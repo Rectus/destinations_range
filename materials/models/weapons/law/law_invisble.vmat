@@ -1,0 +1,17 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "vr_unlit.vfx"
+
+	//---- Translucent ----
+	F_TRANSLUCENT 1
+
+	//---- Color ----
+	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
+	TextureColor "materials/default/default_color.tga"
+
+	//---- Translucent ----
+	g_flOpacityScale "0.000"
+	TextureTranslucency "[0.000000 0.000000 0.000000 0.000000]"
+}

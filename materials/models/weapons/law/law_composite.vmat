@@ -1,0 +1,31 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "vr_standard.vfx"
+
+	//---- Specular ----
+	F_METALNESS_TEXTURE 1
+	F_SPECULAR 1
+	F_SPECULAR_CUBE_MAP 1 // In-game Cube Map
+
+	//---- Color ----
+	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	g_vTexCoordScrollSpeed "[0.000 0.000]"
+	TextureColor "materials/models/weapons/law/launcher.tga"
+
+	//---- Cube Map ----
+	g_flCubeMapBlurAmount "1.000"
+
+	//---- Lighting ----
+	g_vMetalnessRange "[0.138 0.879]"
+	g_vReflectanceRange "[0.000 0.397]"
+	TextureGlossiness "materials/models/weapons/law/launcher_exp.tga"
+	TextureMetalness "materials/models/weapons/law/launcher_metal.tga"
+	TextureReflectance "materials/models/weapons/law/launcher_refl.tga"
+
+	//---- Normal Map ----
+	TextureNormal "materials/models/weapons/law/launcher_normal.tga"
+}

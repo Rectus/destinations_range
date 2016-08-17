@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="PlatformDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Simple vehicle platform" />
+				<Label class="Desc Big" text="Demonstartes that the play area can be parented to movable objects.\n\nUsage:\nStand in the middle of the play area and use the grip button to get on.\nHold the trigger and move the controller to move the platform.\n\nWarning: May fall out of the level if going too fast. Has issues with prediction on the controller." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

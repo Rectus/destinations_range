@@ -1,0 +1,62 @@
+/* styles for the example destination */
+
+.Page {
+	width: 100%;
+	height: 100%;
+	flow-children: none;
+
+	background-color: gradient( linear, 0% 0%, 0% 100%, from( #000000ee ), to( #000000dd ) );
+	border-radius: 20px;
+	border: 4px solid #2f94c2ff;
+}
+
+.TextArea {
+	width: 100%;
+	height: 1500px;
+	vertical-align: top;
+	flow-children: down;
+	padding: 100px;
+	overflow: clip scroll;
+}
+
+.TextArea.WithButtons {
+	padding-bottom: 50px;
+}
+
+.ButtonArea {
+	width: 100%;
+	height: 700px;
+	vertical-align: bottom;
+	flow-children: down;
+	padding: 100px;
+	overflow: clip scroll;
+}
+
+.Title, .Desc {
+	color: #eeeeeeff;
+	text-align: left;
+}
+
+.Title
+{
+	font-size: 90px;
+	font-weight: bold;
+}
+
+.Desc {
+	horizontal-align: left;
+	padding-top: 60px;
+	font-size: 55px;
+}
+
+.BigDialog .Title {
+	font-size: 180px;
+}
+
+.BigDialog .Desc {
+	font-size: 110px;
+}
+
+.BigDialog .TextArea {
+	height: 100%;
+}

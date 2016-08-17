@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="BarnacleGunDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Barnacle Gun" />
+				<Label class="Desc Big" text="Your very own pet barnacle.\n\nUsage:\nPick up with the grip button.\nHold the trigger to latch on to walls or objects.\nRelease to drop the object or yourself." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

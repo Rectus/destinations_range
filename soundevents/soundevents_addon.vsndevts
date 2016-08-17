@@ -1,0 +1,187 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	Law.Fire = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.6
+		distance_max = "10000"
+		vsnd_files = 
+		[
+			"sounds/weapons/rpg_fire_01.vsnd",
+			"sounds/weapons/rpg_fire_02.vsnd",
+			"sounds/weapons/rpg_fire_03.vsnd",
+		]
+	}
+	
+	Law.Explode = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		distance_max = "100000"
+		vsnd_files = "sounds/weapons/rocket_explode_01.vsnd"
+
+	}
+	
+	Physcannon.HoldLoop = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/hold_loop.vsnd"		
+	}
+	
+	Physcannon.Pickup = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/physcannon_pickup.vsnd"		
+	}
+	
+	Physcannon.Charge = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/physcannon_charge.vsnd"		
+	}
+		
+	Physcannon.Drop = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/physcannon_drop.vsnd"		
+	}
+		
+	Physcannon.Dryfire = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/physcannon_dryfire.vsnd"		
+	}
+		
+	Physcannon.Tooheavy = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/physcannon_tooheavy.vsnd"		
+	}
+		
+	Physcannon.ClawsClose = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/physcannon_claws_close.vsnd"		
+	}
+		
+	Physcannon.ClawsOpen = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/physcannon_claws_open.vsnd"		
+	}
+	
+	Physcannon.Launch = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/weapons/physcannon/superphys_launch1.vsnd"		
+	}
+	
+	Barnacle.TongueAttack =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		distance_max = "10000"
+
+		vsnd_files =
+		[
+			"sounds/weapons/barnacle/Smoker_LaunchTongue_01.vsnd",
+			"sounds/weapons/barnacle/Smoker_LaunchTongue_02.vsnd",
+			"sounds/weapons/barnacle/Smoker_LaunchTongue_03.vsnd"
+		]
+	}
+
+
+	Barnacle.TongueMiss =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		distance_max = "10000"
+		
+		vsnd_files =
+		[
+			"sounds/weapons/barnacle/Smoker_TongueHit_01.vsnd",	
+			"sounds/weapons/barnacle/Smoker_TongueHit_02.vsnd"
+		]
+	}
+
+	Barnacle.TongueHit =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		distance_max = "10000"
+		
+		vsnd_files =
+		[
+			"sounds/weapons/barnacle/tongue_hit_1.vsnd"
+		]
+	}
+
+	
+	Barnacle.TongueRetract =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		distance_max = "10000"
+
+
+		vsnd_files =
+		[
+			"sounds/weapons/barnacle/Smoker_ReelTongueIn_01.vsnd",
+			"sounds/weapons/barnacle/Smoker_ReelTongueIn_02.vsnd",
+			"sounds/weapons/barnacle/Smoker_ReelTongueIn_03.vsnd",
+			"sounds/weapons/barnacle/Smoker_ReelTongueIn_04.vsnd",
+			"sounds/weapons/barnacle/Smoker_ReelTongueIn_05.vsnd"
+		]
+	}
+
+
+	Barnacle.TongueStrain =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		distance_max = "10000"
+
+		vsnd_files =
+		[
+			"sounds/weapons/barnacle/Cow_LickLips_Slurp2.vsnd",
+			"sounds/weapons/barnacle/Cow_LickLips_Slurp3.vsnd",
+			"sounds/weapons/barnacle/Cow_LickLips_Slurp4.vsnd"
+		]
+	}
+
+	Barnacle.TongueFly =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		distance_max = "10000"
+
+
+		vsnd_files = "sounds/weapons/barnacle/tongue_fly_loop.vsnd"
+	}
+}

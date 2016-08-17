@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page BigDialog" id="GravityGunDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Information" />
+				<Label class="Desc Big" text="Most objects can be picked up with the grip button." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

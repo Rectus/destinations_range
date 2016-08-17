@@ -1,0 +1,41 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<script>
+		function SpawnLaw()
+		{		
+			$.DispatchEvent( "ClientUI_FireOutput", '0' );		
+		}
+		function SpawnMelon()
+		{		
+			$.DispatchEvent( "ClientUI_FireOutput", '1' );		
+		}
+	</script>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SpawnDialog">
+			<Panel class="TextArea WithButtons">
+				<Label class="Title" text="Item Spawner" />
+				<Panel class="ButtonArea">
+				
+					<Panel class="InfoDialogButton">
+						<Button id="SpawnLawBtn" class="DialogButton Visible" text="Spawn LAW" onactivate="SpawnLaw()"> 
+							<Label text="Spawn LAW" />
+						</Button>
+					</Panel>
+					<Panel class="InfoDialogButton">
+						<Button id="SpawnMelonBtn" class="DialogButton Visible" text="Spawn Melon" onactivate="SpawnMelon()"> 
+							<Label text="Spawn Melon" />
+						</Button>
+					</Panel>
+				</Panel>
+			</Panel>
+			
+			
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

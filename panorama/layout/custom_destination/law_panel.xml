@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="LawGunDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="M72 LAW Rocket Launcher" />
+				<Label class="Desc Big" text="Example of a scripted animated weapon that also functions as a physics prop.\n\nUsage:\nPick up with the grip button.\nUse the trigger fire.\n\nNote: Picking it up with the trigger may cause glitches." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>
