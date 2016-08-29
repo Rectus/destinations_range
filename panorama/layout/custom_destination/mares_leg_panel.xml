@@ -6,10 +6,10 @@
 	</styles>
 
 	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
-		<Panel class="Page" id="LawGunDialog">
+		<Panel class="Page" id="MaresLegGunDialog">
 			<Panel class="TextArea">
-				<Label class="Title" text="M72 LAW Rocket Launcher" />
-				<Label class="Desc Big" text="Example of a scripted animated weapon that also functions as a physics prop.\n\nUsage:\nPick up with the grip button.\nUse the trigger to fire.\n\nNote: Picking it up with the trigger may cause glitches." />
+				<Label class="Title" text="Improvised Mare's Leg Rifle" />
+				<Label class="Desc Big" text="Example of a firearm.\n\nUsage:\nPick up with the grip button.\nUse the trigger to fire.\nFlick the controller to cycle the gun.\n\nThe red dot sight is partially functional and only displays correctly on the closest eye." />
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

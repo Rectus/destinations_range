@@ -1,0 +1,46 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "vr_standard.vfx"
+
+	//---- Self Illum ----
+	F_SELF_ILLUM 1
+
+	//---- Specular ----
+	F_ADVANCED_FRESNEL_CONTROLS 1
+	F_SPECULAR 1
+
+	//---- Translucent ----
+	F_ADDITIVE_BLEND 1
+	F_TRANSLUCENT 1
+
+	//---- Color ----
+	g_vColorTint "[1.000000 0.000000 0.000000 0.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	g_vTexCoordScrollSpeed "[0.000 0.000]"
+	TextureColor "materials/models/weapons/micro_h1_dot_color.tga"
+
+	//---- Lighting ----
+	g_flFresnelExponent "1.000"
+	g_flFresnelFacing "0.149"
+	g_flMetalness "0.000"
+	g_vFresnelFacingRange "[0.000 1.000]"
+	g_vReflectanceRange "[0.000 1.000]"
+	TextureGlossiness "materials/default/default_gloss.tga"
+	TextureReflectance "materials/default/default_refl.tga"
+
+	//---- Normal Map ----
+	TextureNormal "materials/default/default_normal.tga"
+
+	//---- Self Illum ----
+	g_flSelfIllumScale "1.000"
+	g_vSelfIllumScrollSpeed "[0.000 0.000]"
+	g_vSelfIllumTint "[1.000000 1.000000 1.000000 0.000000]"
+	TextureSelfIllumMask "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Translucent ----
+	g_flOpacityScale "1.000"
+	TextureTranslucency "materials/default/default_trans.tga"
+}

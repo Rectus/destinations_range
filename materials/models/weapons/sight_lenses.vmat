@@ -1,0 +1,44 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "vr_standard.vfx"
+
+	//---- Specular ----
+	F_ADVANCED_FRESNEL_CONTROLS 1
+	F_SPECULAR 1
+	F_SPECULAR_CUBE_MAP 1 // In-game Cube Map
+
+	//---- Translucent ----
+	F_GLASS 1
+	F_TRANSLUCENT 1
+
+	//---- Color ----
+	g_vColorTint "[0.568627 0.145098 0.145098 0.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	g_vTexCoordScrollSpeed "[0.000 0.000]"
+	TextureColor "materials/models/weapons/micro_h1_sight_lenses_color.tga"
+
+	//---- Cube Map ----
+	g_flCubeMapBlurAmount "1.000"
+
+	//---- Lighting ----
+	g_flFresnelExponent "5.000"
+	g_flFresnelFacing "0.254"
+	g_flGlassFresnelExponent "3.000"
+	g_flGlassFresnelMaxOpacity "0.500"
+	g_flGlassFresnelThickness "0.299"
+	g_flMetalness "0.000"
+	g_vFresnelFacingRange "[0.000 1.000]"
+	g_vReflectanceRange "[0.000 0.534]"
+	TextureGlossiness "[0.595000 0.595000 0.595000 0.000000]"
+	TextureReflectance "materials/default/default_refl.tga"
+
+	//---- Normal Map ----
+	TextureNormal "materials/default/default_normal.tga"
+
+	//---- Translucent ----
+	g_flOpacityScale "0.076"
+	TextureTranslucency "materials/models/weapons/micro_h1_sight_lenses_trans.tga"
+}

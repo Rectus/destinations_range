@@ -1,0 +1,25 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "vr_standard.vfx"
+
+	//---- Specular ----
+	F_SPECULAR 1
+
+	//---- Color ----
+	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	g_vTexCoordScrollSpeed "[0.000 0.000]"
+	TextureColor "materials/models/weapons/micro_h1_sight_body_color.tga"
+
+	//---- Lighting ----
+	g_flMetalness "0.104"
+	g_vReflectanceRange "[0.000 0.310]"
+	TextureGlossiness "materials/default/default_gloss.tga"
+	TextureReflectance "materials/default/default_refl.tga"
+
+	//---- Normal Map ----
+	TextureNormal "materials/models/weapons/micro_h1_sight_body_normal.tga"
+}
