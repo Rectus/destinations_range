@@ -23,62 +23,91 @@
 	THE SOFTWARE.
 ]]--
 
-SPIN_CHECK_INTERVAL = 0.2
-CARRY_OFFSET = Vector(-0.2, 0, 0)
-CARRY_ANGLES = QAngle(20, 0, 0)
-FIRE_RUMBLE_INTERVAL = 0.01
-FIRE_RUMBLE_TIME = 0.2
-SPIN_TIME = 1.5
-SPIN_RUMBLE_INTERVAL = 0.02
-SHOT_TRACE_DISTANCE = 16384
+require("particle_system")
 
-DAMAGE = 50
-DAMAGE_FORCE = 1000 
+local SPIN_CHECK_INTERVAL = 0.2
+local CARRY_OFFSET = Vector(-0.2, 0, 0)
+local CARRY_ANGLES = QAngle(20, 0, 0)
+local FIRE_RUMBLE_INTERVAL = 0.01
+local FIRE_RUMBLE_TIME = 0.2
+local SPIN_TIME = 1.1
+local CYCLE_TIME = 1.0
+local SPIN_RUMBLE_INTERVAL = 0.02
+local SHOT_TRACE_DISTANCE = 16384
 
-isCarried = false
-fired = false
-controller = nil
-currentPlayer = nil
-spinTimeElapsed = 0
-fireRumbleElapsed = 0
-tracerParticle = nil
-tracerEnd = nil
-muzzleFlash = nil
-impactParticle = nil
+local DAMAGE = 50
+local DAMAGE_FORCE = 100
+local DAMAGE_ANG_FORCE = 25
+local DAMAGE_MAX_ANG_MOMENTUM = 1000
 
-tracerKeyvals = {
+local isCarried = false
+local fired = false
+local controller = nil
+local currentPlayer = nil
+local spinTimeElapsed = 0
+local fireRumbleElapsed = 0
+local tracerParticle = nil
+local tracerEnd = nil
+local muzzleFlash = nil
+local impactParticle = nil
+local gunAnim = nil
+
+local tracerKeyvals = {
 	classname = "info_particle_system";
 	effect_name = "particles/weapon_tracers.vpcf";
 	start_active = 0;
 	cpoint1 = ""
 }
 
-dustKeyvals = {
+local dustKeyvals = {
 	classname = "info_particle_system";
 	effect_name = "particles/generic_fx/fx_dust.vpcf";
 	start_active = 0;
 }
 
 
-tracerEndKeyvals = {
+local tracerEndKeyvals = {
 	classname = "info_particle_target";
 	targetname = ""
 }
 
-g_VRScript.AddEntityPrecache(tracerKeyvals)
-g_VRScript.AddEntityPrecache(dustKeyvals)
+local animKeyvals = {
+	targetname = "mares_leg_anim";
+	model = "models/weapons/mares_leg.vmdl";
+	solid = 0
+	}
+
+function Precache(context)
+	PrecacheParticle(tracerKeyvals.effect_name, context)
+	PrecacheParticle(dustKeyvals.effect_name, context)
+	PrecacheModel(animKeyvals.model, context)
+	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
+end
 
 g_VRScript.pickupManager:RegisterEntity(thisEntity)
 
 function Init(self)
-	local cpName = DoUniqueString("tongue")
+	local child = thisEntity:FirstMoveChild()
+
+	animKeyvals.origin = thisEntity:GetOrigin()
+	animKeyvals.angles = thisEntity:GetAngles()
+	gunAnim = SpawnEntityFromTableSynchronous("prop_dynamic", animKeyvals)
+	gunAnim:SetParent(thisEntity, "")
+	gunAnim:SetOrigin(thisEntity:GetOrigin())
+
+	if child and child:GetName() == "rds"
+	then
+		child:SetParent(gunAnim, "sight")
+	end
+
+	local cpName = DoUniqueString("tracer")
 	tracerEndKeyvals.targetname = cpName
 	tracerKeyvals.cpoint1 = cpName
-	tracerParticle = SpawnEntityFromTableSynchronous(tracerKeyvals.classname, tracerKeyvals)
-	tracerEnd = SpawnEntityFromTableSynchronous(tracerEndKeyvals.classname, tracerEndKeyvals)
+	tracerParticle = ParticleSystem("particles/weapon_tracers.vpcf", false)
+	tracerEnd = tracerParticle:CreateControlPoint(1)
 	
-	muzzleFlash = SpawnEntityFromTableSynchronous(dustKeyvals.classname, dustKeyvals)
-	impactParticle = SpawnEntityFromTableSynchronous(dustKeyvals.classname, dustKeyvals)
+	muzzleFlash = ParticleSystem("particles/generic_fx/fx_dust.vpcf", false)
+	impactParticle = ParticleSystem("particles/generic_fx/fx_dust.vpcf", false)
 end
 
 function OnTriggerPressed(self)
@@ -98,8 +127,8 @@ function Fire()
 	then
 		thisEntity:SetThink(FireRumble, "fire_rumble", 0.1)
 	end
-	DoEntFireByInstanceHandle(thisEntity, "SetAnimationNoReset", "fire", 0 , nil, nil)
-	DoEntFireByInstanceHandle(thisEntity, "SetDefaultAnimation", "idle_uncocked", 0 , nil, nil)
+	DoEntFireByInstanceHandle(gunAnim, "SetAnimationNoReset", "fire", 0 , nil, nil)
+	DoEntFireByInstanceHandle(gunAnim, "SetDefaultAnimation", "idle_uncocked", 0 , nil, nil)
 	
 	prevAngles = thisEntity:GetAngles()
 	thisEntity:SetThink(CheckSpin, "check_spin", SPIN_CHECK_INTERVAL)
@@ -131,7 +160,8 @@ function TraceShot(self)
 		
 		if traceTable.enthit
 		then
-			TakeDamage(
+			local dmgInfo = CreateDamageInfo(thisEntity, currentPlayer, thisEntity:GetAngles():Forward() * DAMAGE_FORCE, traceTable.pos,  DAMAGE)
+			--[[TakeDamage(
 				{
 					victim = traceTable.enthit;
 					damage = DAMAGE;
@@ -140,9 +170,13 @@ function TraceShot(self)
 					position = traceTable.pos;
 					attacker = currentPlayer
 				}
-			)
 			
+			)]]
 			
+			ApplyImpulse(traceTable.enthit, thisEntity:GetAngles(), traceTable.pos - traceTable.enthit:GetCenter(), DAMAGE_FORCE, DAMAGE_ANG_FORCE, DAMAGE_MAX_ANG_MOMENTUM)
+			traceTable.enthit:TakeDamage(dmgInfo)
+			
+			DestroyDamageInfo(dmgInfo)
 		
 		end
 		
@@ -150,8 +184,9 @@ function TraceShot(self)
 		tracerEnd:SetAngles(-thisEntity:GetAngles().x, -thisEntity:GetAngles().y, -thisEntity:GetAngles().z)
 		impactParticle:SetOrigin(traceTable.pos)
 		
-		DoEntFireByInstanceHandle(impactParticle, "Start", "", 0, nil, nil)
-		DoEntFireByInstanceHandle(impactParticle, "Stop", "", 1, nil, nil)
+		impactParticle:Start()
+		impactParticle:Stop(1)
+		
 	else
 		tracerEnd:SetOrigin(muzzle.origin + RotatePosition(Vector(0,0,0), thisEntity:GetAngles(), Vector(SHOT_TRACE_DISTANCE, 0, 0)))
 	end
@@ -160,12 +195,36 @@ function TraceShot(self)
 	muzzleFlash:SetOrigin(muzzle.origin)
 	muzzleFlash:SetAngles(thisEntity:GetAngles().x, thisEntity:GetAngles().y, thisEntity:GetAngles().z)
 	
-	DoEntFireByInstanceHandle(tracerParticle, "Start", "", 0, nil, nil)
-	DoEntFireByInstanceHandle(tracerParticle, "Stop", "", 0.1, nil, nil)
+	tracerParticle:Start()
+	tracerParticle:Stop(0.1)
+
+	muzzleFlash:Start()
+	muzzleFlash:Stop(1)
 	
-	DoEntFireByInstanceHandle(muzzleFlash, "Start", "", 0, nil, nil)
-	DoEntFireByInstanceHandle(muzzleFlash, "Stop", "", 1, nil, nil)
+end
+
+
+function ApplyImpulse(entity, absAngles, relLocation, magnitude, angMagnitude, clampAngImpulse)
+
+	local angularImpulse = (absAngles:Forward() * -angMagnitude):Cross(relLocation)
+	local inverseAngle = QAngle(-entity:GetAngles().x, -entity:GetAngles().y, -entity:GetAngles().z)
+	local locAngularImpulse = RotatePosition(Vector(0,0,0), inverseAngle, angularImpulse)
 	
+	if g_VRScript.pickupManager.debug
+	then
+		DebugDrawLine(entity:GetCenter(), entity:GetCenter() + relLocation, 0, 255, 255, true, 1)
+		DebugDrawLine(entity:GetCenter(), entity:GetCenter() + angularImpulse * 0.2, 255, 0, 255, true, 1)
+		DebugDrawLine(entity:GetCenter(), entity:GetCenter() + locAngularImpulse * 0.2, 128, 0, 128, true, 1)
+	end
+	
+	if locAngularImpulse:Length() > clampAngImpulse
+	then
+		locAngularImpulse = locAngularImpulse:Normalized() * clampAngImpulse
+	end
+	
+	-- Not physically correct.
+	entity:ApplyAbsVelocityImpulse(absAngles:Forward() * magnitude * (1 - locAngularImpulse:Length() / clampAngImpulse) )
+	entity:ApplyLocalAngularVelocityImpulse(locAngularImpulse)
 end
 
 
@@ -199,8 +258,8 @@ function OnPickedUp(self, hand, player)
 	
 	if not alreadyPickedUp
 	then
-		DoEntFireByInstanceHandle(thisEntity, "SetAnimationNoReset", "draw", 0 , nil, nil)
-		DoEntFireByInstanceHandle(thisEntity, "SetDefaultAnimation", "idle", 0 , nil, nil)
+		DoEntFireByInstanceHandle(gunAnim, "SetAnimationNoReset", "draw", 0 , nil, nil)
+		DoEntFireByInstanceHandle(gunAnim, "SetDefaultAnimation", "idle", 0 , nil, nil)
 		alreadyPickedUp = true
 	end
 
@@ -217,8 +276,8 @@ function CheckSpin(self)
 
 	if angles.x < prevAngles.x - 20
 	then
-		DoEntFireByInstanceHandle(thisEntity, "SetAnimationNoReset", "spin_vr", 0 , nil, nil)
-		DoEntFireByInstanceHandle(thisEntity, "SetDefaultAnimation", "idle", 0 , nil, nil)
+		DoEntFireByInstanceHandle(gunAnim, "SetAnimationNoReset", "spin_vr", 0 , nil, nil)
+		DoEntFireByInstanceHandle(gunAnim, "SetDefaultAnimation", "idle", 0 , nil, nil)
 		
 		if controller
 		then
@@ -227,6 +286,20 @@ function CheckSpin(self)
 		
 		prevAngles = nil
 		thisEntity:SetThink(SpinRumble, "spin_complete", SPIN_RUMBLE_INTERVAL)
+		return nil
+		
+	elseif angles.x > prevAngles.x + 20
+	then
+		DoEntFireByInstanceHandle(gunAnim, "SetAnimationNoReset", "cycle_vr", 0 , nil, nil)
+		DoEntFireByInstanceHandle(gunAnim, "SetDefaultAnimation", "idle", 0 , nil, nil)
+		
+		if controller
+		then
+			controller:FireHapticPulse(0)
+		end
+		
+		prevAngles = nil
+		thisEntity:SetThink(CycleRumble, "spin_complete", SPIN_RUMBLE_INTERVAL)
 		return nil
 	end
 	
@@ -244,6 +317,25 @@ function SpinRumble(self)
 	end
 	
 	if spinTimeElapsed >= SPIN_TIME
+	then
+		spinTimeElapsed = 0
+		fired = false
+		return nil
+	end
+	
+	return SPIN_RUMBLE_INTERVAL
+end
+
+
+function CycleRumble(self)
+	spinTimeElapsed = spinTimeElapsed + SPIN_RUMBLE_INTERVAL
+	
+	if controller
+	then
+		controller:FireHapticPulse(0)
+	end
+	
+	if spinTimeElapsed >= CYCLE_TIME
 	then
 		spinTimeElapsed = 0
 		fired = false

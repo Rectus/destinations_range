@@ -26,8 +26,6 @@ PickupManager = class(
 	{
 		entities = {};
 		players = {}; 
-		--player.buttons = {};
-		--player.carrySlots = {};
 		initialized = false
 	}, 
 	
@@ -60,7 +58,7 @@ PickupManager = class(
 -- Registers a new entity to be tracked by the system.
 function PickupManager:RegisterEntity(entity)
 	self.entities[entity] = entity:GetPrivateScriptScope()
-	print(" Pickup manager: " .. entity:GetClassname() .. ": " .. entity:GetName() .. " registered.")
+	print(" Pickup manager: " .. entity:GetClassname() .. ": " .. entity:GetName() .. "(" .. tostring(entity:entindex()) .. ") registered.")
 	
 	if self.initialized
 	then
@@ -73,7 +71,7 @@ end
 
 
 -- Polls the motion controller buttons.
-function  PickupManager:OnThink()
+function PickupManager:OnThink()
 
 	for playerEnt, properties in pairs(self.players)
 	do
@@ -283,13 +281,13 @@ function PickupManager:AddPlayer(player)
 	then
 		print(self.player:GetDebugName())
 		
-		self.players[playerEnt] = {}
-		self.players[playerEnt].carrySlots = {}
-		self.players[playerEnt].buttons = {}
+		self.players[player] = {}
+		self.players[player].carrySlots = {}
+		self.players[player].buttons = {}
 		
 		for i = 24, 41, 1
 		do	
-			self.players[playerEnt].buttons[i] = false
+			self.players[player].buttons[i] = false
 		end
 	end
 end

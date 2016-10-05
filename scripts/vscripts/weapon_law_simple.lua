@@ -24,9 +24,9 @@
 ]]--
 
 
-ROCKET_OFFSET = Vector(30, 0, 0)
+local ROCKET_OFFSET = Vector(30, 0, 0)
 
-isCarried = false
+local isCarried = false
 
 
 rocketKeyvals = {
@@ -38,27 +38,27 @@ rocketKeyvals = {
 animKeyvals = {
 	targetname = "law_anim";
 	model = "models/weapons/law_weapon_animated.vmdl";
-	solid = 0
+	--solid = 0
 	}
 	
-
-PrecacheEntityFromTable("prop_physics_override", rocketKeyvals, thisEntity)
-PrecacheEntityFromTable("prop_dynamic", animKeyvals, thisEntity)
-thisEntity:PrecacheScriptSound("Law.Fire")
+function Precache(context)
+	PrecacheModel(animKeyvals.model, context)
+	PrecacheModel(rocketKeyvals.model, context)
+	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
+end
 
 g_VRScript.pickupManager:RegisterEntity(thisEntity)
 
 function Init(self)
-print("law: Init()")
 	animKeyvals.origin = thisEntity:GetOrigin()
 	animKeyvals.angles = thisEntity:GetAngles()
 	lawAnim = SpawnEntityFromTableSynchronous("prop_dynamic", animKeyvals)
 	lawAnim:SetParent(thisEntity, "")
 	lawAnim:SetOrigin(thisEntity:GetOrigin())
+	
 end
 
 function OnTriggerPressed(self)
-	print("law: OnTriggerPressed()")
 	
 	if not rocket
 	then
@@ -71,42 +71,28 @@ function OnTriggerPressed(self)
 		
 		rocket:GetPrivateScriptScope():Fire()
 		
-		--lawAnim:SetBodygroupByName("fired", 1)
 		DoEntFireByInstanceHandle(lawAnim, "SetBodyGroup", "fired", 0, nil, nil)
 				
 	end
 end
 
 function OnTriggerUnpressed(self)
-	print("law: OnTriggerUnpressed()")
+
 end
 
-function OnPickedUp(self, hand, player)
-	print("law: OnPickedUp()")
-	thisEntity:SetParent(nil, "")
-	lawAnim:SetParent(hand, "")
-	thisEntity:SetOrigin(Vector(0,0, -100000))
-	thisEntity:DisableMotion()
+function OnPickedUp(self, hand, player)	
+	thisEntity:SetParent(hand, "")
 	
 	if not alreadyPickedUp
 	then
-		DoEntFireByInstanceHandle(lawAnim, "setSequence", "extend",0 , nil, nil)
+		DoEntFireByInstanceHandle(lawAnim, "setSequence", "extend", 0 , nil, nil)
 		alreadyPickedUp = true
 	end
 
 end
 
 function OnDropped(self, hand, player)
-	print("law: OnDropped()")
-	
-	local origin = lawAnim:GetOrigin()
-	local angles = lawAnim:GetAngles()
-	
-	thisEntity:SetOrigin(origin)
-	thisEntity:SetAngles(angles.x, angles.y, angles.z)
-	lawAnim:SetParent(thisEntity, "")
+	thisEntity:SetParent(nil, "")
 
-	--thisEntity:SetAngles(angles.x + 90, angles.y -90, angles.z)
-	thisEntity:EnableMotion()
 end
 

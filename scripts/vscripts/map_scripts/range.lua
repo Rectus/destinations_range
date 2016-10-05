@@ -1,13 +1,16 @@
 
 print("Range map script")
-require("new_controller")
+--require("new_controller")
 require("pickup_manager")
+require("player_fall_controller")
 g_VRScript.pickupManager = PickupManager()
+g_VRScript.fallController = PlayerFallContoller()
+g_VRScript.fallController:Init()
 
 g_VRScript.precacheList = {}
 
 function OnInit()
-	EntityFramework:InstallClasses() 
+	--EntityFramework:InstallClasses() 
 
 	
 end
@@ -36,6 +39,7 @@ function OnHMDAvatarAndHandsSpawned()
 	if pickupManager:Initialize()
 	then
 		g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(OnThink)
+		--pickupManager.debug = true
 	end
 	
 	--PrintTable(EntityClasses, 0, 10)

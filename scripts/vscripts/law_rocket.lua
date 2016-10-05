@@ -23,30 +23,31 @@
 ]]--
 
 
-ROCKET_INITVELOCITY = 3000
-ROCKET_ADDVELOCITY = 1000
-THINK_INTERVAL = 0.05
-armCounter = 0
-ARM_DELAY = 1 
-TRACE_DISTANCE = 32
-prevAngles = null
-ANGLE_TOLERANCE = 0.1
+local ROCKET_INITVELOCITY = 3000
+local ROCKET_ADDVELOCITY = 1000
+local THINK_INTERVAL = 0.02
+local armCounter = 0
+local ARM_DELAY = 1 
+local TRACE_DISTANCE = 48
+local prevAngles = null
+local ANGLE_TOLERANCE = 0.1
 
-EXPLOSION_RANGE = 768
-EXPLOSION_MAX_IMPULSE = 10000
+local EXPLOSION_RANGE = 600
+local EXPLOSION_MAX_IMPULSE = 10000
 
-exploded = false
+local exploded = false
 
-explosionKeyvals = {
+local explosionKeyvals = {
 	fireballsprite = "sprites/zerogxplode.spr";
 	iMagnitude = 100;
 	rendermode = "kRenderTransAdd"
 }
 
-PrecacheEntityFromTable("env_explosion", explosionKeyvals, thisEntity)
+function Precache(context)
+	PrecacheEntityFromTable("env_explosion", explosionKeyvals, context)
+end
 
 function Fire(self)
-	print("law rocket: Fire()")
 	thisEntity:ApplyAbsVelocityImpulse(thisEntity:GetAngles():Forward() * ROCKET_INITVELOCITY)
 	thisEntity:ApplyLocalAngularVelocityImpulse(Vector(1000, 0, 0))
 	thisEntity:SetThink(Think, "ent_think", THINK_INTERVAL)

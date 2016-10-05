@@ -53,10 +53,13 @@ function Think(self)
 		
 		local dotY = math.tan(math.rad(anglePitch)) * sightDist
 		local dotX = math.tan(math.rad(angleYaw))* sightDist
-		
+
+		local sightTilt = math.rad(thisEntity:GetAngles().z)
+		local dotLocalPos = Vector(dotX * math.cos(sightTilt) + dotY * math.sin(sightTilt), dotY * math.cos(sightTilt) + dotX * -math.sin(sightTilt), 0)
+
 		if g_VRScript.pickupManager.debug
 		then
-			local dotPos = lensPos + RotatePosition(Vector(0,0,0), thisEntity:GetAngles(), Vector(0, dotX, dotY))
+			local dotPos = lensPos + RotatePosition(Vector(0,0,0), thisEntity:GetAngles(), Vector(0, dotLocalPos.x, dotLocalPos.y))
 			DebugDrawLine(lensPos, dotPos, 0, 255, 0, false, DOT_UPDATE_INTERVAL)
 		end
 		
@@ -64,8 +67,7 @@ function Think(self)
 		
 		if circleFactor > 1.41
 		then
-			dotX = 0.5
-			dotY = -1
+			dotLocalPos = Vector(-0.4, -1, 0)
 		end
 		
 		if g_VRScript.pickupManager.debug
@@ -74,12 +76,12 @@ function Think(self)
 			DebugDrawLine(eyePos, lensPos, 255, 0, 0, false, DOT_UPDATE_INTERVAL)
 			DebugDrawLine(lensPos, projPos, 255, 0, 0, false, DOT_UPDATE_INTERVAL)
 			
-			dotPos = lensPos + RotatePosition(Vector(0,0,0), thisEntity:GetAngles(), Vector(0, dotX, dotY))
+			dotPos = lensPos + RotatePosition(Vector(0,0,0), thisEntity:GetAngles(), Vector(0, dotLocalPos.x, dotLocalPos.y))
 			DebugDrawLine(lensPos, dotPos, 0, 0, 255, false, DOT_UPDATE_INTERVAL)
 		end
 		
-		thisEntity:SetPoseParameter("dot_x", -dotX * DOT_MOVE_FACTOR)
-		thisEntity:SetPoseParameter("dot_y", dotY * DOT_MOVE_FACTOR)
+		thisEntity:SetPoseParameter("dot_x", -dotLocalPos.x * DOT_MOVE_FACTOR)
+		thisEntity:SetPoseParameter("dot_y", dotLocalPos.y * DOT_MOVE_FACTOR)
 	end
 	
 	return DOT_UPDATE_INTERVAL

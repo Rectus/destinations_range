@@ -1,5 +1,6 @@
+
 --[[
-	Prop_dynamic version of LAW.
+	Flashlight script.
 	
 	Copyright (c) 2016 Rectus
 	
@@ -22,61 +23,60 @@
 	THE SOFTWARE.
 ]]--
 
-ROCKET_OFFSET = Vector(30, 0, 0)
-
-isCarried = false
-
-
-rocketKeyvals = {
-	targetname = "rocket";
-	model = "models/weapons/law_rocket.vmdl";
-	vscripts = "law_rocket"
-	}
-
-PrecacheEntityFromTable("prop_physics_override", rocketKeyvals, thisEntity)
 
 g_VRScript.pickupManager:RegisterEntity(thisEntity)
 
+local turnedOn = false
+local lightEnt = nil
+
+local lightKeyvals = {
+	classname = "light_spot";
+	targetname = "flashlight_light";
+	enabled = 0;
+	color = "209 192 184 255";
+	brightness = 3;
+	range = 3000;
+	indirectlight = 0;
+	attenuation1 = 0.3;
+	attenuation2 = 0;
+	falloff = 10;
+	innerconeangle = 10;
+	outerconeangle = 20;
+}
+
 function Init(self)
-print("law_d: Init()")
-	DoEntFireByInstanceHandle(thisEntity, "setSequence", "folded", 0, nil, nil)
+	lightEnt = SpawnEntityFromTableSynchronous(lightKeyvals.classname, lightKeyvals)
+	lightEnt:SetParent(thisEntity, "light")
+	
+	lightEnt:SetOrigin(thisEntity:GetOrigin())
+	local lightAngles = thisEntity:GetAngles()
+	lightEnt:SetAngles(lightAngles.x, lightAngles.y, lightAngles.z)
 end
 
 function OnTriggerPressed(self)
-	print("law: OnTriggerPressed()")
-	
-	if not rocket
+	if turnedOn
 	then
-		rocketKeyvals.origin = thisEntity:GetOrigin() + RotatePosition(Vector(0,0,0), thisEntity:GetAngles(), ROCKET_OFFSET)
-		rocketKeyvals.angles = thisEntity:GetAngles()
-		rocket = SpawnEntityFromTableSynchronous("prop_physics_override", rocketKeyvals)
-		
-		rocket:GetPrivateScriptScope():Fire()
-		
-		DoEntFireByInstanceHandle(thisEntity, "SetBodyGroup", "fired", 0, nil, nil)
-				
+		turnedOn = false
+		DoEntFireByInstanceHandle(thisEntity, "Skin", "0", 0 , nil, nil)
+		DoEntFireByInstanceHandle(lightEnt, "TurnOff", "", 0 , nil, nil)
+	else
+		turnedOn = true
+		DoEntFireByInstanceHandle(thisEntity, "Skin", "1", 0 , nil, nil)
+		DoEntFireByInstanceHandle(lightEnt, "TurnOn", "", 0 , nil, nil)
 	end
 end
 
 function OnTriggerUnpressed(self)
-	print("law: OnTriggerUnpressed()")
+
 end
 
 function OnPickedUp(self, hand, player)
-	print("law: OnPickedUp()")
+
 	thisEntity:SetParent(hand, "")
-	
-	if not alreadyPickedUp
-	then
-		DoEntFireByInstanceHandle(thisEntity, "setSequence", "extend", 0, nil, nil)
-		alreadyPickedUp = true
-	end
 
 end
 
 function OnDropped(self, hand, player)
-	print("law: OnDropped()")
 
 	thisEntity:SetParent(nil, "")
-	DoEntFireByInstanceHandle(thisEntity, "enablemotion", "", .1, nil, nil)
 end

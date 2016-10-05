@@ -14,12 +14,20 @@
 		{		
 			$.DispatchEvent( "ClientUI_FireOutput", '1' );		
 		}
+		function ResetRange()
+		{		
+			$.DispatchEvent( "ClientUI_FireOutput", '2' );		
+		}
+		function FireLaws()
+		{		
+			$.DispatchEvent( "ClientUI_FireOutput", '3' );		
+		}
 	</script>
 
 	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
 		<Panel class="Page" id="SpawnDialog">
 			<Panel class="TextArea WithButtons">
-				<Label class="Title" text="Item Spawner" />
+				<Label class="Title" text="Range controls" />
 				<Panel class="ButtonArea">
 				
 					<Panel class="InfoDialogButton">
@@ -30,6 +38,16 @@
 					<Panel class="InfoDialogButton">
 						<Button id="SpawnMelonBtn" class="DialogButton Visible" text="Spawn Melon" onactivate="SpawnMelon()"> 
 							<Label text="Spawn Melon" />
+						</Button>
+					</Panel>
+					<Panel class="InfoDialogButton">
+						<Button id="ResetBtn" class="DialogButton Visible" text="Reset Range" onactivate="ResetRange()"> 
+							<Label text="Reset Range" />
+						</Button>
+					</Panel>
+					<Panel class="InfoDialogButton">
+						<Button id="FireLAwsBtn" class="DialogButton Visible" text="Fire ALL LAWS!" onactivate="FireLaws()"> 
+							<Label text="Fire ALL LAWS!" />
 						</Button>
 					</Panel>
 				</Panel>

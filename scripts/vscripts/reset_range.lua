@@ -1,5 +1,6 @@
+
 --[[
-	Adds pose paramter sequences to the red dot sight.
+	Resets the firing range entities.
 	
 	Copyright (c) 2016 Rectus
 	
@@ -22,30 +23,31 @@
 	THE SOFTWARE.
 ]]--
 
-require "animationsystem.sequences"             
+local barrels = {} 
+
+function Store()
+	local barrelEnt = Entities:FindByName(nil, "barrel")
+	
+	while barrelEnt
+	do
+		barrels[barrelEnt] = {origin = barrelEnt:GetOrigin(); angles = barrelEnt:GetAngles()} 
+		
+		barrelEnt = Entities:FindByName(barrelEnt, "barrel")
+	end
+end
 
 
-model:CreateSequence(
-    {
-        name = "aim",
-        poseParamX = model:CreatePoseParameter("dot_x", -1, 1, 0, false),
-        poseParamY = model:CreatePoseParameter("dot_y", -1, 1, 0, false),
-        --delta = true,
-        sequences = 
-		{
-            {"xy_ul", "y_u", "xy_ur"}, {"x_l", "mid", "x_r"}, { "xy_dl", "y_d", "xy_dr"}
-        },
-    }
-)
-
-model:CreateSequence(
-	{
-		name = "idle",
-		sequences = {
-			{ "mid" }
-		},
-		addlayer = {
-			 "aim"
-		}
-	}
-)
+function Reset()
+	local barrelEnt = Entities:FindByName(nil, "barrel")
+	while barrelEnt
+	do
+		barrelEnt:SetOrigin(barrels[barrelEnt].origin)
+		local angles = barrels[barrelEnt].angles
+		barrelEnt:SetAngles(angles.x, angles.y, angles.z)
+		
+		barrelEnt = Entities:FindByName(barrelEnt, "barrel")
+	end
+	
+	DoEntFire("target", "SetAnimation", "reset", 0, nil, nil)
+	DoEntFire("target", "SetDefaultAnimation", "idle", 0, nil, nil)
+end

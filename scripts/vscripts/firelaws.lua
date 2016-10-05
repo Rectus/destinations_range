@@ -1,5 +1,6 @@
+
 --[[
-	Adds pose paramter sequences to the red dot sight.
+	Fires all the rocket launchers.
 	
 	Copyright (c) 2016 Rectus
 	
@@ -22,30 +23,12 @@
 	THE SOFTWARE.
 ]]--
 
-require "animationsystem.sequences"             
-
-
-model:CreateSequence(
-    {
-        name = "aim",
-        poseParamX = model:CreatePoseParameter("dot_x", -1, 1, 0, false),
-        poseParamY = model:CreatePoseParameter("dot_y", -1, 1, 0, false),
-        --delta = true,
-        sequences = 
-		{
-            {"xy_ul", "y_u", "xy_ur"}, {"x_l", "mid", "x_r"}, { "xy_dl", "y_d", "xy_dr"}
-        },
-    }
-)
-
-model:CreateSequence(
-	{
-		name = "idle",
-		sequences = {
-			{ "mid" }
-		},
-		addlayer = {
-			 "aim"
-		}
-	}
-)
+function Fire()
+	local law = Entities:FindByModel(nil, "models/weapons/law_weapon.vmdl")
+	
+	while law
+	do
+		law:GetPrivateScriptScope().OnTriggerPressed(law:GetPrivateScriptScope())
+		law = Entities:FindByModel(law, "models/weapons/law_weapon.vmdl")
+	end
+end

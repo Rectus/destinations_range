@@ -9,7 +9,7 @@
 		<Panel class="Page" id="BarnacleGunDialog">
 			<Panel class="TextArea">
 				<Label class="Title" text="Barnacle Gun" />
-				<Label class="Desc Big" text="Your very own pet barnacle.\n\nUsage:\nPick up with the grip button.\nHold the trigger to latch on to walls or objects.\nRelease to drop the object or yourself." />
+				<Label class="Desc Big" text="Your very own pet barnacle.\n\nUsage:\nPick up with the grip button.\nHold the trigger to target. Release to latch on to walls or objects.\nPress the trigger again to drop the object or yourself." />
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

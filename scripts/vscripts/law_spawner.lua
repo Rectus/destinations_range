@@ -23,12 +23,12 @@
 ]]--
 
 function PostSpawn(self, entities)
+	-- The spawn callback returns all entities it has ever spawned.
 	for i, entity in pairs(entities)
 	do
-	  	if not entity:IsNull() and not entity:GetPrivateScriptScope().OnPickedUp
+	  	if not entity:IsNull() and not entity:GetOrCreatePrivateScriptScope().OnPickedUp
 	  	then
-	  		print(entity:GetClassname())
-	  		DoEntFireByInstanceHandle(entity, "RunScriptFile", "weapon_law", 0, nil, nil)
+	  		DoEntFireByInstanceHandle(entity, "RunScriptFile", "weapon_law_simple", 0, nil, nil)
 	  		DoEntFireByInstanceHandle(entity, "CallScriptFunction", "Init", 0, nil, nil)
 	  	end
 	end

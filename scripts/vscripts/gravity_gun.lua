@@ -1,6 +1,8 @@
 --[[
 	Gravity gun script.
 	
+	Since the gravity gun doesn't have any animations, no extra prop needs to be spawned.
+	
 	Copyright (c) 2016 Rectus
 	
 	Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,21 +26,47 @@
 
 g_VRScript.pickupManager:RegisterEntity(thisEntity)
 
-PUNT_IMPULSE = 1000
-MAX_PULL_IMPULSE = 500
-MAX_PULLED_VELOCITY = 500
-PULL_EASE_DISTANCE = 128.0
-CARRY_DISTANCE = 32
-CARRY_GLUE_DISTANCE = 16
-TRACE_DISTANCE = 512
-OBJECT_PULL_INTERVAL = 0.1
-MUZZLE_OFFSET = Vector(36, 0, 4)
-CARRY_OFFSET = Vector(-4, 0, 0)
-CARRY_ANGLES = QAngle(10, 0, 0)
+local PUNT_IMPULSE = 1000
+local MAX_PULL_IMPULSE = 500
+local MAX_PULLED_VELOCITY = 500
+local PULL_EASE_DISTANCE = 128.0
+local CARRY_DISTANCE = 32
+local CARRY_GLUE_DISTANCE = 16
+local TRACE_DISTANCE = 512
+local OBJECT_PULL_INTERVAL = 0.1
+local MUZZLE_OFFSET = Vector(36, 0, 0)
+local CARRY_OFFSET = Vector(-4, 0, 0)
+local CARRY_ANGLES = QAngle(10, 0, 0)
+local BEAM_TRACE_INTERVAL = 0.1
 
-pulledObject = nil
-isCarrying = false
-isCarried = false
+local pulledObject = nil
+local isCarrying = false
+local isCarried = false
+local beamParticle = nil
+local isTargeting = false
+
+local pulledEntities = {"prop_physics"; "prop_physics_override"; "simple_physics_prop"}
+
+function Precache(context)
+	PrecacheParticle("particles/item_laser_pointer.vpcf", context)
+	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
+end
+
+
+function Init(self)
+
+	beamParticle = ParticleSystem("particles/item_laser_pointer.vpcf", false)
+	beamParticle:CreateControlPoint(1, Vector(TRACE_DISTANCE, 0, 0), thisEntity, "")
+	-- Control point 3 sets the color of the beam.
+	beamParticle:CreateControlPoint(3, Vector(0.5, 0.5, 0.8))
+
+	
+	beamParticle:SetParent(thisEntity, "beam")
+	beamParticle:SetOrigin(thisEntity:GetAbsOrigin())
+	
+	
+end
+
 
 function OnTriggerPressed(self)
 	if isCarrying
@@ -48,6 +76,8 @@ function OnTriggerPressed(self)
 		StopSoundEvent("Physcannon.Charge", thisEntity)
 		StopSoundEvent("Physcannon.HoldLoop", thisEntity)
 		StartSoundEvent("Physcannon.Drop", thisEntity)
+		thisEntity:SetThink(TraceBeam, "trace_beam", BEAM_TRACE_INTERVAL)
+		beamParticle:Start()
 		return
 	end
 
@@ -66,6 +96,7 @@ function OnTriggerPressed(self)
 	end
 end
 
+
 function OnTriggerUnpressed(self)
 	if not isCarrying and pulledObject
 	then
@@ -76,6 +107,7 @@ function OnTriggerUnpressed(self)
 	end
 end
 
+
 function OnPadPressed(self)
 	if isCarrying
 	then
@@ -85,9 +117,12 @@ function OnPadPressed(self)
 		isCarrying = false
 		StopSoundEvent("Physcannon.HoldLoop", thisEntity)
 		StartSoundEvent("Physcannon.Launch", thisEntity)
+		thisEntity:SetThink(TraceBeam, "trace_beam", BEAM_TRACE_INTERVAL)
+		beamParticle:Start()
 	end
 
 end
+
 
 function OnPickedUp(self, hand, player)
 
@@ -96,13 +131,19 @@ function OnPickedUp(self, hand, player)
 	local carryAngles = hand:GetAngles() + CARRY_ANGLES
 	thisEntity:SetAngles(carryAngles.x, carryAngles.y, carryAngles.z)
 
+	beamParticle:Start()
+	isTargeting = true
+	thisEntity:SetThink(TraceBeam, "trace_beam", 0)
 end
+
 
 function OnDropped(self, hand, player)
 	pulledObject = nil
 	isCarrying = false
 	StopSoundEvent("Physcannon.HoldLoop", thisEntity)
 	thisEntity:SetParent(nil, "")
+	beamParticle:StopPlayEndcap()
+	isTargeting = false
 end
 
 
@@ -117,14 +158,80 @@ function TraceEntity(self)
 	--DebugDrawLine(traceTable.startpos, traceTable.endpos, 0, 255, 0, false, 0.11)
 	TraceLine(traceTable)
 	
-	if traceTable.hit and traceTable.enthit and traceTable.enthit:GetClassname() == "prop_physics_override"
+	if traceTable.hit and traceTable.enthit
 	then
-		return traceTable.enthit
+		for _, entClass in ipairs(pulledEntities)
+		do
+			if traceTable.enthit:GetClassname() == entClass
+			then
+				return traceTable.enthit
+			end
+		end
 	end
-	
-	
+		
 	return nil
 end
+
+
+function TraceBeam(self)
+	if (not isTargeting) or isCarrying
+	then 
+		return nil
+	end
+
+	local traceTable =
+	{
+		startpos = GetMuzzlePos();
+		endpos = GetMuzzlePos() + RotatePosition(Vector(0,0,0), 
+				RotateOrientation(thisEntity:GetAngles(), QAngle(0, 0, 0)), Vector(TRACE_DISTANCE, 0, 0));
+		ignore = thisEntity
+
+	}
+	--DebugDrawLine(traceTable.startpos, traceTable.endpos, 255, 0, 0, false, 0.1)
+	TraceLine(traceTable)
+	
+	if traceTable.hit 
+	then
+		--DebugDrawLine(traceTable.startpos, GetMuzzlePos() + RotatePosition(Vector(0,0,0), 
+				--RotateOrientation(thisEntity:GetAngles(), MUZZLE_ANGLES_OFFSET), Vector(TONGUE_MAX_DISTANCE * traceTable.fraction, 0, 0)), 0, 255, 255, false, 0.5)
+		
+		
+		
+		local pullableHit = false
+		if traceTable.enthit 
+		then
+			for _, entClass in ipairs(pulledEntities)
+			do
+				if traceTable.enthit:GetClassname() == entClass
+				then
+					pullableHit = true
+				end
+			end
+		end
+		
+		if pullableHit
+		then
+			beamParticle:GetControlPoint(3):SetOrigin(Vector(0.8, 0.8, 0.5))
+		else
+			beamParticle:GetControlPoint(3):SetOrigin(Vector(0.5, 0.5, 0.8))
+		end
+		
+		
+		beamParticle:GetControlPoint(1):SetAbsOrigin(thisEntity:GetAbsOrigin()  + RotatePosition(Vector(0,0,0), 
+				thisEntity:GetAngles(), Vector(TRACE_DISTANCE * traceTable.fraction * 2 + 1, 0, 0)))
+		
+
+	
+	else
+		beamParticle:GetControlPoint(3):SetOrigin(Vector(0.4, 0.4, 0.6))
+		beamParticle:GetControlPoint(1):SetAbsOrigin(thisEntity:GetAbsOrigin() + RotatePosition(Vector(0,0,0), 
+				thisEntity:GetAngles(), Vector(TRACE_DISTANCE * 2 + 1, 0, 0)))
+		
+	end
+	
+	return BEAM_TRACE_INTERVAL
+end
+
 
 function PullObjectFrame(self)
 	
@@ -174,6 +281,7 @@ function StartedCarrying(self)
 	StopSoundEvent("Physcannon.Charge", thisEntity)
 	StartSoundEvent("Physcannon.Pickup", thisEntity)
 	StartSoundEvent("Physcannon.HoldLoop", thisEntity)
+	beamParticle:StopPlayEndcap()
 end
 
 function GetMuzzlePos()

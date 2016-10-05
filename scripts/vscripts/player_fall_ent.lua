@@ -1,5 +1,5 @@
 --[[
-	Adds pose paramter sequences to the red dot sight.
+	Think entity for the fall manager.
 	
 	Copyright (c) 2016 Rectus
 	
@@ -21,31 +21,20 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 ]]--
+local controller = nil
+local thinkInterval = 1
 
-require "animationsystem.sequences"             
+function EnableThink(cont, interval)
+	thinkInterval = interval
+	controller = cont
+	thisEntity:SetThink(Think, "player_fall", thinkInterval)
+end
 
-
-model:CreateSequence(
-    {
-        name = "aim",
-        poseParamX = model:CreatePoseParameter("dot_x", -1, 1, 0, false),
-        poseParamY = model:CreatePoseParameter("dot_y", -1, 1, 0, false),
-        --delta = true,
-        sequences = 
-		{
-            {"xy_ul", "y_u", "xy_ur"}, {"x_l", "mid", "x_r"}, { "xy_dl", "y_d", "xy_dr"}
-        },
-    }
-)
-
-model:CreateSequence(
-	{
-		name = "idle",
-		sequences = {
-			{ "mid" }
-		},
-		addlayer = {
-			 "aim"
-		}
-	}
-)
+function Think()
+	if controller
+	then
+		controller:PlayerFallFrame()
+	end
+	
+	return thinkInterval
+end
