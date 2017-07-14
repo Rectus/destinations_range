@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SuctionCupDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="World Grabber" />
+				<Label class="Desc Big" text="Can be used to move around and rotate the view.\n\nUsage:\nPick up with the trigger button.\nHold the trigger to attach to the world.\nUse one grabber in each hand to rotate.\nMay cause motion sickness." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

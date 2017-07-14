@@ -34,14 +34,14 @@ local TONGUE_PULL_INTERVAL = 0.02
 local TONGUE_PULL_DELAY = 0.5
 local REEL_SOUND_INTERVAL = 10
 local REEL_ANIM_INTERVAL = 1
-local MUZZLE_OFFSET = Vector(-24, 8, 0)
+local MUZZLE_OFFSET = Vector(-24, -8, 0)
 local MUZZLE_ANGLES_OFFSET = QAngle(-90, 0, 0) 
 
-local TONGUE_PULL_PLAYER_SPEED = 8
-local TONGUE_PULL_PLAYER_EASE_DISTANCE = 128
+local TONGUE_PULL_PLAYER_SPEED = 10
+local TONGUE_PULL_PLAYER_EASE_DISTANCE = 32
 
-local CARRY_OFFSET = Vector(-6, -7.5, -2)
-local CARRY_ANGLES = QAngle(90, 0, 0)
+local CARRY_OFFSET = Vector(6, 7.5, -2)
+local CARRY_ANGLES = QAngle(90, 180, 0)
 
 local isCarried = false
 local playerEnt = nil
@@ -201,6 +201,7 @@ function ReleaseTongue(self)
 	then
 		playerMoved = false
 		g_VRScript.fallController:RemoveConstraint(playerEnt, thisEntity)
+		g_VRScript.fallController:EnableGravity(playerEnt)
 	end
 end
 
@@ -324,6 +325,7 @@ function TongueTravelFrame(self)
 		else
 			playerMoved = true
 			g_VRScript.fallController:AddConstraint(playerEnt, thisEntity)
+			g_VRScript.fallController:DisableGravity(playerEnt)
 		end
 	
 		tongueParticle:GetControlPoint(1):SetOrigin(pullEndpoint)
@@ -346,9 +348,14 @@ function TonguePullFrame(self)
 		return nil
 	end
 	
+	if not g_VRScript.fallController:IsActive(playerEnt, thisEntity)
+	then
+		return TONGUE_PULL_INTERVAL
+	end	
+	
 	local pullVector = nil
 	
-	local gunRelativePos = GetMuzzlePos() - playerEnt:GetHMDAnchor():GetOrigin()
+	--local gunRelativePos = GetMuzzlePos() - playerEnt:GetHMDAnchor():GetOrigin()
 	
 	if pulledEnt
 	then
@@ -366,18 +373,34 @@ function TonguePullFrame(self)
 		then 
 			pullVector = pullVector * distance / TONGUE_PULL_PLAYER_EASE_DISTANCE
 		end
+				
+		if pulledEnt
+		then
+			pulledEnt:ApplyAbsVelocityImpulse(pullVector)
+		else
+			-- Prevent player from going through floors
+			if pullVector.z < 0 and g_VRScript.fallController:TracePlayerHeight(playerEnt) <= 0
+			then
+				pullVector = pullVector - Vector(0, 0, pullVector.z)
+			end
+		
+			g_VRScript.fallController:AddVelocity(playerEnt, pullVector)
+			--playerEnt:GetHMDAnchor():SetOrigin(GetMuzzlePos() - gunRelativePos + pullVector)
+		end		
+	elseif not pulledEnt
+	then
+		g_VRScript.fallController:StickFrame(playerEnt)
+		if distance < TONGUE_PULL_PLAYER_EASE_DISTANCE
+		then 
+			pullVector = pullVector * distance / TONGUE_PULL_PLAYER_EASE_DISTANCE
+		end
 		-- Prevent player from going through floors
 		if pullVector.z < 0 and g_VRScript.fallController:TracePlayerHeight(playerEnt) <= 0
 		then
 			pullVector = pullVector - Vector(0, 0, pullVector.z)
 		end
-		
-		if pulledEnt
-		then
-			pulledEnt:ApplyAbsVelocityImpulse(pullVector)
-		else
-			playerEnt:GetHMDAnchor():SetOrigin(GetMuzzlePos() - gunRelativePos + pullVector)
-		end
+		g_VRScript.fallController:MovePlayer(playerEnt, pullVector)
+		--playerEnt:GetHMDAnchor():SetOrigin(GetMuzzlePos() - gunRelativePos + pullVector)
 	end
 	
 	--DebugDrawLine(GetMuzzlePos(), pullEndpoint, 0, 0, 255, false, TONGUE_PULL_INTERVAL)

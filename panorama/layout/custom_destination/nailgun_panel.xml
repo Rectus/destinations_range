@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SuctionCupDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Nailgun (WIP)" />
+				<Label class="Desc Big" text="Attaches a rope or rigid constraint between two objects.\n\nUsage:\nPick up with the trigger button.\nPress the trigger to shoot.\nShoot two objects or the level geometry.\nPress the touchpad up or down to change mode.\nNote: This might crash the game, use with care." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

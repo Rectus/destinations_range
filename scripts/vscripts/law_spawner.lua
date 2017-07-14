@@ -28,8 +28,8 @@ function PostSpawn(self, entities)
 	do
 	  	if not entity:IsNull() and not entity:GetOrCreatePrivateScriptScope().OnPickedUp
 	  	then
-	  		DoEntFireByInstanceHandle(entity, "RunScriptFile", "weapon_law_simple", 0, nil, nil)
-	  		DoEntFireByInstanceHandle(entity, "CallScriptFunction", "Init", 0, nil, nil)
+	  		DoEntFireByInstanceHandle(entity, "RunScriptFile", "tool_law", 0, nil, nil)
+	  		DoEntFireByInstanceHandle(entity, "CallScriptFunction", "DelaySpawn", 0, nil, nil)
 	  	end
 	end
 end

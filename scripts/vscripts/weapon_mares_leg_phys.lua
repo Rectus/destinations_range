@@ -27,7 +27,7 @@ require("particle_system")
 
 local SPIN_CHECK_INTERVAL = 0.2
 local CARRY_OFFSET = Vector(-0.2, 0, 0)
-local CARRY_ANGLES = QAngle(20, 0, 0)
+local CARRY_ANGLES = QAngle(20, 180, 0)
 local FIRE_RUMBLE_INTERVAL = 0.01
 local FIRE_RUMBLE_TIME = 0.2
 local SPIN_TIME = 1.1
@@ -36,8 +36,8 @@ local SPIN_RUMBLE_INTERVAL = 0.02
 local SHOT_TRACE_DISTANCE = 16384
 
 local DAMAGE = 50
-local DAMAGE_FORCE = 100
-local DAMAGE_ANG_FORCE = 25
+local DAMAGE_FORCE = 150
+local DAMAGE_ANG_FORCE = 50
 local DAMAGE_MAX_ANG_MOMENTUM = 1000
 
 local isCarried = false
@@ -81,6 +81,7 @@ function Precache(context)
 	PrecacheParticle(tracerKeyvals.effect_name, context)
 	PrecacheParticle(dustKeyvals.effect_name, context)
 	PrecacheModel(animKeyvals.model, context)
+	PrecacheModel("models/weapons/hand_dummy.vmdl", context)
 	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
 end
 
@@ -160,6 +161,7 @@ function TraceShot(self)
 		
 		if traceTable.enthit
 		then
+		
 			local dmgInfo = CreateDamageInfo(thisEntity, currentPlayer, thisEntity:GetAngles():Forward() * DAMAGE_FORCE, traceTable.pos,  DAMAGE)
 			--[[TakeDamage(
 				{
@@ -177,6 +179,12 @@ function TraceShot(self)
 			traceTable.enthit:TakeDamage(dmgInfo)
 			
 			DestroyDamageInfo(dmgInfo)
+			
+			if traceTable.enthit:GetPrivateScriptScope() and 
+				traceTable.enthit:GetPrivateScriptScope().OnHurt
+			then
+				traceTable.enthit:GetPrivateScriptScope().OnHurt()
+			end
 		
 		end
 		
@@ -249,6 +257,7 @@ function OnTriggerUnpressed(self)
 end
 
 function OnPickedUp(self, hand, player)
+	hand:AddHandModelOverride("models/weapons/hand_dummy.vmdl")
 	controller = hand
 	currentPlayer = player
 	thisEntity:SetParent(hand, "")
@@ -266,6 +275,7 @@ function OnPickedUp(self, hand, player)
 end
 
 function OnDropped(self, hand, player)
+	hand:RemoveHandModelOverride("models/weapons/hand_dummy.vmdl")
 	thisEntity:SetParent(nil, "")
 	controller = nil
 end

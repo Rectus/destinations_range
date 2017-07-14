@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SuctionCupDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Pogo Stick" />
+				<Label class="Desc Big" text="Bouncy locomotion.\n\nUsage:\nHold the trigger to boost. Press the trigger at the right time to jump high.\nMay cause motion sickness." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

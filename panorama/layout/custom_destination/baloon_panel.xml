@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SuctionCupDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Hydrogen cylinder" />
+				<Label class="Desc Big" text="Inflates balloonicorns\n\nUsage:\nHold the trigger to inflate a balloon.\nBalloon buoyancy can be adjusted by scaling it." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

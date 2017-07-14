@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/custom_destination/scanner_display.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/scanner_panel.js" />
+	</scripts>
+
+	<ClientUIDialogPanel>
+		<ClientUIDialogPanel class="Display">
+			<Label class="Text" id="TextDisplay" text="Booting..." />
+		</ClientUIDialogPanel>
+	</ClientUIDialogPanel>
+</root>

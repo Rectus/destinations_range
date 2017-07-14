@@ -1,0 +1,15 @@
+
+
+.Display {
+	opacity: 1;
+	wash-color: none;
+	padding: 10px;
+	/*border: 2px solid red;*/
+}
+
+.Text {
+	color: #20cf20ff;
+	font-family: platformfont;
+	font-size: 20px;
+	text-align: left;
+}

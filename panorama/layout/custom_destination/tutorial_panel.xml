@@ -9,7 +9,7 @@
 		<Panel class="Page BigDialog" id="GravityGunDialog">
 			<Panel class="TextArea">
 				<Label class="Title" text="Information" />
-				<Label class="Desc Big" text="Most objects can be picked up with the grip button." />
+				<Label class="Desc Big" text="Most objects can be picked up with the trigger, and dropped with the grip button." />
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

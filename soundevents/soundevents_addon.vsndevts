@@ -24,6 +24,65 @@
 
 	}
 	
+	Balloon.Inflate = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/balloon-inflate.vsnd"
+
+	}
+	
+	Balloon.Explode = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		pitch = 1.4
+		distance_max = "10000"
+		vsnd_files = "sounds/tools/drone_explode.vsnd"
+
+	}
+	
+	SkiPole.Hit = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		vsnd_files = "sounds/props/dice_impact_04.vsnd"
+
+	}
+	
+	
+	
+	Flashlight.Button = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.6
+		vsnd_files = "sounds/props/toy_soldier_impact_04.vsnd"
+
+	}
+	Suctioncup.Attach = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.6
+		distance_max = "2000"
+		vsnd_files = "sounds/suction_cup/suction_cup_attach.vsnd"
+
+	}
+	
+	Suctioncup.Release = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.7
+		distance_max = "2000"
+		vsnd_files = "sounds/suction_cup/suction_cup_release.vsnd"
+
+	}
+	
 	Physcannon.HoldLoop = 
 	{
 		type = "destinations.simple_vr"
@@ -183,5 +242,68 @@
 
 
 		vsnd_files = "sounds/weapons/barnacle/tongue_fly_loop.vsnd"
+	}
+	
+	Scanner.Equip =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+
+		vsnd_files = "sounds/tools/drone_equip.vsnd"
+	}
+	
+	Scanner.Start =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+
+		vsnd_files = "sounds/tools/cachefinder_ping.vsnd"
+	}
+	
+	Scanner.Stop =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+
+		vsnd_files = "sounds/tools/cachefinder_trigger_fail.vsnd"
+	}
+	
+	Scanner.Track =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+
+		vsnd_files = "sounds/tools/drone_loop_data.vsnd"
+	}
+	
+	Scanner.Scan =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+
+		vsnd_files = "sounds/tools/scanner_scan.vsnd"
+	}
+	
+	Scanner.Beep =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+
+		vsnd_files = "sounds/tools/drone_recall.vsnd"
+	}
+	
+	Jetpack.Loop =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+
+		vsnd_files = "sounds/tools/jetpack_loop.vsnd"
 	}
 }

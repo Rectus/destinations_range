@@ -1,8 +1,6 @@
 --[[
 	Gravity gun script.
 	
-	Since the gravity gun doesn't have any animations, no extra prop needs to be spawned.
-	
 	Copyright (c) 2016 Rectus
 	
 	Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,16 +25,16 @@
 g_VRScript.pickupManager:RegisterEntity(thisEntity)
 
 local PUNT_IMPULSE = 1000
-local MAX_PULL_IMPULSE = 500
+local MAX_PULL_IMPULSE = 250
 local MAX_PULLED_VELOCITY = 500
-local PULL_EASE_DISTANCE = 128.0
+local PULL_EASE_DISTANCE = 32.0
 local CARRY_DISTANCE = 32
 local CARRY_GLUE_DISTANCE = 16
-local TRACE_DISTANCE = 512
+local TRACE_DISTANCE = 1024
 local OBJECT_PULL_INTERVAL = 0.1
 local MUZZLE_OFFSET = Vector(36, 0, 0)
-local CARRY_OFFSET = Vector(-4, 0, 0)
-local CARRY_ANGLES = QAngle(10, 0, 0)
+local CARRY_OFFSET = Vector(4, 1, 0)
+local CARRY_ANGLES = QAngle(10, 180, 0)
 local BEAM_TRACE_INTERVAL = 0.1
 
 local pulledObject = nil
@@ -125,10 +123,10 @@ end
 
 
 function OnPickedUp(self, hand, player)
-
+	hand:AddHandModelOverride("models/weapons/hand_dummy.vmdl")
 	thisEntity:SetParent(hand, "")
 	thisEntity:SetOrigin(hand:GetOrigin() + RotatePosition(Vector(0,0,0), hand:GetAngles(), CARRY_OFFSET))
-	local carryAngles = hand:GetAngles() + CARRY_ANGLES
+	local carryAngles = RotateOrientation(hand:GetAngles(), CARRY_ANGLES)
 	thisEntity:SetAngles(carryAngles.x, carryAngles.y, carryAngles.z)
 
 	beamParticle:Start()
@@ -138,6 +136,7 @@ end
 
 
 function OnDropped(self, hand, player)
+	hand:RemoveHandModelOverride("models/weapons/hand_dummy.vmdl")
 	pulledObject = nil
 	isCarrying = false
 	StopSoundEvent("Physcannon.HoldLoop", thisEntity)

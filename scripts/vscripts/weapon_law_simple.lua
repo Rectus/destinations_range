@@ -81,6 +81,7 @@ function OnTriggerUnpressed(self)
 end
 
 function OnPickedUp(self, hand, player)	
+	hand:AddHandModelOverride("models/weapons/hand_dummy.vmdl")
 	thisEntity:SetParent(hand, "")
 	
 	if not alreadyPickedUp
@@ -92,6 +93,7 @@ function OnPickedUp(self, hand, player)
 end
 
 function OnDropped(self, hand, player)
+	hand:RemoveHandModelOverride("models/weapons/hand_dummy.vmdl")
 	thisEntity:SetParent(nil, "")
 
 end

@@ -130,6 +130,10 @@ end
 
 
 function ParticleSystem:GetControlPoint(num)
+	if not self.controlPoints[num] or (not IsValidEntity(self.controlPoints[num])) 
+	then
+		self:CreateControlPoint(num, Vector(0,0,0), nil, nil)
+	end
 	return self.controlPoints[num]
 end
 

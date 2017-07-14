@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SuctionCupDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Entity Scanner" />
+				<Label class="Desc Big" text="Displays information about solid entities. \n\nUsage:\nHold trigger to scan." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

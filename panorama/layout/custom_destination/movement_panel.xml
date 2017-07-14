@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SuctionCupDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Movement Tool" />
+				<Label class="Desc Big" text="Enbles grabbing and trackpad locomotion.\n\nUsage:\nPick up with the trigger button.\nGrab and hold onto geometry or props with the trigger to pull yourself around. Grabbing onto moving props drags you along.\nUse the trackpad to move around.\nUse one tool in each hand to rotate (currently broken).\nMay cause motion sickness." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

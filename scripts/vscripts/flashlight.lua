@@ -1,30 +1,10 @@
 
---[[
-	Flashlight script.
-	
-	Copyright (c) 2016 Rectus
-	
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-]]--
 
 
 g_VRScript.pickupManager:RegisterEntity(thisEntity)
+
+local CARRY_OFFSET = Vector(3.5, 0, -0.5)
+local CARRY_ANGLES = QAngle(0, 0, 0)
 
 local turnedOn = false
 local lightEnt = nil
@@ -42,6 +22,7 @@ local lightKeyvals = {
 	falloff = 10;
 	innerconeangle = 10;
 	outerconeangle = 20;
+	castshadows = 1;
 }
 
 function Init(self)
@@ -51,9 +32,11 @@ function Init(self)
 	lightEnt:SetOrigin(thisEntity:GetOrigin())
 	local lightAngles = thisEntity:GetAngles()
 	lightEnt:SetAngles(lightAngles.x, lightAngles.y, lightAngles.z)
+	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
 end
 
 function OnTriggerPressed(self)
+	StartSoundEvent("Flashlight.Button", thisEntity)
 	if turnedOn
 	then
 		turnedOn = false
@@ -71,12 +54,16 @@ function OnTriggerUnpressed(self)
 end
 
 function OnPickedUp(self, hand, player)
+	hand:AddHandModelOverride("models/weapons/hand_dummy.vmdl")
 
 	thisEntity:SetParent(hand, "")
+	thisEntity:SetOrigin(hand:GetOrigin() + RotatePosition(Vector(0,0,0), hand:GetAngles(), CARRY_OFFSET))
+	local carryAngles = RotateOrientation(hand:GetAngles(), CARRY_ANGLES)
+	thisEntity:SetAngles(carryAngles.x, carryAngles.y, carryAngles.z)
 
 end
 
 function OnDropped(self, hand, player)
-
+	hand:RemoveHandModelOverride("models/weapons/hand_dummy.vmdl")
 	thisEntity:SetParent(nil, "")
 end

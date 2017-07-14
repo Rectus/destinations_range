@@ -29,7 +29,7 @@ local THINK_INTERVAL = 0.02
 local armCounter = 0
 local ARM_DELAY = 1 
 local TRACE_DISTANCE = 48
-local prevAngles = null
+local prevAngles = nil
 local ANGLE_TOLERANCE = 0.1
 
 local EXPLOSION_RANGE = 600
@@ -109,6 +109,12 @@ function Explode(self)
 				local magnitude = (EXPLOSION_MAX_IMPULSE - EXPLOSION_MAX_IMPULSE * distance / EXPLOSION_RANGE)
 				local impulse = (pushEnt:GetCenter() - thisEntity:GetCenter()):Normalized() * magnitude
 				pushEnt:ApplyAbsVelocityImpulse(impulse)
+				
+				if pushEnt:GetPrivateScriptScope() and 
+					pushEnt:GetPrivateScriptScope().OnHurt
+				then
+					pushEnt:GetPrivateScriptScope().OnHurt()
+				end
 			end
 		end
 		pushEnt = Entities:FindByClassname(pushEnt, "prop_physics_override")
@@ -120,7 +126,7 @@ function Explode(self)
 	DoEntFireByInstanceHandle(explosion, "Kill", "", 20, nil, nil)
 	
 	StartSoundEventFromPosition("Law.Explode", thisEntity:GetOrigin())
-	print(thisEntity:GetOrigin())
+	--print(thisEntity:GetOrigin())
 	thisEntity:Kill()
 	
 end

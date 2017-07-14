@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SuctionCupDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Suction Cup" />
+				<Label class="Desc Big" text="Can be used to carry objects or to move around and climb walls.\n\nUsage:\nPick up with the trigger button.\nPush the cup onto an object or geometry to grab on.\nPress the trigger to release." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>
