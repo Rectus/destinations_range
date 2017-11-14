@@ -31,25 +31,42 @@ local ARM_DELAY = 1
 local TRACE_DISTANCE = 48
 local prevAngles = nil
 local ANGLE_TOLERANCE = 0.1
+local user = nil
 
-local EXPLOSION_RANGE = 600
-local EXPLOSION_MAX_IMPULSE = 10000
+local EXPLOSION_RANGE = 500
+local EXPLOSION_MAX_IMPULSE = 5000
 
 local exploded = false
 
 local explosionKeyvals = {
-	fireballsprite = "sprites/zerogxplode.spr";
+	--fireballsprite = "sprites/zerogxplode.spr";
 	iMagnitude = 100;
 	rendermode = "kRenderTransAdd"
 }
 
 function Precache(context)
-	PrecacheEntityFromTable("env_explosion", explosionKeyvals, context)
+	--PrecacheEntityFromTable("env_explosion", explosionKeyvals, context)
+	PrecacheParticle("particles/weapons/law_rocket_smoke.vpcf", context)
+	PrecacheParticle("particles/weapons/law_explosion.vpcf", context)
+	
 end
 
-function Fire(self)
+function EnableDamage(usingPlayer)
+	Fire(self)
+end
+
+
+function Fire(player)
+	user = player
 	thisEntity:ApplyAbsVelocityImpulse(thisEntity:GetAngles():Forward() * ROCKET_INITVELOCITY)
 	thisEntity:ApplyLocalAngularVelocityImpulse(Vector(1000, 0, 0))
+	
+	
+	local smoke = ParticleManager:CreateParticle("particles/weapons/law_rocket_smoke.vpcf", 
+			PATTACH_ABSORIGIN, thisEntity)
+		ParticleManager:SetParticleControlEnt(smoke, 
+			0, thisEntity, PATTACH_POINT_FOLLOW, "exhaust", Vector(0, 0, 0), false)
+	
 	thisEntity:SetThink(Think, "ent_think", THINK_INTERVAL)
 end
 
@@ -67,7 +84,7 @@ function Think(self)
 	
 	if TraceDirectHit(self)
 	then
-		Explode(self)
+		
 		return false
 	end	
 	
@@ -87,46 +104,54 @@ function TraceDirectHit(self)
 	
 	if traceTable.hit
 	then
+		Explode(traceTable.normal)
+	
 		return true
 	end
 	
 	return false
 end
 
-function Explode(self)
+function Explode(normal)
 	exploded = true
 	
-	local pushEnt = Entities:FindByClassname(nil, "prop_physics_override")
+	local entities = Entities:FindAllInSphere(thisEntity:GetOrigin(), EXPLOSION_RANGE)
 	
-	while pushEnt 
+	for _,dmgEnt in ipairs(entities) 
 	do
-		if pushEnt ~= thisEntity
+		if IsValidEntity(dmgEnt) and dmgEnt:IsAlive() and dmgEnt ~= thisEntity
 		then
-			local distance = (pushEnt:GetCenter() - thisEntity:GetCenter()):Length()
-			
-			if distance < EXPLOSION_RANGE
-			then
-				local magnitude = (EXPLOSION_MAX_IMPULSE - EXPLOSION_MAX_IMPULSE * distance / EXPLOSION_RANGE)
-				local impulse = (pushEnt:GetCenter() - thisEntity:GetCenter()):Normalized() * magnitude
-				pushEnt:ApplyAbsVelocityImpulse(impulse)
+			local distance = (dmgEnt:GetCenter() - thisEntity:GetCenter()):Length()
 				
-				if pushEnt:GetPrivateScriptScope() and 
-					pushEnt:GetPrivateScriptScope().OnHurt
-				then
-					pushEnt:GetPrivateScriptScope().OnHurt()
-				end
-			end
+			local magnitude = (EXPLOSION_MAX_IMPULSE - EXPLOSION_MAX_IMPULSE * distance / EXPLOSION_RANGE)			
+			local impulse = (dmgEnt:GetCenter() - thisEntity:GetCenter()):Normalized() * magnitude
+			
+			dmgEnt:ApplyAbsVelocityImpulse(impulse)
+			
+			local dmg = CreateDamageInfo(thisEntity, user, impulse, thisEntity:GetOrigin(), magnitude, DMG_BLAST)
+			dmgEnt:TakeDamage(dmg)
+			DestroyDamageInfo(dmg)
+
 		end
-		pushEnt = Entities:FindByClassname(pushEnt, "prop_physics_override")
+		dmgEnt = Entities:FindByClassname(dmgEnt, "prop_physics_override")
 	end
 	
-	local explosion = SpawnEntityFromTableSynchronous("env_explosion", explosionKeyvals)
-	explosion:SetOrigin(thisEntity:GetOrigin())
-	DoEntFireByInstanceHandle(explosion, "Explode", "", 0, nil, nil)
-	DoEntFireByInstanceHandle(explosion, "Kill", "", 20, nil, nil)
+	--local explosion = SpawnEntityFromTableSynchronous("env_explosion", explosionKeyvals)
+	--explosion:SetOrigin(thisEntity:GetOrigin())
+	
+	local explParticle = ParticleManager:CreateParticle("particles/weapons/law_explosion.vpcf", 
+		PATTACH_ABSORIGIN, thisEntity)
+	ParticleManager:SetParticleControl(explParticle, 0, thisEntity:GetOrigin())
+	ParticleManager:SetParticleControlForward(explParticle, 0, normal)
+	
+	thisEntity:AddEffects(32)
+	
+	--DoEntFireByInstanceHandle(explosion, "Explode", "", 0, nil, nil)
+	--DoEntFireByInstanceHandle(explosion, "Kill", "", 5, nil, nil)
+	
+	DoEntFireByInstanceHandle(thisEntity, "Kill", "", 5, nil, nil)
 	
 	StartSoundEventFromPosition("Law.Explode", thisEntity:GetOrigin())
-	--print(thisEntity:GetOrigin())
-	thisEntity:Kill()
+	--thisEntity:Kill()
 	
 end

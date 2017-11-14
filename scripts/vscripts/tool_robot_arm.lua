@@ -72,6 +72,7 @@ function Precache(context)
 end
 
 
+
 function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
@@ -86,6 +87,9 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	targetFound = false
 	isTargeting = true
 	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+
 	thisEntity:SetThink(IdleFrame, "move", 0.1)
 	return true
 end
@@ -100,6 +104,9 @@ function SetUnequipped()
 	handEnt = nil
 	isCarried = false
 	isTargeting = false
+	
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	return true
 end
@@ -147,7 +154,8 @@ function OnTriggerPressed(self)
 			
 	end
 	isTargeting = false
-
+	
+	
 end
 
 
@@ -158,6 +166,7 @@ function OnTriggerUnpressed(self)
 		targetFound = false
 		isTargeting = true
 	end
+	
 end
 
 
@@ -178,7 +187,7 @@ function ReleaseHold(self)
 		grabbedEnt = nil
 		
 	end
-	
+	thisEntity:SetVelocity(Vector(1000,1000,1000))
 	thisEntity:SetThink(IdleFrame, "move", GRAB_MOVE_INTERVAL)
 end
 
@@ -223,6 +232,7 @@ function TraceGrab(self)
 				grabEnt:SetAbsOrigin(grabLoc)
 				
 				handAttachment:SetProceduralIKTarget("arm_ik", "arm_target", grabLoc, ang)
+				thisEntity:SetProceduralIKTarget("arm_ik", "arm_target", grabLoc, ang)
 				handAttachment:SetProceduralIKTargetWeight("arm_ik", "arm_target", 1)
 				grabbedEnt:SetParent(handAttachment, "")
 				thisEntity:SetThink(GrabMoveFrame, "move", GRAB_MOVE_INTERVAL)

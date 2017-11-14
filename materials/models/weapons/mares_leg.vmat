@@ -4,10 +4,15 @@ Layer0
 {
 	shader "vr_standard.vfx"
 
+	//---- Lighting ----
+	F_INDIRECT_TEXTURES 2 // Ambient Occlusion Texture
+
 	//---- Specular ----
+	F_ANISOTROPIC_GLOSS 1
 	F_METALNESS_TEXTURE 1
 	F_SPECULAR 1
 	F_SPECULAR_CUBE_MAP 1 // In-game Cube Map
+	F_SPECULAR_CUBE_MAP_PROJECTION 1
 
 	//---- Color ----
 	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
@@ -17,15 +22,24 @@ Layer0
 	TextureColor "materials/models/weapons/mares_leg_color.tga"
 
 	//---- Cube Map ----
-	g_flCubeMapBlurAmount "1.000"
+	g_flCubeMapBlur "0.000"
+	g_flCubeMapBrightness "1.000"
 
 	//---- Lighting ----
+	g_flAmbientOcclusionStrengthDirectDiffuse "1.000"
+	g_flAmbientOcclusionStrengthDirectSpecular "1.000"
 	g_vMetalnessRange "[0.000 1.000]"
-	g_vReflectanceRange "[0.000 0.207]"
+	g_vReflectanceRange "[0.000 1.000]"
+	TextureAmbientOcclusion "materials/models/weapons/mares_leg_ao.tga"
 	TextureGlossiness "materials/models/weapons/mares_leg_gloss.tga"
-	TextureMetalness "materials/models/weapons/rifle_exp_metal.tga"
+	TextureMetalness "materials/models/weapons/mares_leg_metal.tga"
 	TextureReflectance "materials/models/weapons/mares_leg_refl.tga"
 
 	//---- Normal Map ----
 	TextureNormal "materials/models/weapons/mares_leg_normal.png"
+
+	SystemAttributes
+	{
+		PhysicsSurfaceProperties "Metal_Cube"
+	}
 }

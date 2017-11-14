@@ -1,0 +1,42 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/classtest.js" />
+	</scripts>
+
+	<ClientUIDialogPanel> 
+		
+		<AvatarCustomizationItem id="testclass1" />
+		<ClientUIDialogPanel id="testclass2" />
+		<ContentBrowserItem id="testclass3" />
+		<DestinationsScrollPanel id="testclass4" />
+		<DestinationsSettingsPanel id="testclass5" />
+		<DestinationsTutorialPanel id="testclass6" />
+		<DestinationsWelcomePanel id="testclass7" />
+		<FriendsItem id="testclass8" />
+		<GameTrophyAppLogoPanel id="testclass9" />
+		<GameTrophyDetailsPanel id="testclass10" />
+		<HTML id="testclass11" />
+		<LobbyItem id="testclass12" />
+		<!--<snippet id="testclass13" />-->
+		<SteamToursAvatarCustomization id="testclass14" />
+		<SteamToursContentBrowser id="testclass15" />
+		<SteamToursFriends id="testclass16" />
+		<SteamToursNotifications id="testclass17" />
+		<SteamToursPlayerBillboard id="testclass18" />
+		<SteamToursRecentApps id="testclass19" />
+		<SteamToursUGCImage id="testclass20" />
+		<TrackpadUIPanel id="testclass21" />
+		<Label id="testclass22" />
+		<DropDown id="testclass23" />
+		<ToggleButton id="testclass24" />
+		<Slider id="testclass13" />
+		
+	</ClientUIDialogPanel> 
+
+</root>

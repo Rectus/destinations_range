@@ -1,0 +1,62 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/custom_destination/pause_panel.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/pause_commands.js" />
+	</scripts>
+	
+	<snippets>	
+		<snippet name="ItemButton">
+			<Button class="PausePanelButton Item"> 
+				<Image class="PausePanelButtonImage" id="ItemSpawnButtonImage" scaling="stretch-to-fit-preserve-aspect"/>
+				<Label class="PausePanelButtonImageLabel" id="ItemSpawnButtonLabel" text="Spawn item" />
+			</Button>
+		</snippet>
+	</snippets>	
+
+	<ClientUIDialogPanel> 
+		<ClientUIDialogPanel class="PausePanel" id="PausePanel">
+			<Panel class="PausePanelTitlebar">
+				<Label class="PausePanelTitleLabel"  text="Movement Paused"/>
+			</Panel>
+			<Panel class="PausePanelButtonArea" id="PausePanelDialog">
+
+
+				<Panel class="PausePanelButtonPane">
+
+					<Button id="TeleportButton" class="PausePanelButton" text="" onactivate="TeleportPlayer()"> 
+						<Label class="PausePanelButtonLabel" text="Teleport to start" />
+					</Button>
+				
+					<Button id="SkisButton" class="PausePanelButton" text="" onactivate="ToggleSkis()"> 
+						<Label class="PausePanelButtonLabel" text="Toggle ski visibility" />
+					</Button>
+				
+					<Button id="DebugButton" class="PausePanelButton" text="" onactivate="ToggleDebug()"> 
+						<Label class="PausePanelButtonLabel" text="Toggle debug visualization" />
+					</Button>
+				</Panel>
+			
+				
+				<Panel class="PausePanelButtonPane">
+					<Panel class="PausePanelScollableButtonPane" id="SpawnPane">
+						<Label class="PausePanelButtonLabel" text="Spawn Items" />
+						<!--<Button id="SpawnPoleButton" class="PausePanelButton" text="" onactivate="SpawnPole()"> 
+							<Image class="PausePanelButtonImage" src="file://{resources}/images/tool_skipole.png" scaling="stretch-to-fit-preserve-aspect"/>
+							<Label class="PausePanelButtonImageLabel" text="Spawn Ski Pole" />
+						</Button>
+
+						<Button id="SpawnJetpackButton" class="PausePanelButton" text="" onactivate="SpawnJetpack()"> 
+							<Image class="PausePanelButtonImage" src="file://{resources}/images/tool_jetpack.png" scaling="stretch-to-fit-preserve-aspect"/>
+							<Label class="PausePanelButtonImageLabel" text="Spawn Jetpack" />
+						</Button>-->
+					</Panel>
+				</Panel>
+				
+			</Panel>
+		</ClientUIDialogPanel>
+	</ClientUIDialogPanel>
+</root>

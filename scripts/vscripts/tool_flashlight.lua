@@ -49,10 +49,17 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 		DoEntFireByInstanceHandle(handAttachment, "Skin", "1", 0 , nil, nil)
 	end
 	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+	
 	return true
 end
 
 function SetUnequipped()
+
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+
 	if lightEnt ~= nil 
 	then
 		lightEnt:SetParent(thisEntity, "light")

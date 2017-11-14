@@ -50,6 +50,8 @@ local padMovement = false
 local padVector = Vector(0,0,0)
 local triggerValue = 0
 local triggerPressed = false
+local gripLocked = false
+local lockedPanel = nil
 
 
 local PACK_KEYVALS = {
@@ -101,10 +103,14 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	
 	thisEntity:SetThink(JetpackThrust, "thrust")
 	
+	playerEnt:AllowTeleportFromHand(handID, false)
+	
 	return true
 end
 
 function SetUnequipped()
+
+	playerEnt:AllowTeleportFromHand(handID, true)
 
 	playerEnt = nil
 	handEnt = nil
@@ -139,7 +145,57 @@ function OnHandleInput( input )
 	local IN_TRIGGER = (handID == 0 and IN_USE_HAND0 or IN_USE_HAND1)
 	local IN_GRIP = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
 	local IN_PAD = (handID == 0 and IN_PAD_HAND0 or IN_PAD_HAND1)
-	local IN_PAD_TOUCH = (handID == 0 and IN_PAD_TOUCH_HAND0 or IN_PAD_TOUCH_HAND1)
+	local IN_PAD_TOUCH = (handID == 0 and IN_PAD_TOUCH_HAND0 or IN_PAD_TOUCH_HAND1)	
+	local IN_JOY_TOUCH = (handID == 0 and 42 or 43)
+	local IN_JOY_PUSH = (handID == 0 and IN_PAD_TOUCH_HAND0 or IN_PAD_TOUCH_HAND1)
+
+
+	if playerEnt:GetVRControllerType() == VR_CONTROLLER_TYPE_TOUCH then
+			
+		if input.buttonsPressed:IsBitSet(IN_JOY_PUSH)
+		then
+			ToggleGripLock()
+		end
+		
+		if input.buttonsPressed:IsBitSet(IN_JOY_TOUCH)
+		then
+			input.buttonsPressed:ClearBit(IN_JOY_TOUCH)
+			padMovement = true
+			
+		end
+		
+		if input.buttonsReleased:IsBitSet(IN_JOY_TOUCH) 
+		then
+			input.buttonsReleased:ClearBit(IN_JOY_TOUCH)
+			padMovement = false
+		end
+		
+	else -- Vive controller
+	
+		if input.buttonsPressed:IsBitSet(IN_PAD_TOUCH)
+		then
+			input.buttonsPressed:ClearBit(IN_PAD_TOUCH)
+			padMovement = true
+			
+		end
+		
+		if input.buttonsReleased:IsBitSet(IN_PAD_TOUCH) 
+		then
+			input.buttonsReleased:ClearBit(IN_PAD_TOUCH)
+			padMovement = false
+		end
+	
+		-- Needed to disable teleports
+		if input.buttonsDown:IsBitSet(IN_PAD) 
+		then
+			input.buttonsDown:ClearBit(IN_PAD)
+		end	
+		if input.buttonsDown:IsBitSet(IN_PAD_TOUCH) 
+		then
+			input.buttonsDown:ClearBit(IN_PAD_TOUCH)
+		end
+		
+	end
 
 	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
@@ -156,32 +212,36 @@ function OnHandleInput( input )
 	
 	if input.buttonsReleased:IsBitSet(IN_GRIP)
 	then
-		input.buttonsReleased:ClearBit(IN_GRIP)
-		thisEntity:ForceDropTool();
-	end
-
-	if input.buttonsPressed:IsBitSet(IN_PAD_TOUCH)
-	then
-		input.buttonsPressed:ClearBit(IN_PAD_TOUCH)
-		padMovement = true
+		if not gripLocked then
 		
-	end
-	
-	if input.buttonsReleased:IsBitSet(IN_PAD_TOUCH) 
-	then
-		input.buttonsReleased:ClearBit(IN_PAD_TOUCH)
-		padMovement = false
+			thisEntity:ForceDropTool()
+			
+		else
+			if IsValidEntity(lockedPanel) then
+				lockedPanel:Kill()
+			end
+		
+			local panelTable = 
+			{
+				origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("lock_message")),
+				dialog_layout_name = "file://{resources}/layout/custom_destination/pole_locked.xml",
+				width = "4",
+				height = "0.6",
+				panel_dpi = "96",
+				interact_distance = "0",
+				horizontal_align = "1",
+				vertical_align = "1",
+				orientation = "0",
+				angles = "0 0 0"
+			}
+			lockedPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
+			lockedPanel:SetParent(handAttachment, "lock_message")
+			lockedPanel:SetLocalAngles(0,0,0)
+			DoEntFireByInstanceHandle(lockedPanel, "Kill", "", 2, thisEntity, thisEntity)
+			EmitSoundOn("Pole.Fail", handAttachment)
+		end
 	end
 
-	-- Needed to disable teleports
-	if input.buttonsDown:IsBitSet(IN_PAD) 
-	then
-		input.buttonsDown:ClearBit(IN_PAD)
-	end	
-	if input.buttonsDown:IsBitSet(IN_PAD_TOUCH) 
-	then
-		input.buttonsDown:ClearBit(IN_PAD_TOUCH)
-	end
 	
 	if padMovement
 	then	
@@ -194,6 +254,52 @@ function OnHandleInput( input )
 
 	return input;
 end
+
+
+function ToggleGripLock()
+
+	local panelTable = 
+	{
+		origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("lock_message")),
+		dialog_layout_name = "file://{resources}/layout/custom_destination/pole_locked.xml",
+		width = "4",
+		height = "0.6",
+		panel_dpi = "96",
+		interact_distance = "0",
+		horizontal_align = "1",
+		vertical_align = "1",
+		orientation = "0",
+		angles = "0 0 0"
+	}
+	
+	if IsValidEntity(lockedPanel) then
+		lockedPanel:Kill()
+	end
+	
+
+	if gripLocked then
+		gripLocked = false
+		
+		panelTable.dialog_layout_name = "file://{resources}/layout/custom_destination/pole_unlocked.xml"
+		lockedPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
+		lockedPanel:SetParent(handAttachment, "lock_message")
+		lockedPanel:SetLocalAngles(0,0,0)
+		DoEntFireByInstanceHandle(lockedPanel, "Kill", "", 2, thisEntity, thisEntity)
+		
+		EmitSoundOn("Pole.Click", handAttachment)
+	else
+		gripLocked = true
+		
+		
+		lockedPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
+		lockedPanel:SetParent(handAttachment, "lock_message")
+		lockedPanel:SetLocalAngles(0,0,0)
+		DoEntFireByInstanceHandle(lockedPanel, "Kill", "", 2, thisEntity, thisEntity)
+		
+		EmitSoundOn("Pole.Click", handAttachment)
+	end
+end
+
 
 
 function UpdatePackPos()
@@ -252,45 +358,62 @@ function JetpackThrust(self)
 		EmitSoundOn("drone_speed_dec", pack)
 		thrusting = false
 	end
-
-	local toolForward = RotateOrientation(QAngle(0, handAttachment:GetAngles().y, 0), QAngle(0, 180, 0))
-	local horizontalVec = RotatePosition(Vector(0,0,0), toolForward, padVector)
-	
-	--DebugDrawLine(handAttachment:GetOrigin(), handAttachment:GetOrigin() + padVector * 10, 255, 255, 0, false, 0.02)
-	--DebugDrawLine(handAttachment:GetOrigin(), handAttachment:GetOrigin() + moveVector * 10, 0, 0, 255, false, 0.02)
-	
-	
-	if horizontalVec:Length() > MOVE_CAP_FACTOR
-	then
-		horizontalVec = horizontalVec:Normalized() * MOVE_CAP_FACTOR
-	end
 	
 	local sphereOrigin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("navsphere"))
-	ParticleManager:SetParticleControl(sphere, 1, sphereOrigin + horizontalVec * 4)
 	
+	if padMovement then
+		if g_VRScript.fallController:TrySetDragConstraint(playerEnt, thisEntity) then
+			g_VRScript.fallController:SetDrag(playerEnt, thisEntity, 1e-4, 2, nil, nil)
+		end
+	else
+		g_VRScript.fallController:RemoveDragConstraint(playerEnt, thisEntity)
+	end 
 	
-	local verticalVector = Vector(0, 0,  triggerValue)
+	if padMovement or triggerValue >0.01 then
+
 	
-	if triggerPressed
-	then
-		verticalVector = verticalVector * TRIGGER_IN_BOOST
+		local toolForward = RotateOrientation(QAngle(0, handAttachment:GetAngles().y, 0), QAngle(0, 180, 0))
+		local horizontalVec = RotatePosition(Vector(0,0,0), toolForward, padVector)
+		
+		--DebugDrawLine(handAttachment:GetOrigin(), handAttachment:GetOrigin() + padVector * 10, 255, 255, 0, false, 0.02)
+		--DebugDrawLine(handAttachment:GetOrigin(), handAttachment:GetOrigin() + moveVector * 10, 0, 0, 255, false, 0.02)
+		
+		
+		if horizontalVec:Length() > MOVE_CAP_FACTOR
+		then
+			horizontalVec = horizontalVec:Normalized() * MOVE_CAP_FACTOR
+		end
+		
+		
+		ParticleManager:SetParticleControl(sphere, 1, sphereOrigin + horizontalVec * 4)
+		
+		
+		local verticalVector = Vector(0, 0,  triggerValue)
+		
+		if triggerPressed
+		then
+			verticalVector = verticalVector * TRIGGER_IN_BOOST
+		end
+		
+		ParticleManager:SetParticleControl(sphere, 2, sphereOrigin + verticalVector * 4)
+		
+		local playerHeight = g_VRScript.fallController:TracePlayerHeight(playerEnt) 
+		
+		if playerHeight < GROUND_EFFECT_HEIGHT
+		then
+			verticalVector = verticalVector * (1 + GROUND_EFFECT_FACTOR * (1 - playerHeight / GROUND_EFFECT_HEIGHT))
+		end
+		
+		local thrustVector = (horizontalVec * THRUST_HORIZONTAL_SPEED) + (verticalVector * THRUST_VERTICAL_SPEED)
+		
+		g_VRScript.fallController:AddVelocity(playerEnt, thrustVector * THRUST_INTERVAL)
+		
+	else
+		ParticleManager:SetParticleControl(sphere, 1, sphereOrigin)
+		ParticleManager:SetParticleControl(sphere, 2, sphereOrigin)
 	end
-	
-	ParticleManager:SetParticleControl(sphere, 2, sphereOrigin + verticalVector * 4)
-	
-	local playerHeight = g_VRScript.fallController:TracePlayerHeight(playerEnt) 
-	
-	if playerHeight < GROUND_EFFECT_HEIGHT
-	then
-		verticalVector = verticalVector * (1 + GROUND_EFFECT_FACTOR * (1 - playerHeight / GROUND_EFFECT_HEIGHT))
-	end
-	
-	local thrustVector = (horizontalVec * THRUST_HORIZONTAL_SPEED) + (verticalVector * THRUST_VERTICAL_SPEED)
-	
-	g_VRScript.fallController:AddVelocity(playerEnt, thrustVector * THRUST_INTERVAL)	
 	
 	local dispVel = g_VRScript.fallController:GetVelocity(playerEnt) * (4 / THRUST_VERTICAL_SPEED)
-	
 	if dispVel:Length() > 4
 	then
 		dispVel = dispVel:Normalized() * 4

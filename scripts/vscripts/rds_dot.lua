@@ -57,7 +57,7 @@ function Think(self)
 		local sightTilt = math.rad(thisEntity:GetAngles().z)
 		local dotLocalPos = Vector(dotX * math.cos(sightTilt) + dotY * math.sin(sightTilt), dotY * math.cos(sightTilt) + dotX * -math.sin(sightTilt), 0)
 
-		if g_VRScript.pickupManager.debug
+		if g_VRScript.fallController:IsDebugDrawEnabled()
 		then
 			local dotPos = lensPos + RotatePosition(Vector(0,0,0), thisEntity:GetAngles(), Vector(0, dotLocalPos.x, dotLocalPos.y))
 			DebugDrawLine(lensPos, dotPos, 0, 255, 0, false, DOT_UPDATE_INTERVAL)
@@ -70,7 +70,7 @@ function Think(self)
 			dotLocalPos = Vector(-0.4, -1, 0)
 		end
 		
-		if g_VRScript.pickupManager.debug
+		if g_VRScript.fallController:IsDebugDrawEnabled()
 		then
 			DebugDrawLine(eyePos, projPos, 255, 0, 0, false, DOT_UPDATE_INTERVAL)
 			DebugDrawLine(eyePos, lensPos, 255, 0, 0, false, DOT_UPDATE_INTERVAL)

@@ -71,6 +71,10 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	playerMoved = false
 	isTargeting = true
 	rotated = false
+	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+	
 	return true
 end
 
@@ -82,6 +86,9 @@ function SetUnequipped()
 	handEnt = nil
 	isCarried = false
 	isTargeting = false
+	
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	return true
 end

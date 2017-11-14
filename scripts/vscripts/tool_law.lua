@@ -23,7 +23,8 @@
 	THE SOFTWARE.
 ]]--
 
-
+local FIRE_RUMBLE_INTERVAL = 0.02
+local FIRE_RUMBLE_TIME = 0.4
 local ROCKET_OFFSET = Vector(30, 0, 0)
 
 local isCarried = false
@@ -32,9 +33,10 @@ local controller = nil
 local handID = 0
 local handAttachment = nil
 local alreadyPickedUp = false
+local loadedRocket = nil
 local rocket = nil
 local fired = false
-local groupSet = false
+local fireRumbleElapsed = 0
 
 local rocketKeyvals = 
 {
@@ -42,19 +44,30 @@ local rocketKeyvals =
 	model = "models/weapons/law_rocket.vmdl";
 	vscripts = "law_rocket"
 }
+
+local loadedRocketKeyvals = 
+{
+	classname = "prop_dynamic";
+	model = "models/weapons/law_rocket_packed.vmdl";
+}
 	
 
 	
 function Precache(context)
-
+	PrecacheModel(loadedRocketKeyvals.model, context)
 	PrecacheModel(rocketKeyvals.model, context)
 	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
-
+	PrecacheParticle("particles/weapons/law_backblast_smoke.vpcf", context)
 end
 
 
 function Activate()
 	thisEntity:SetSequence("folded")
+	
+	loadedRocket = SpawnEntityFromTableSynchronous(loadedRocketKeyvals.classname, loadedRocketKeyvals)
+	loadedRocket:SetParent(thisEntity, "rocket_loaded")
+	loadedRocket:SetLocalOrigin(Vector(0,0,0))
+	loadedRocket:SetLocalAngles(0,0,0)
 end
 
 
@@ -77,8 +90,16 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	
 	if fired
 	then
-		handAttachment:SetSingleMeshGroup("fired")
+		--handAttachment:SetSingleMeshGroup("fired")
+		
+	elseif IsValidEntity(loadedRocket) then
+		loadedRocket:SetParent(handAttachment, "rocket_loaded")
+		loadedRocket:SetLocalOrigin(Vector(0,0,0))
+		loadedRocket:SetLocalAngles(0,0,0)
 	end
+	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 
 	return true
 end
@@ -89,7 +110,20 @@ function SetUnequipped()
 	then
 		thisEntity:SetSingleMeshGroup("loaded") -- Fixes issue with model dissappearing if dropped with the fired group set.
 		thisEntity:SetContextThink("set_mesh", function () thisEntity:SetSingleMeshGroup("fired") end, 0)
+		
+	elseif IsValidEntity(loadedRocket) then
+		loadedRocket:SetParent(thisEntity, "rocket_loaded")
+		loadedRocket:SetLocalOrigin(Vector(0,0,0))
+		loadedRocket:SetLocalAngles(0,0,0)
 	end
+	
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+
+	handID = -1
+	controller = nil
+	playerEnt = nil
+	handAttachment = nil
 
 	return true
 end
@@ -105,7 +139,7 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		OnTriggerPressed(self)
+		OnTriggerPressed()
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
@@ -123,7 +157,7 @@ function OnHandleInput( input )
 end
 
 
-function OnTriggerPressed(self)
+function OnTriggerPressed()
 	
 	if not fired
 	then
@@ -136,21 +170,49 @@ function OnTriggerPressed(self)
 		end
 	
 		fired = true
-		StartSoundEvent("Law.Fire", prop)
+		StartSoundEvent("Law.Fire", thisEntity)
+		
+		local backblast = ParticleManager:CreateParticle("particles/weapons/law_backblast.vpcf", 
+			PATTACH_POINT, thisEntity)
+		ParticleManager:SetParticleControlEnt(backblast, 
+			0, handAttachment, PATTACH_POINT, "backblast", Vector(0, 0, 0), true)
 	
 		local attachment = prop:ScriptLookupAttachment("rocket_spawn")
+	
+		if IsValidEntity(loadedRocket) then
+			loadedRocket:Kill()
+		end
 	
 		rocketKeyvals.origin = prop:GetAttachmentOrigin(attachment)
 		rocketKeyvals.angles = prop:GetAttachmentAngles(attachment)
 		rocket = SpawnEntityFromTableSynchronous("prop_physics_override", rocketKeyvals)
 		
-		rocket:GetPrivateScriptScope():Fire()
+		rocket:GetPrivateScriptScope():Fire(playerEnt)
 		
-		prop:SetSingleMeshGroup("fired")
+		--prop:SetSingleMeshGroup("fired") --Broken
 		prop:SetSequence("extended")
 
-				
+		if controller
+		then
+			thisEntity:SetThink(FireRumble, "fire_rumble", 0.0)
+		end	
 	end
 end
 
+
+function FireRumble(self)
+	if controller
+	then
+		controller:FireHapticPulse(2)
+	end
+	
+	fireRumbleElapsed = fireRumbleElapsed + FIRE_RUMBLE_INTERVAL
+	if fireRumbleElapsed >= FIRE_RUMBLE_TIME
+	then
+		fireRumbleElapsed = 0
+		return nil
+	end
+	
+	return FIRE_RUMBLE_INTERVAL
+end
 

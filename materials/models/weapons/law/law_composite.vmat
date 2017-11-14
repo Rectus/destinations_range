@@ -4,6 +4,9 @@ Layer0
 {
 	shader "vr_standard.vfx"
 
+	//---- Lighting ----
+	F_INDIRECT_TEXTURES 2 // Ambient Occlusion Texture
+
 	//---- Specular ----
 	F_METALNESS_TEXTURE 1
 	F_SPECULAR 1
@@ -14,15 +17,19 @@ Layer0
 	g_vTexCoordOffset "[0.000 0.000]"
 	g_vTexCoordScale "[1.000 1.000]"
 	g_vTexCoordScrollSpeed "[0.000 0.000]"
-	TextureColor "materials/models/weapons/law/launcher.tga"
+	TextureColor "materials/models/weapons/law/launcher_color.tga"
 
 	//---- Cube Map ----
-	g_flCubeMapBlurAmount "1.000"
+	g_flCubeMapBlur "0.000"
+	g_flCubeMapBrightness "1.000"
 
 	//---- Lighting ----
-	g_vMetalnessRange "[0.138 0.879]"
-	g_vReflectanceRange "[0.000 0.397]"
-	TextureGlossiness "materials/models/weapons/law/launcher_exp.tga"
+	g_flAmbientOcclusionStrengthDirectDiffuse "1.000"
+	g_flAmbientOcclusionStrengthDirectSpecular "1.000"
+	g_vMetalnessRange "[0.000 1.000]"
+	g_vReflectanceRange "[0.000 1.000]"
+	TextureAmbientOcclusion "materials/models/weapons/law/launcher_ao.tga"
+	TextureGlossiness "materials/models/weapons/law/launcher_gloss.tga"
 	TextureMetalness "materials/models/weapons/law/launcher_metal.tga"
 	TextureReflectance "materials/models/weapons/law/launcher_refl.tga"
 

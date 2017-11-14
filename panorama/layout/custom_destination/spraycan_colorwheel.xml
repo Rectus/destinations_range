@@ -1,0 +1,10 @@
+<root>
+	<styles>
+		
+	</styles>
+	<ClientUIDialogPanel class="InWorldInfoPanel">
+		<ClientUIDialogPanel class="InWorldInfoPanel" id="ImagePanel">
+			<Image  src="file://{resources}/images/custom_destination/spraycan_colorwheel.png" />
+		</ClientUIDialogPanel>
+	</ClientUIDialogPanel>
+</root>

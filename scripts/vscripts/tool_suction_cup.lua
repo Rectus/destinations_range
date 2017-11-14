@@ -101,6 +101,9 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 		DoEntFireByInstanceHandle(propAnim, "SetSequence", "idle", 0, nil, nil)
 	end
 	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+	
 	return true
 end
 
@@ -109,6 +112,9 @@ function SetUnequipped()
 	then
 		ReleaseHold(self)
 	end
+	
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	playerEnt = nil
 	handEnt = nil

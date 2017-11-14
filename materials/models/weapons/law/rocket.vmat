@@ -4,20 +4,33 @@ Layer0
 {
 	shader "vr_standard.vfx"
 
+	//---- Lighting ----
+	F_INDIRECT_TEXTURES 2 // Ambient Occlusion Texture
+
 	//---- Specular ----
+	F_METALNESS_TEXTURE 1
 	F_SPECULAR 1
+	F_SPECULAR_CUBE_MAP 1 // In-game Cube Map
 
 	//---- Color ----
 	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
 	g_vTexCoordOffset "[0.000 0.000]"
 	g_vTexCoordScale "[1.000 1.000]"
 	g_vTexCoordScrollSpeed "[0.000 0.000]"
-	TextureColor "materials/models/weapons/law/rocket.tga"
+	TextureColor "materials/models/weapons/law/rocket_color.tga"
+
+	//---- Cube Map ----
+	g_flCubeMapBlur "0.000"
+	g_flCubeMapBrightness "1.000"
 
 	//---- Lighting ----
-	g_flMetalness "1.000"
+	g_flAmbientOcclusionStrengthDirectDiffuse "1.000"
+	g_flAmbientOcclusionStrengthDirectSpecular "1.000"
+	g_vMetalnessRange "[0.000 1.000]"
 	g_vReflectanceRange "[0.000 1.000]"
-	TextureGlossiness "[0.500000 0.500000 0.500000 0.000000]"
+	TextureAmbientOcclusion "materials/models/weapons/law/rocket_ao.tga"
+	TextureGlossiness "materials/models/weapons/law/rocket_gloss.tga"
+	TextureMetalness "materials/models/weapons/law/rocket_metal.tga"
 	TextureReflectance "materials/models/weapons/law/rocket_refl.tga"
 
 	//---- Normal Map ----

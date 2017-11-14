@@ -1,0 +1,15 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/custom_destination/pole_hints.css" /> 
+
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page">
+			<Panel class="TextArea">
+				<Label class="Text" text="Teleport" />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

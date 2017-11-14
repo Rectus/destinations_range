@@ -1,53 +1,26 @@
 
 print("Range map script")
---require("new_controller")
-require("pickup_manager")
+
 require("player_physics")
-g_VRScript.pickupManager = PickupManager()
+require("pause_manager")
+
+
 g_VRScript.fallController = CPlayerPhysics()
+
 g_VRScript.fallController:Init()
 
-g_VRScript.precacheList = {}
+g_VRScript.pauseManager = CPauseManager()
 
-function OnInit()
-	--EntityFramework:InstallClasses() 
-
-	
+function OnActivate()
+	g_VRScript.pauseManager:Init()
+	CustomGameEventManager:RegisterListener("toggle_debug_draw", ToggleDebugDraw)
 end
 
 
-function OnPrecache(context)
-	PrecacheEntityListFromTable(precacheList, context)
+function ToggleDebugDraw()
+	g_VRScript.fallController:ToggleDebugDraw()
 end
 
-
-function AddEntityPrecache(keyvals)
-	precacheList[keyvals] = keyvals
-end
-
-
-function OnGameplayStart()
-	print("Range map script OnGameplayStart()")
-	
-end
-
-
-function OnHMDAvatarAndHandsSpawned()
-	--print("Enabling pickup manager...")
-
-	--print(pickupManager)
-	--if pickupManager:Initialize()
-	--then
-		--g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(OnThink)
-		--pickupManager.debug = true
-	--end
-	
-	--PrintTable(EntityClasses, 0, 10)
-end
-
---function OnThink()
-	--pickupManager:OnThink()
---end
 
 function PrintTable(table, level, maxlevel)
 

@@ -1,0 +1,120 @@
+
+.PausePanel {
+	background-color: none;
+	flow-children: down;
+	width: 100%;
+	height: 100%;
+	opacity: 1;
+	transition-property: opacity;
+	transition-duration: shortduration;
+	transition-timing-function: bigpicture-ease-in-out;
+}
+
+
+.PausePanelTitlebar {
+	width: 100%;
+	height: fill-parent-flow( 0.15 );
+	flow-children: none;
+	background-color: background_gradient;
+	border-radius: 5px;
+	border: 2px solid panel_stroke;
+	transition-property: border, opacity;
+	transition-duration: 0.23s;
+	transition-timing-function: bigpicture-ease-in-out;
+
+}
+
+.PausePanelTitleLabel {
+	width: 100%;
+	height: 100%;
+	margin-top: 20px;
+	font-size: 60px;
+	text-align: center;
+	color: white;
+}
+
+.PausePanelButtonArea {
+	width: 100%;
+	height: fill-parent-flow( 0.85 );
+	margin-top: 5px;
+	padding-top: 25px;
+	background-color: background_center_gradient;
+	border-radius: 5px;
+	border: 2px solid panel_stroke;
+	flow-children: right;
+	padding: 20px 30px 0px 25px;
+	overflow: clip;
+}
+
+.PausePanelButtonPane {
+	width: fill-parent-flow( 1 );
+	height: 100%;
+	padding: 0px;
+	vertical-align: top;
+	horizontal-align: center;
+	flow-children: down;
+}
+
+.PausePanelScollableButtonPane {
+	width: fill-parent-flow( 1 );
+	padding-bottom: 100px;
+	vertical-align: top;
+	horizontal-align: center;
+	flow-children: down;
+	overflow: squish scroll;
+}
+
+.PausePanelButton {
+	width: 100%;
+	border-radius: 5px;
+	border: 2px solid #ffffff10;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	margin: 7px;
+	background-color: background_center_gradient_dark;
+	flow-children: right;
+	
+	transition-property: border;
+	transition-duration: shortduration;
+	transition-timing-function: bigpicture-ease-in-out;
+}
+
+.PausePanelButton.Item {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	
+}
+
+.PausePanelButton:hover,
+.PausePanelButton:focus {
+	//background-color: button_gradient_hover;	
+	//pre-transform-scale2d: 1;
+	border: 2px solid #ffffffff;
+}
+
+.PausePanelButton:active {
+	background-color: button_gradient_bright;	
+
+}
+
+.PausePanelButtonLabel {
+	width: 100%;
+	font-size: 35px;
+	text-align: center;
+	color: white;
+}
+
+.PausePanelButtonImage {
+	height: 100px;
+
+	horizontal-align: center;
+}
+
+.PausePanelButtonImageLabel {
+	width: 100%;
+	font-size: 35px;
+	text-align: left;
+	color: white;
+	vertical-align: center;
+	padding-left: 40px;
+}

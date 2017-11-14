@@ -112,6 +112,8 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	
 	thisEntity:EmitSound("Scanner.Equip")
 	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	return true
 end
@@ -129,6 +131,8 @@ function SetUnequipped()
 	thisEntity:StopSound("Scanner.Scan")
 	thisEntity:StopSound("Scanner.Track")
 	
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	isTargeting = false
 	
@@ -230,7 +234,7 @@ end
 
 function TriggerPressed(self)
 	SetPanelText(self, "Scanning...")
-	
+
 	thisEntity:EmitSound("Scanner.Start")
 	thisEntity:EmitSound("Scanner.Track")
 	

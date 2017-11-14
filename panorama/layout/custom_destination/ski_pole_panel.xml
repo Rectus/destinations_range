@@ -6,10 +6,10 @@
 	</styles>
 
 	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
-		<Panel class="Page" id="SuctionCupDialog">
+		<Panel class="Page" id="SkiDialog">
 			<Panel class="TextArea">
-				<Label class="Title" text="Ski pole" />
-				<Label class="Desc Big" text="Used for staking locomotion.\n\nUsage:\nPick up with the trigger button.\nStake to move (no acceleration and very buggy currently)." />
+				<Label class="Title" text="Ski pole (and skis)" />
+				<Label class="Desc Big" text="Used for staking locomotion.\n\nUsage:\nPick up with the trigger button. Hold the trigger to extend the pole.\nStake with both hands to move." />
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

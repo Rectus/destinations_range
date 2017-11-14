@@ -153,11 +153,17 @@ function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
 	
 	thisEntity:SetThink(TraceBeam, "trace_beam", 0.1)
 	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+	
 	return true
 end
 
 
 function SetUnequipped()
+
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	playerEnt = nil
 	handEnt = nil

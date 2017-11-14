@@ -25,27 +25,37 @@
 require "utils.deepprint"
  
 
-local SPIN_CHECK_INTERVAL = 0.2
+local SPIN_CHECK_INTERVAL = 0.05
+local SPIN_POSE_INTERVAL = 0.011
 local FIRE_RUMBLE_INTERVAL = 0.01
 local FIRE_RUMBLE_TIME = 0.2
-local SPIN_TIME = 1.1
-local CYCLE_TIME = 1.0
-local SPIN_RUMBLE_INTERVAL = 0.02
-local SHOT_TRACE_DISTANCE = 16384
 
+local SHOT_TRACE_DISTANCE = 16384
 local DAMAGE = 150
 local DAMAGE_FORCE = 500
 
+local STATE_READY = 1
+local STATE_FIRED = 2
+local STATE_CYCLING = 3
+local STATE_CYCLING_COCKED = 4
+
+local state = STATE_READY
+
 local isCarried = false
-local fired = false
-local cycling = false
 local controller = nil
 local currentPlayer = nil
 local handID = 0
 local handAttachment = nil
 local isFireButtonPressed = false
 local alreadyPickedUp = false
-local prevAngles = nil
+local prevRotSpeed = 0
+local spinMomentum = 0
+local spinAngle = 0
+local leverPos = 0
+local lastVel = Vector(0,0,0)
+
+local rumbleLevelPos = 0
+local rumbleSpinAngle = 0
 
 local spinTimeElapsed = 0
 local fireRumbleElapsed = 0
@@ -57,42 +67,29 @@ local impactParticle = nil
 local sight = nil
 
 
-
-local tracerKeyvals = {
-	classname = "info_particle_system";
-	effect_name = "particles/weapon_tracers.vpcf";
-	start_active = 0;
-	cpoint1 = ""
-}
-
-local dustKeyvals = {
-	classname = "info_particle_system";
-	effect_name = "particles/generic_fx/fx_dust.vpcf";
-	start_active = 0;
-}
-
-
-local tracerEndKeyvals = {
-	classname = "info_particle_target";
-	targetname = ""
-}
-
-local animKeyvals = {
-	targetname = "mares_leg_anim";
-	model = "models/weapons/mares_leg.vmdl";
-	solid = 0
-	}
-
 function Precache(context)
-	PrecacheParticle(tracerKeyvals.effect_name, context)
-	PrecacheParticle(dustKeyvals.effect_name, context)
-	PrecacheModel(animKeyvals.model, context)
+	PrecacheParticle("particles/weapons/mares_leg_tracer.vpcf", context)
+	PrecacheParticle("particles/weapons/mares_leg_bullet_impact.vpcf", context)
+	PrecacheParticle("particles/weapons/mares_leg_bullet_impact_dynamic.vpcf", context)
+	PrecacheParticle("particles/weapons/mares_leg_shell_casing.vpcf", context)
+	PrecacheParticle("particles/weapons/mares_leg_muzzle_flash.vpcf", context)
+	
 	PrecacheModel("models/weapons/hand_dummy.vmdl", context)
 	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
 end
 
 function Activate()
 	thisEntity:SetSequence("idle_uncocked")
+	
+	
+	local child = thisEntity:FirstMoveChild()
+	if child and child:GetName() == "rds"
+	then
+		sight = child
+		child:SetParent(thisEntity, "sight")
+		child:SetLocalOrigin(Vector(0,0,0))
+		child:SetLocalAngles(0,0,0)
+	end
 end
 
 function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
@@ -114,6 +111,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	
 	if not alreadyPickedUp
 	then
+		StartSoundEvent("Maresleg.Bolt_Open", handAttachment)
 		handAttachment:SetSequence("draw")
 		thisEntity:SetThink(SequenceFinished, "sequence", handAttachment:ActiveSequenceDuration())
 		alreadyPickedUp = true
@@ -121,18 +119,24 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 		SequenceFinished()
 	end
 	
-	if fired and not cycling
+	if state == STATE_FIRED
 	then
 		handAttachment:SetSequence("idle_uncocked")
-		prevAngles = thisEntity:GetLocalAngles()
 		thisEntity:SetThink(CheckSpin, "check_spin", SPIN_CHECK_INTERVAL)
 	end
+	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+	
 
 	return true
 end
 
 function SetUnequipped()
 	isCarried = false
+	
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	if sight ~= nil
 	then
@@ -141,7 +145,18 @@ function SetUnequipped()
 		sight:SetLocalAngles(0,0,0)
 	end
 	
-	if fired and not cycling
+	if state == STATE_CYCLING then
+		state = STATE_FIRED
+	elseif state == STATE_CYCLING_COCKED then
+		state = STATE_READY
+	end
+	
+	leverPos = 0
+	spinAngle = 0
+	lastVel = Vector(0,0,0)
+	
+	
+	if state == STATE_FIRED
 	then
 		thisEntity:SetSequence("idle_uncocked")
 	else
@@ -160,7 +175,11 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		OnTriggerPressed(self)
+		
+		if state == STATE_READY
+		then
+			Fire()	
+		end
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
@@ -178,41 +197,18 @@ function OnHandleInput( input )
 end
 
 
-function Init(self)
-	local child = thisEntity:FirstMoveChild()
-
-	animKeyvals.origin = handAttachment:GetOrigin()
-	animKeyvals.angles = handAttachment:GetAngles()
-	
-	gunAnim = SpawnEntityFromTableSynchronous("prop_dynamic", animKeyvals)
-
-	gunAnim:SetParent(handAttachment, "")
-	gunAnim:SetOrigin(handAttachment:GetOrigin())
-
-	if child and child:GetName() == "rds"
-	then
-		sight = child
-		child:SetParent(gunAnim, "sight")
-		child:SetLocalOrigin(Vector(0,0,0))
-		child:SetLocalAngles(0,0,0)
-	end
-end
-
-
-function OnTriggerPressed(self)
-
-	if not fired and not cycling
-	then
-		Fire()	
-	end
-end
-
 
 function Fire()
-	fired = true
-	cycling = false
-	StartSoundEvent("Law.Fire", thisEntity)
-	TraceShot(self)
+	state = STATE_FIRED
+	StartSoundEvent("Maresleg.Fire", handAttachment)
+	
+	
+	local muzzleFlash = ParticleManager:CreateParticle("particles/weapons/mares_leg_muzzle_flash.vpcf", 
+		PATTACH_POINT_FOLLOW, handAttachment)
+	ParticleManager:SetParticleControlEnt(muzzleFlash, 0, handAttachment, PATTACH_POINT_FOLLOW, 
+		"muzzle", Vector(0, 0, 0), true)
+	
+	TraceShot()
 	
 	if controller
 	then
@@ -220,38 +216,37 @@ function Fire()
 	end
 	handAttachment:SetSequence("fire")
 	thisEntity:SetThink(SequenceFinished, "sequence", handAttachment:ActiveSequenceDuration())
-	
-	prevAngles = thisEntity:GetLocalAngles()
+
 	thisEntity:SetThink(CheckSpin, "check_spin", SPIN_CHECK_INTERVAL)
 end
 
 
-function TraceShot(self)
+function TraceShot()
 
-	local muzzle = GetAttachment("muzzle")
+	local muzzle = GetAttachment(handAttachment, "muzzle")
 	local traceTable =
 	{
 		startpos = muzzle.origin;
-		endpos = muzzle.origin + RotatePosition(Vector(0,0,0), thisEntity:GetAngles(), Vector(SHOT_TRACE_DISTANCE, 0, 0));
-		ignore = thisEntity
+		endpos = muzzle.origin + muzzle.angles:Forward() * SHOT_TRACE_DISTANCE;
+		ignore = currentPlayer
 
 	}
 	local tracerEndPos = traceTable.endpos
-	if false
+	if g_VRScript.fallController:IsDebugDrawEnabled()
 	then
 		DebugDrawLine(traceTable.startpos, traceTable.endpos, 255, 0, 0, false, 0.1)
 	end
 	
 	TraceLine(traceTable)
 	
-	if traceTable.hit 
+	if traceTable.hit
 	then
-		if false
+		if g_VRScript.fallController:IsDebugDrawEnabled()
 		then
 			DebugDrawLine(traceTable.startpos, traceTable.pos, 0, 255, 0, false, 0.2)
 		end
 		
-		if traceTable.enthit
+		if traceTable.enthit and traceTable.enthit:GetEntityIndex() > 0
 		then
 		
 			local dmgInfo = CreateDamageInfo(thisEntity, currentPlayer, thisEntity:GetAngles():Forward() * DAMAGE_FORCE, 
@@ -265,40 +260,36 @@ function TraceShot(self)
 			then
 				traceTable.enthit:GetPrivateScriptScope().OnHurt()
 			end]]
+			local impactParticle = ParticleManager:CreateParticle("particles/weapons/mares_leg_bullet_impact_dynamic.vpcf", PATTACH_CUSTOMORIGIN, thisEntity)
+			ParticleManager:SetParticleControl(impactParticle, 0, traceTable.pos)
+			ParticleManager:SetParticleControlForward(impactParticle, 0, traceTable.normal)
+		else
+			local impactParticle = ParticleManager:CreateParticle("particles/weapons/mares_leg_bullet_impact.vpcf", PATTACH_CUSTOMORIGIN, thisEntity)
+			ParticleManager:SetParticleControl(impactParticle, 0, traceTable.pos)
+			ParticleManager:SetParticleControlForward(impactParticle, 0, traceTable.normal)
 		
 		end
 		
 		tracerEndPos = traceTable.pos
 		
-		local impactParticle = ParticleManager:CreateParticle("particles/generic_fx/fx_dust.vpcf", PATTACH_CUSTOMORIGIN, nil)
-		ParticleManager:SetParticleControl(impactParticle, 0, traceTable.pos)
-		ParticleManager:SetParticleControlForward(impactParticle, 0, traceTable.normal)
-		
 	end
 	
-	local tracer = ParticleManager:CreateParticle("particles/weapon_tracers.vpcf", PATTACH_CUSTOMORIGIN, nil)
+	local tracer = ParticleManager:CreateParticle("particles/weapons/mares_leg_tracer.vpcf", PATTACH_CUSTOMORIGIN, thisEntity)
 	ParticleManager:SetParticleControl(tracer, 0, traceTable.startpos)
 	ParticleManager:SetParticleControl(tracer, 1, tracerEndPos)
 	
-	local muzzleFlash = ParticleManager:CreateParticle("particles/generic_fx/fx_dust.vpcf", PATTACH_POINT_FOLLOW, gunAnim)
-	ParticleManager:SetParticleControlEnt(muzzleFlash, 0, gunAnim, PATTACH_POINT_FOLLOW, "muzzle", Vector(0, 0, 0), true)
+	
 	
 end
 
 
 function SequenceFinished()
-	if IsValidEntity(handAttachment) and handAttachment:IsSequenceFinished()
-	then
-		cycling = false
-	
-		if fired
+	if isCarried
+	then	
+		if state == STATE_FIRED
 		then
 			handAttachment:SetSequence("idle_uncocked")
-		else		
-			handAttachment:SetSequence("idle")
 		end
-	else
-		return handAttachment:ActiveSequenceDuration()
 	end
 end
 	
@@ -328,89 +319,159 @@ function CheckSpin(self)
 		return nil
 	end
 
-	local angles = thisEntity:GetLocalAngles()
+	local torque = GetLeverTorque()
 
-	if angles.x < prevAngles.x - 20
+	if abs(torque) > 200
 	then
-		handAttachment:SetSequence("spin_vr")
-		thisEntity:SetThink(SequenceFinished, "sequence", handAttachment:ActiveSequenceDuration())
-		cycling = true
-		fired = false
+		spinMomentum = -torque * 2
 		
-		
-		if controller
-		then
-			controller:FireHapticPulse(0)
+		if torque > 0 then
+			leverPos = 0.5
+		else
+			leverPos = 0.05
 		end
 		
-		prevAngles = nil
-		thisEntity:SetThink(SpinRumble, "spin_complete", SPIN_RUMBLE_INTERVAL)
+		handAttachment:SetSequence("spin_posable_uncocked")
+		handAttachment:SetPoseParameter("lever_pos", leverPos)
+		handAttachment:SetPoseParameter("spin_rot", 1)
+		
+		spinAngle = 360
+		lastVel = GetPhysVelocity(handAttachment) 
+		thisEntity:SetThink(SpinPose, "spin_pose", SPIN_POSE_INTERVAL)
+		state = STATE_CYCLING
+		
+		StartSoundEvent("Maresleg.Bolt_Open", handAttachment)
+			
+		controller:FireHapticPulse(2)
+		
 		return nil
 		
-	elseif angles.x > prevAngles.x + 20
-	then
-		handAttachment:SetSequence("cycle_vr")
-		thisEntity:SetThink(SequenceFinished, "sequence", handAttachment:ActiveSequenceDuration())
-		cycling = true
-		fired = false
-		
-		if controller
-		then
-			controller:FireHapticPulse(0)
-		end
-		
-		prevAngles = nil
-		thisEntity:SetThink(CycleRumble, "spin_complete", SPIN_RUMBLE_INTERVAL)
-		return nil
 	end
 	
-	prevAngles = angles
 	return SPIN_CHECK_INTERVAL
 end
 
 
-function SpinRumble(self)
-	spinTimeElapsed = spinTimeElapsed + SPIN_RUMBLE_INTERVAL
+function SpinPose()
+	if not isCarried then return nil end
 	
-	if controller
-	then
+	if leverPos > 0.85 and state == STATE_CYCLING then
+		
+		local casing = ParticleManager:CreateParticle("particles/weapons/mares_leg_shell_casing.vpcf", 
+		PATTACH_POINT, thisEntity)
+		ParticleManager:SetParticleControlEnt(casing, 0, handAttachment, PATTACH_POINT, 
+			"shell_casing", Vector(0, 0, 0), true)
+		
+		StartSoundEvent("Maresleg.Load_Round", handAttachment)
+		state = STATE_CYCLING_COCKED
+		handAttachment:SetSequence("spin_posable")
+		
+	elseif leverPos < 0.15 and state == STATE_CYCLING_COCKED then
+	
+		StartSoundEvent("Maresleg.Bolt_Closed", handAttachment)
+		state = STATE_READY
+		handAttachment:SetSequence("idle")
+		leverPos = 0
+		spinAngle = 0
+		lastVel = Vector(0,0,0)
+		return false
+	end
+
+
+	local torque = GetLeverTorque()
+	
+	local leverFactor = 0.9
+	
+	if (leverPos >= 1 and spinMomentum > 0) or (leverPos <= 0 and spinMomentum < 0) then
+	
+		leverFactor = 0.0
+	end
+	
+	local rotAcc =  torque * 170.0 * (1 -leverFactor) * SPIN_POSE_INTERVAL
+	local leverAcc = torque * leverFactor * 10.0 * SPIN_POSE_INTERVAL
+	
+
+	spinMomentum = spinMomentum * 0.9990 + rotAcc - sign(spinMomentum) * 0.15
+	spinMomentum = Clamp(spinMomentum, -500, 500)
+
+	spinAngle = Clamp((spinAngle - spinMomentum * SPIN_POSE_INTERVAL + 360) % 360, 0, 360) 
+		
+	local leverMaxMove = 2 * SPIN_POSE_INTERVAL
+	local leverMove = Clamp(leverAcc * 0.5, -leverMaxMove, leverMaxMove)
+	leverPos = Clamp(leverPos + leverMove, 0, 1)
+	
+	handAttachment:SetPoseParameter("spin_rot", spinAngle)
+	handAttachment:SetPoseParameter("lever_pos", leverPos)
+	
+	if abs(spinAngle - rumbleSpinAngle) > 10 then
+		rumbleSpinAngle = spinAngle
 		controller:FireHapticPulse(0)
-	end
+	end 
 	
-	if spinTimeElapsed >= SPIN_TIME
-	then
-		spinTimeElapsed = 0
-		return nil
-	end
+	if abs(leverPos - rumbleLevelPos) > 0.05 then
+		rumbleLevelPos = leverPos
+		controller:FireHapticPulse(0)
+	end	
 	
-	return SPIN_RUMBLE_INTERVAL
+	return SPIN_POSE_INTERVAL
 end
 
 
-function CycleRumble(self)
-	spinTimeElapsed = spinTimeElapsed + SPIN_RUMBLE_INTERVAL
+function GetLeverTorque()
+
+	local idx = handAttachment:ScriptLookupAttachment("mass_center")
+	local massCenter = handAttachment:GetAttachmentOrigin(idx)
 	
-	if controller
-	then
-		controller:FireHapticPulse(0)
+	idx = handAttachment:ScriptLookupAttachment("spin_pivot")
+	local pivot = handAttachment:GetAttachmentOrigin(idx)
+	
+	local velocity = currentPlayer:GetHMDAvatar():GetVRHand(handID):GetVelocity()--GetPhysVelocity(handAttachment) 
+	local acc = velocity - lastVel
+	
+	lastVel = velocity
+	
+	local accSpeed = acc:Length()
+	
+	if accSpeed < 1 then
+		acc = Vector(0,0,0)		
+	elseif accSpeed < 4 then
+		acc = acc:Normalized() * RemapVal(accSpeed, 1, 4, 0, 4) 
 	end
 	
-	if spinTimeElapsed >= CYCLE_TIME
-	then
-		spinTimeElapsed = 0
-		return nil
+	local torqueVector = (pivot - massCenter):Cross(-handAttachment:GetAngles():Left())
+	
+	
+	
+	-- Object velocity + gravity
+	local gravFactor = torqueVector:Dot(Vector(0,0, 386 * SPIN_POSE_INTERVAL * 0.2))
+	local dotVal = torqueVector:Dot(acc) + gravFactor
+	
+	
+	if g_VRScript.fallController:IsDebugDrawEnabled() then
+		DebugDrawLine(pivot, massCenter, 255, 255, 0, false, SPIN_POSE_INTERVAL)
+		DebugDrawLine(pivot, pivot + torqueVector:Normalized() * dotVal, 255, 0, 255, false, SPIN_POSE_INTERVAL)
+		DebugDrawLine(pivot, pivot + acc:Normalized() * torqueVector:Dot(acc), 128, 0, 255, false, SPIN_POSE_INTERVAL)
+		DebugDrawLine(pivot, pivot + Vector(0,0,-1) * gravFactor, 0, 255, 255, false, SPIN_POSE_INTERVAL)
 	end
 	
-	return SPIN_RUMBLE_INTERVAL
+	
+	return dotVal
 end
 
 
-function GetAttachment(name)
-	local idx = thisEntity:ScriptLookupAttachment(name)
+function sign(x)
+	return x > 0 and 1 or x < 0 and -1 or 1
+end
+
+
+
+function GetAttachment(ent, name)
+	local idx = ent:ScriptLookupAttachment(name)
 	
 	local table = {}
-	table.origin = thisEntity:GetAttachmentOrigin(idx)
-	table.angles = VectorToAngles(thisEntity:GetAttachmentAngles(idx))
+	table.origin = ent:GetAttachmentOrigin(idx)
+	local ang = ent:GetAttachmentAngles(idx)
+	table.angles = QAngle(ang.x, ang.y, ang.z)
 	
 	return table
 end

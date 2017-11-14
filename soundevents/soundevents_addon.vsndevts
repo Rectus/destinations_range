@@ -4,7 +4,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.6
+		volume = 0.5
 		distance_max = "100000"
 		vsnd_files = 
 		[
@@ -18,8 +18,8 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 1.0
-		distance_max = "100000"
+		volume = 0.7
+		distance_max = "1000000"
 		vsnd_files = "sounds/weapons/rocket_explode_01.vsnd"
 
 	}
@@ -48,7 +48,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.4
 		vsnd_files = "sounds/props/dice_impact_04.vsnd"
 
 	}
@@ -59,7 +59,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.6
+		volume = 0.4
 		vsnd_files = "sounds/props/toy_soldier_impact_04.vsnd"
 
 	}
@@ -67,7 +67,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.6
+		volume = 0.5
 		distance_max = "2000"
 		vsnd_files = "sounds/suction_cup/suction_cup_attach.vsnd"
 
@@ -77,7 +77,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.7
+		volume = 0.5
 		distance_max = "2000"
 		vsnd_files = "sounds/suction_cup/suction_cup_release.vsnd"
 
@@ -87,7 +87,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/hold_loop.vsnd"		
 	}
 	
@@ -95,7 +95,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/physcannon_pickup.vsnd"		
 	}
 	
@@ -103,7 +103,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/physcannon_charge.vsnd"		
 	}
 		
@@ -111,7 +111,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/physcannon_drop.vsnd"		
 	}
 		
@@ -119,7 +119,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/physcannon_dryfire.vsnd"		
 	}
 		
@@ -127,7 +127,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/physcannon_tooheavy.vsnd"		
 	}
 		
@@ -135,7 +135,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/physcannon_claws_close.vsnd"		
 	}
 		
@@ -143,7 +143,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/physcannon_claws_open.vsnd"		
 	}
 	
@@ -151,7 +151,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.3
 		vsnd_files = "sounds/weapons/physcannon/superphys_launch1.vsnd"		
 	}
 	
@@ -159,7 +159,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.4
+		volume = 0.3
 		distance_max = "10000"
 
 		vsnd_files =
@@ -175,7 +175,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.4
+		volume = 0.3
 		distance_max = "10000"
 		
 		vsnd_files =
@@ -189,7 +189,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.4
+		volume = 0.3
 		distance_max = "10000"
 		
 		vsnd_files =
@@ -203,7 +203,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.4
+		volume = 0.3
 		distance_max = "10000"
 
 
@@ -222,7 +222,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.4
+		volume = 0.3
 		distance_max = "10000"
 
 		vsnd_files =
@@ -237,7 +237,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.4
+		volume = 0.3
 		distance_max = "10000"
 
 
@@ -248,7 +248,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 1.0
+		volume = 0.8
 
 		vsnd_files = "sounds/tools/drone_equip.vsnd"
 	}
@@ -257,7 +257,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 1.0
+		volume = 0.8
 
 		vsnd_files = "sounds/tools/cachefinder_ping.vsnd"
 	}
@@ -266,7 +266,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 1.0
+		volume = 0.8
 
 		vsnd_files = "sounds/tools/cachefinder_trigger_fail.vsnd"
 	}
@@ -275,7 +275,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 1.0
+		volume = 0.8
 
 		vsnd_files = "sounds/tools/drone_loop_data.vsnd"
 	}
@@ -284,7 +284,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.5
+		volume = 0.4
 
 		vsnd_files = "sounds/tools/scanner_scan.vsnd"
 	}
@@ -293,7 +293,7 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 1.0
+		volume = 0.8
 
 		vsnd_files = "sounds/tools/drone_recall.vsnd"
 	}
@@ -302,8 +302,532 @@
 	{
 		type = "destinations.simple_vr"
 		preload_vsnds = true
-		volume = 0.3
+		volume = 0.25
 
 		vsnd_files = "sounds/tools/jetpack_loop.vsnd"
+	}
+	
+	Bow.String =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.8
+
+		vsnd_files = "sounds/weapons/bowstring.vsnd"
+	}
+	
+	Arrow.Impact =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+
+		vsnd_files = "sounds/weapons/arrow_impact.vsnd"
+	}
+	
+	Attempt.Grab =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+
+		vsnd_files = 
+		[
+			"sounds/attempt_grab.vsnd",
+			"sounds/attempt_grab2.vsnd",
+			"sounds/attempt_grab3.vsnd"
+		]
+	}
+	
+	Ski.Turn = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+		vsnd_files = "sounds/ski_slope/ski_turn.vsnd"
+
+	}
+	
+	Ski.Noise0 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.0
+		vsnd_files = "sounds/null.vsnd"
+	}
+	
+	Ski.Noise1 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.35
+		pitch = 0.7
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	Ski.Noise2 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		pitch = 0.75
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	Ski.Noise3 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.45
+		pitch = 0.8
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	Ski.Noise4 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		pitch = 0.9
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	Ski.Noise5 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.6
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	Ski.Noise6 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.7
+		pitch = 1.05
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	Ski.Noise7 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.8
+		pitch = 1.1
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	Ski.Noise8 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.9
+		pitch = 1.125
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	Ski.Noise9 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		pitch = 1.15
+		vsnd_files = "sounds/ski_slope/ski_noise.vsnd"
+
+	}
+	
+	
+	
+	Ski.Carve0 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.0
+		vsnd_files = "sounds/null.vsnd"
+	}
+	
+	Ski.Carve1 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.1
+		//pitch = 0.94
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve2 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.2
+		//pitch = 0.95
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve3 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.25
+		//pitch = 0.96
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve4 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+		//pitch = 0.97
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve5 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.35
+		//pitch = 0.98
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve6 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		//pitch = 0.99
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve7 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.45
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve8 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve9 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.55
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve10 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.6
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve11 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.65
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve12 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.7
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve13 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.75
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve14 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.8
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve15 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.85
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve16 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.9
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve17 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.95
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+	Ski.Carve18 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		pitch = 1.0
+		vsnd_files = "sounds/ski_slope/ski_carve.vsnd"
+
+	}
+	
+
+	
+	
+	
+	Ski.Wind0 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.0
+		vsnd_files = "sounds/null.vsnd"
+	}
+	
+	Ski.Wind1 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.125
+		//pitch = 0.8
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+	}
+	
+	Ski.Wind2 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.15
+		//pitch = 0.825
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+	}
+	
+	Ski.Wind3 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.175
+		//pitch = 0.85
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+	}
+	
+	Ski.Wind4 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.2
+		//pitch = 0.9
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+	}
+	
+	Ski.Wind5 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.225
+		//pitch = 0.92
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+	}
+	
+	Ski.Wind6 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.25
+		//pitch = 0.94
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+	}
+	
+	Ski.Wind7 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+		//pitch = 0.96
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+	}
+	
+	Ski.Wind8 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		//pitch = 0.98
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+
+	}
+	
+	Ski.Wind9 = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+		//pitch = 1.0
+		vsnd_files = "sounds/ski_slope/wind_constant.vsnd"
+
+	}
+	
+	Slope.EndTeleport = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		vsnd_files = "sounds/common/teleport_go.vsnd"
+
+	}
+	
+	Slope.UITeleport = 
+	{
+		type = "destinations.simple_2d"
+		preload_vsnds = true
+		volume = 0.3
+		vsnd_files = "sounds/common/teleport_go.vsnd"
+
+	}
+	
+	Slope.UISpawnSlalom = 
+	{
+		type = "destinations.simple_2d"
+		preload_vsnds = true
+		volume = 0.3
+		vsnd_files = "sounds/tools/cache_released.vsnd"
+
+	}
+	
+	Pole.Click =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+
+		vsnd_files = "sounds/tools/multitool_click.vsnd"
+	}
+	
+	Pole.Fail =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+
+		vsnd_files = "sounds/common/focus_change.vsnd"
+	}
+	
+	Sword.Hit =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.5
+
+		vsnd_files = "sounds/weapons/sword_hit.vsnd"
+	}
+	
+	Sword.Draw =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+
+		vsnd_files = "sounds/weapons/sword_draw.vsnd"
+	}
+	
+	Maresleg.Fire = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+		distance_max = "100000"
+		vsnd_files =  "sounds/weapons/rpg_fire_01.vsnd"
+	}
+	
+	Maresleg.Bolt_Open = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+		distance_max = "100000"
+		vsnd_files =  "sounds/weapons/mares_leg/open_bolt.vsnd"
+	}
+	
+	Maresleg.Bolt_Closed = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+		distance_max = "100000"
+		vsnd_files =  "sounds/weapons/mares_leg/close_bolt.vsnd"
+	}
+	
+	Maresleg.Load_Round = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+		distance_max = "100000"
+		vsnd_files =  "sounds/weapons/mares_leg/chamber_round.vsnd"
+			
 	}
 }

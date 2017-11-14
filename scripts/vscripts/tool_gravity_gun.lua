@@ -49,7 +49,7 @@ local beamParticle = nil
 local isTargeting = false
 
 local pulledEntities = {"prop_physics"; "prop_physics_override"; "simple_physics_prop";
-	"prop_destinations_physics"; "prop_destinations_tool"}
+	"prop_destinations_physics"; "prop_destinations_tool"; "prop_destinations_game_trophy"}
 
 function Precache(context)
 	PrecacheParticle("particles/item_laser_pointer.vpcf", context)
@@ -82,6 +82,9 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	isTargeting = true
 	thisEntity:SetThink(TraceBeam, "trace_beam", 0)
 	
+	local paintColor = thisEntity:GetRenderColor()
+	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
+	
 	return true
 end
 
@@ -99,6 +102,9 @@ function SetUnequipped()
 	beamParticle:SetParent(thisEntity, "beam")
 	beamParticle:GetControlPoint(1):SetParent(thisEntity, "")
 	isTargeting = false
+	
+	local paintColor = handAttachment:GetRenderColor()
+	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	return true
 end
