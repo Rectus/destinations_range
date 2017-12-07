@@ -33,9 +33,6 @@ local MOVE_CAP_FACTOR = 0.7
 local MOVE_SPEED = 300
 local AIR_CONTROL_FACTOR = 0.5
 
-local MUZZLE_OFFSET = Vector(0, 0, -0.2)
-local MUZZLE_ANGLES_OFFSET = QAngle(90, 0, 0) 
-
 local GRAB_PULL_PLAYER_SPEED = 24
 local GRAB_PULL_PLAYER_EASE_DISTANCE = 32
 local GRAB_TRACE_INTERVAL = 0.02
@@ -196,10 +193,6 @@ end
 
 function OnTriggerPressed(self)
 
-	--[[if FindPickupProp()
-	then
-		return
-	end]]
 
 	isGrabbing = true
 

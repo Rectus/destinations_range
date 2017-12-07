@@ -1,0 +1,16 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/custom_destination/locomotion_tool_handle_display.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/locomotion_tool_handle_display.js" />
+	</scripts>
+
+	<ClientUIDialogPanel>
+		<ClientUIDialogPanel class="Display">
+			<Label class="Text" id="TextDisplay" text="100kph\n\n2000m\n\n88:88" />
+		</ClientUIDialogPanel>
+	</ClientUIDialogPanel>
+</root>

@@ -8,8 +8,8 @@
 	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
 		<Panel class="Page" id="SuctionCupDialog">
 			<Panel class="TextArea">
-				<Label class="Title" text="Movement Tool" />
-				<Label class="Desc Big" text="Enbles grabbing and trackpad locomotion.\n\nUsage:\nPick up with the trigger button.\nGrab and hold onto geometry or props with the trigger to pull yourself around. Grabbing onto moving props drags you along.\nUse the trackpad to move around.\nUse one tool in each hand to rotate (currently broken).\nMay cause motion sickness." />
+				<Label class="Title" text="Locomotion Tool" />
+				<Label class="Desc Big" text="Enables multiple kinds of VR locomotion.\n\nUsage:\nPick up with the trigger button.\nPress the menu button to access the selection menu. The menu can be operated either by using the touchpad, or by the other controller.\n\nMay cause motion sickness." />
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

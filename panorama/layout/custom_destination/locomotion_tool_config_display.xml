@@ -1,0 +1,119 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/custom_destination/locomotion_tool_config_display.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/locomotion_tool_config_display.js" />
+	</scripts>
+
+	<ClientUIDialogPanel> 
+		<ClientUIDialogPanel class="ConfigPanel" id="ConfigPanel">
+			<!--<Panel class="ConfigPanelTitlebar">
+				<Label class="ConfigPanelTitleLabel"  text="Locomotion Setup"/>
+			</Panel>-->
+
+			
+			<Panel class="ConfigPanelButtonPane">
+				<Panel class="ConfigPanelButtonHeading">
+					<Label class="ConfigPanelButtonHeadingText" text="Trigger" />
+				</Panel>
+				
+				<Button id="TriggerSurfaceGrab" class="ConfigPanelButton" text="" onactivate="SetTrigger(1)"> 
+					<Label class="ConfigPanelButtonLabel" text="Surface Grab" />
+				</Button>
+			
+				<Button id="TriggerAirGrab" class="ConfigPanelButton" text="" onactivate="SetTrigger(2)"> 
+					<Label class="ConfigPanelButtonLabel" text="Air Grab" />
+				</Button>
+			
+				<Button id="TriggerAirGrabGround" class="ConfigPanelButton" text="" onactivate="SetTrigger(3)"> 
+					<Label class="ConfigPanelButtonLabel" text="Air Grab (Grounded)" />
+				</Button>
+				
+				<Button id="TriggerGrapple" class="ConfigPanelButton" text="" onactivate="SetTrigger(4)"> 
+					<Label class="ConfigPanelButtonLabel" text="Grappling Hook" />
+				</Button>
+				
+				<Button id="TriggerJetpack" class="ConfigPanelButton" text="" onactivate="SetTrigger(5)"> 
+					<Label class="ConfigPanelButtonLabel" text="Jetpack" />
+				</Button>
+				
+				<Button id="TriggerFly" class="ConfigPanelButton" text="" onactivate="SetTrigger(6)"> 
+					<Label class="ConfigPanelButtonLabel" text="Flying" />
+				</Button>
+			</Panel>
+			
+			
+			<Panel class="ConfigPanelButtonPane">
+				<Panel class="ConfigPanelButtonHeading">
+					<Label class="ConfigPanelButtonHeadingText" text="Touchpad" />
+				</Panel>
+				
+				<Button id="PadDisable" class="ConfigPanelButton" text="" onactivate="SetPad(0)"> 
+					<Label class="ConfigPanelButtonLabel" text="Disable" />
+				</Button>
+				
+				<Button id="PadTeleport" class="ConfigPanelButton" text="" onactivate="SetPad(1)"> 
+					<Label class="ConfigPanelButtonLabel" text="Teleport" />
+				</Button>
+			
+				<Button id="PadTouch" class="ConfigPanelButton" text="" onactivate="SetPad(2)"> 
+					<Label class="ConfigPanelButtonLabel" text="Touch" />
+				</Button>
+			
+				<Button id="PadPush" class="ConfigPanelButton" text="" onactivate="SetPad(3)"> 
+					<Label class="ConfigPanelButtonLabel" text="Hold" />
+				</Button>
+				
+				<Button id="PadDual" class="ConfigPanelButton" text="" onactivate="SetPad(4)"> 
+					<Label class="ConfigPanelButtonLabel" text="Touch/Hold" />
+				</Button>
+			</Panel>
+
+			<Panel class="ConfigPanelButtonPane">
+				<Panel class="ConfigPanelButtonHeading">
+					<Label class="ConfigPanelButtonHeadingText" text="Rotation" />
+				</Panel>
+				
+				<Button id="RotateDisable" class="ConfigPanelButton" text="" onactivate="SetRotation(0)"> 
+					<Label class="ConfigPanelButtonLabel" text="Disable" />
+				</Button>
+			
+				<Button id="RotateOneYaw" class="ConfigPanelButton" text="" onactivate="SetRotation(1)"> 
+					<Label class="ConfigPanelButtonLabel" text="One Handed (Yaw)" />
+				</Button>
+				
+				<Button id="RotateTwo" class="ConfigPanelButton" text="" onactivate="SetRotation(2)"> 
+					<Label class="ConfigPanelButtonLabel" text="Two Handed" />
+				</Button>
+			</Panel>
+			
+			<Panel class="ConfigPanelButtonPane">
+				<Panel class="ConfigPanelButtonHeading">
+					<Label class="ConfigPanelButtonHeadingText" text="Targeting Mode" />
+				</Panel>
+		
+				<Button id="TargetingHand" class="ConfigPanelButton" text="" onactivate="SetTargeting(1)"> 
+					<Label class="ConfigPanelButtonLabel" text="Hand" />
+				</Button>
+				
+				<Button id="TargetingHandNormal" class="ConfigPanelButton" text="" onactivate="SetTargeting(2)"> 
+					<Label class="ConfigPanelButtonLabel" text="Hand(Constant)" />
+				</Button>
+			
+				<Button id="TargetingHead" class="ConfigPanelButton" text="" onactivate="SetTargeting(3)"> 
+					<Label class="ConfigPanelButtonLabel" text="Head" />
+				</Button>
+
+			</Panel>
+			
+			<Panel class="ConfigPanelDescriptionBox">
+				<Label class="ConfigPanelDescriptionText" id="Description" text="" />
+			</Panel>
+
+			
+		</ClientUIDialogPanel>
+	</ClientUIDialogPanel>
+</root>

@@ -830,4 +830,94 @@
 		vsnd_files =  "sounds/weapons/mares_leg/chamber_round.vsnd"
 			
 	}
+	
+	
+	LocomotionTool_UI_Cursor = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		vsnd_files =  "sounds/common/focus_change.vsnd"
+			
+	}
+	
+	LocomotionTool_UI_Select = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		vsnd_files =  "sounds/common/ui_select.vsnd"
+			
+	}
+	
+	
+	LocomotionTool_GravityEmitterLoop = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.2
+		pitch = 0.9
+		volume_falloff_min = 8.0
+		volume_falloff_max = 32.0
+		vsnd_files =  "sounds/tools/gravity_field_loop.vsnd"
+			
+	}
+	
+	
+	Grapple_Fire = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.7
+		vsnd_files =  "sounds/tools/grapple_fire.vsnd"
+			
+	}
+	
+	Grapple_Return = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		vsnd_files =  "sounds/tools/grapple_return.vsnd"
+			
+	}
+	
+	Grapple_Grab = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.6
+		vsnd_files =  "sounds/tools/grapple_grab.vsnd"
+			
+	}
+	
+	Grapple_Miss = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		vsnd_files =  "sounds/tools/grapple_miss.vsnd"
+			
+	}
+	
+	Grapple_Hit = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.4
+		volume_falloff_min = 10.0
+		volume_falloff_max = 3000.0
+		//distance_max = "100000"
+		vsnd_files =  "sounds/tools/grapple_impact.vsnd"
+			
+	}
+	
+	Grapple_Fly =
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.3
+		distance_max = "10000"
+		vsnd_files = "sounds/weapons/barnacle/tongue_fly_loop.vsnd"
+	}
 }

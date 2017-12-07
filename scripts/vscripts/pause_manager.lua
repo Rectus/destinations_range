@@ -10,14 +10,14 @@ CPauseManager = class(
 		SPAWN_ITEMS = 
 		{
 			{
-				name = "Movement tool",
+				name = "Locomotion tool",
 				img = "",
 				isTool = true,
 				keyvals =
 				{
 					targetname = "",
-					model = "models/props_range/grabber.vmdl";
-					vscripts = "tool_movement";
+					model = "models/tools/locomotion_tool_base.vmdl";
+					vscripts = "tool_locomotion";
 					HasCollisionInHand = 0;
 				}
 			},

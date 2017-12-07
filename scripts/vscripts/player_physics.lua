@@ -42,7 +42,7 @@ CPlayerPhysics = class(
 		FALL_DISTANCE = 64000;
 		FALL_GLUE_DISTANCE = 8;
 		PULL_UP_DISTANCE = 16;
-		PULL_UP_SPEED = 50;
+		PULL_UP_SPEED = 100;
 		PLAYER_STEP_MAX_SIZE = 12;
 		PLAYER_FULL_HEIGHT = 72;
 		PLAYER_HEIGHT_DRAG_FACTOR = 1.0;
@@ -128,6 +128,7 @@ function CPlayerPhysics:AddPlayer(player)
 			lerpTime = 0,
 			moveNextFrame = nil,
 			groundEnt = nil,
+			velChangeThisThink = false,
 			--[[turnSoundCounter = 0,
 			moveSoundLevel = 0,
 			moveSoundCounter = 0,
@@ -175,7 +176,14 @@ function CPlayerPhysics:AddVelocity(player, inVelocity)
 	if inVelocity.z ~= 0
 	then
 		self.players[player].onGround = false
+		
+		-- Ignore forced movement unless we have a rigid constraint.
+		if not self.players[player].active or not self.players[player].active.rigid then
+			self.players[player].moveNextFrame = nil
+		end
 	end
+	
+	self.players[player].velChangeThisThink = true
 	
 	self.players[player].idle = false
 end
@@ -201,6 +209,7 @@ function CPlayerPhysics:SetVelocity(player, inVelocity)
 		self.players[player].onGround = false
 	end
 	
+	self.players[player].velChangeThisThink = true
 	self.players[player].idle = false
 end
 
@@ -217,6 +226,28 @@ function CPlayerPhysics:GetVelocity(player)
 	
 	return self.players[player].velocity
 end
+
+
+function CPlayerPhysics:GetPlayerHeight(player)
+	if not self.players[player]
+	then
+		self:AddPlayer(player)
+	end
+	
+	if self.players[player].idle then
+		return 0
+	end
+	
+	local height = self:TracePlayerHeight(player)
+	
+	if height < self.FALL_GLUE_DISTANCE then
+		return 0
+	end
+	
+	return height
+end
+
+
 
 
 function CPlayerPhysics:IsPlayerOnGround(player)
@@ -384,7 +415,9 @@ end
 
 
 -- Move the player, while testing for world collisions in the move direction
-function CPlayerPhysics:MovePlayer(player, offset, accelerate)
+function CPlayerPhysics:MovePlayer(player, offset, accelerate, grounded)
+
+	grounded = grounded or false
 
 	if not self.players[player]
 	then
@@ -399,16 +432,30 @@ function CPlayerPhysics:MovePlayer(player, offset, accelerate)
 	local playerHeadHeight = player:GetHMDAvatar():GetOrigin().z + 4 - player:GetOrigin().z
 	local startVector = player:GetOrigin()
 
+	local maxMoveDistance = 5
+	
+	if not self.players[player].idle 
+	then
+		maxMoveDistance = max(self.players[player].velocity:Length() * self.lastThinkDelta, maxMoveDistance)
+	end
+
+	-- Do precise traces to find where the collsion is. 
 	for _, bound in pairs(self.PLAYER_COLLISON_BOUNDS)
 	do
+		local zOffset = self.PLAYER_STEP_MAX_SIZE
+	
+		if bound.headonly
+		then
+			zOffset = playerHeadHeight - 16 
+		end
 		
 		local traceTable =
 		{
 			startpos = startVector;
-			endpos = startVector + bound.dir * self.PLAYER_COLLISION_DEPTH;
+			endpos = startVector + bound.dir * (self.PLAYER_COLLISION_DEPTH + maxMoveDistance);
 			ignore = player;
 			mask = 33636363; -- TRACE_MASK_PLAYER_SOLID	
-			min = bound.min + Vector(0, 0, self.PLAYER_STEP_MAX_SIZE);
+			min = bound.min + Vector(0, 0, zOffset);
 			max = bound.max + Vector(0, 0, playerHeadHeight);
 		}
 		TraceHull(traceTable)
@@ -416,6 +463,7 @@ function CPlayerPhysics:MovePlayer(player, offset, accelerate)
 		--DebugDrawBox(startVector, traceTable.min, traceTable.max, 0, 255, 0, 0, self.lastThinkDelta)
 		if traceTable.hit --and (not traceTable.enthit or self.PROP_CLASSES[traceTable.enthit:GetClassname()] == nil)
 		then
+			--DebugDrawBox(traceTable.pos, traceTable.min, traceTable.max, 0, 255, 0, 0, 2)
 			local normalLen = offset:Dot(bound.dir)
 			if normalLen > 0
 			then
@@ -427,25 +475,36 @@ function CPlayerPhysics:MovePlayer(player, offset, accelerate)
 	
 	local height = self:TracePlayerHeight(player)
 	
-	if offset.z < 0 and offset.z > height
+	self.players[player].idle = false
+	if not grounded and self.players[player].velocity.z <= 0 then
+		self.players[player].stick = true
+	elseif height > self.FALL_GLUE_DISTANCE then
+		self.players[player].onGround = false
+	end
+	
+	if (height + offset.z < 0) or height < 0
 	then
-		offset.z = height
+		offset.z = min(-height, self.PULL_UP_SPEED * self.lastThinkDelta)
+	elseif height > 0 and offset.z <= 0 and grounded and height < self.FALL_GLUE_DISTANCE then
+		offset.z = max(-height , -self.PULL_UP_SPEED * self.lastThinkDelta)
+	elseif grounded then
+		offset.z = 0
 	end
 
 	local newOrigin = offset + player:GetHMDAnchor():GetOrigin()
 
 	if accelerate
 	then
-		-- Add velocity to give player momentum
-		self.players[player].velocity = (newOrigin - self.players[player].prevPos) * (1 / self.lastThinkDelta)
+		if self.players[player].onGround then
+			-- Add velocity to give player momentum
+			self.players[player].velocity = (newOrigin - self.players[player].prevPos) * (1 / self.lastThinkDelta)
+			self.players[player].velocity.z = 0
+		end
 	end
-
-	--player:GetHMDAnchor():SetOrigin(newOrigin)
-	self.players[player].moveNextFrame = newOrigin
+	if not self.players[player].velChangeThisThink then
+		self.players[player].moveNextFrame = newOrigin
+	end
 	--self:CheckMapBounds(player, self.players[player])
-	
-	self.players[player].idle = false
-	self.players[player].stick = true
 end
 
 
@@ -511,7 +570,7 @@ function CPlayerPhysics:PlayerMoveThink()
 		
 			self.players[playerEnt] = nil
 		else
-		
+			playerProps.velChangeThisThink = false
 			playerProps.lerpTime = 0
 		
 			local move = not playerProps.idle
@@ -900,36 +959,41 @@ end
 
 function CPlayerPhysics:TracePlayerHeight(playerEnt)
 
-	local startVector = playerEnt:GetOrigin() + Vector(0, 0, playerEnt:GetHMDAnchor():GetOrigin().z - playerEnt:GetOrigin().z)
+	local playerOrigin = playerEnt:GetOrigin()
+	local startVector =  Vector(playerOrigin.x, playerOrigin.y, playerEnt:GetHMDAnchor():GetOrigin().z)
 	local traceTable =
 	{
 		startpos = startVector + Vector(0, 0, self.PULL_UP_DISTANCE);
 		endpos = startVector;
 		ignore = playerEnt;
+		mask = 33636363; -- TRACE_MASK_PLAYER_SOLID	
 		min = Vector(-3, -3, 0);
-		max = Vector(3, 3, 1)
+		max = Vector(3, 3, 2)
 	}
 	
 	TraceHull(traceTable)
 	
 	if traceTable.hit 
-	then	
-		return (traceTable.pos - traceTable.startpos).z
+	then
+		if self.debugDraw
+		then
+			DebugDrawLine(traceTable.startpos, traceTable.pos, 192, 0, 0, true, 10)	
+		end
+		return traceTable.endpos.z - traceTable.pos.z
 	end
 	traceTable.startpos = startVector;
 	traceTable.endpos = startVector - Vector(0, 0, self.FALL_DISTANCE)
 	
-	--DebugDrawLine(traceTable.startpos, traceTable.endpos, 255, 0, 0, false, 10.1)
+	
 	TraceHull(traceTable)
 	
 	if traceTable.hit 
 	then
-		--DebugDrawLine(traceTable.startpos, traceTable.pos, 0, 255, 0, false, 10.2)
-		
-		local playerHeight = (traceTable.startpos - traceTable.pos).z
-		
-		--DebugDrawLine(traceTable.startpos, traceTable.pos, 0, 255, 0, false, 10.2)
-		return playerHeight
+		if self.debugDraw
+		then
+			DebugDrawLine(traceTable.startpos, traceTable.pos, 0, 192, 0, true, 10)
+		end
+		return traceTable.startpos.z - traceTable.pos.z
 	end
 	
 	return 16384

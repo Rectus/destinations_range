@@ -1,0 +1,19 @@
+
+
+.Display {
+	opacity: 1;
+	wash-color: none;
+	padding: 2px;
+	padding-top: 7px;
+	/*border: 2px solid red; */
+}
+
+.Text {
+	width: 100%;
+	height: 100%;
+	color: #cfcfcfff;
+	font-family: platformfont;
+	font-size: 13px;
+	text-align: center;
+	text-overflow: clip;
+}

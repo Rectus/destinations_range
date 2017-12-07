@@ -1,0 +1,163 @@
+
+@define text_color: #d0f0ffff;
+
+@define background_base: #00a0a0a0;
+@define background_trans: #00c0c000;
+
+.ConfigPanel {
+	background-color: gradient( radial, 50% 50%, 0% 0%, 50% 50%, from( background_base ), to( background_trans ) );
+	opacity-mask: url( "file://{resources}/images/custom_destination/holoscreen_opacity.png") 0.6;
+	flow-children: down;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	transition-property: opacity;
+	transition-duration: shortduration;
+	transition-timing-function: bigpicture-ease-in-out;
+	/* border: 2px solid red;  */
+}
+
+.ConfigPanel.Visible {
+	opacity: 1;
+}
+
+
+.ConfigPanelTitlebar {
+	background-color: gradient( radial, 50% 50%, 0% 0%, 50% 50%, from( #00c0c010 ), to( #00c0c000 ) );
+	width: 100%;
+	
+	height: fit-children;
+	flow-children: none;
+}
+
+.ConfigPanelTitleLabel {
+	width: 100%;
+	
+	margin-top: 10px;
+	font-size: 30px;
+	text-align: center;
+	color: text_color;
+}
+
+.ConfigPanelDescriptionBox {
+	background-color: #00c0c0a0;
+	width: 100%;
+	height: fit-children;
+	border-radius: 10px;
+	min-height: 150px;
+	padding: 25px;
+	padding-top: 25px;
+	padding-bottom: 25px;
+	vertical-align: top;
+	margin: 20px;
+	horizontal-align: center;
+}
+
+.ConfigPanelDescriptionText {
+	background-color: gradient( radial, 50% 50%, 0% 0%, 50% 50%, from( #00c0c040 ), to( #00c0c000 ) );
+	width: 100%;
+	font-size: 20px;
+	text-align: left;
+	color: text_color;
+}
+
+
+.ConfigPanelButtonHeading {
+	width: 100%;
+	height: fit-children;
+	
+	background-color: none;
+	/*background-color: background_center_gradient;
+	border-radius: 5px;
+	border: 2px solid panel_stroke;*/
+	padding: 10px;
+	padding-top: 0px;
+	padding-bottom: 5px;
+	overflow: clip;
+}
+
+.ConfigPanelButtonHeadingText {
+	width: 100%;
+	font-size: 25px;
+	text-align: left;
+	color: text_color;
+}
+
+.ConfigPanelButtonPane {
+	background-color: gradient( radial, 50% 50%, 0% 0%, 50% 50%, from( #00c0c040 ), to( #00c0c000 ) );
+	width: 100%;
+	height: fit-children;
+	padding: 10px;
+
+	padding-bottom: 0px;
+	vertical-align: top;
+	horizontal-align: center;
+	flow-children: right-wrap;
+}
+
+
+.ConfigPanelButton {
+	border-radius: 10px;
+	border: 2px solid #ffffff10;
+	padding: 20px;
+
+	margin: 4px;
+	background-color: #00a0a060;
+	flow-children: right;
+	
+	/*transition-property: border;
+	transition-duration: shortduration;
+	transition-timing-function: bigpicture-ease-in-out;*/
+}
+
+.ConfigPanelButton.Item {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	
+}
+
+
+
+.ConfigPanelButton:hover,
+.ConfigPanelButton:focus {
+	//background-color: #00d0d070;	
+	//pre-transform-scale2d: 1;
+	border: 2px solid text_color;
+}
+
+.ConfigPanelButton.Cursor {
+	border: 4px solid text_color;
+	margin: 2px;
+}
+
+.ConfigPanelButton.Selected {
+	background-color: #60e0e080;
+
+}
+
+.ConfigPanelButton:active {
+	background-color: #60e0e080;	
+
+}
+
+.ConfigPanelButtonLabel {
+	/*width: 100%;*/
+	font-size: 20px;
+	text-align: center;
+	color: text_color;
+}
+
+.ConfigPanelButtonImage {
+	height: 100px;
+
+	horizontal-align: center;
+}
+
+.ConfigPanelButtonImageLabel {
+	width: 100%;
+	font-size: 35px;
+	text-align: left;
+	color: text_color;
+	vertical-align: center;
+	padding-left: 40px;
+}
