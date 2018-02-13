@@ -1,0 +1,63 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/custom_destination/scoreboard.css" />
+		<include src="s2r://panorama/styles/player_billboard.vcss_c" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/slalom_scoreboard.js" />
+	</scripts>
+
+	<ClientUIDialogPanel>
+		<ClientUIDialogPanel class="ScoreBoard" id="ScoreBoard">
+		
+			<ClientUIDialogPanel class="ScoreSection">
+				<ClientUIDialogPanel class="ScoreEntry">
+					<Label class="ScorePos" text="" />
+					<Label class="ScoreText" text="Player" />
+					<Label class="ScoreTimeHeading" text="Time" />
+					<Label class="ScoreTimeHeading" text="Difference" />
+				</ClientUIDialogPanel>
+				
+				<ClientUIDialogPanel class="ScoreEntry">
+					<Label class="ScorePos" text="1" />
+					<Label class="ScoreText" id="ScoreName1" text="Player" />
+					<Label class="ScoreTime" id="ScoreTime1" text="00:00.000" />
+					<Label class="ScoreTime" id="ScoreDiff1" text="-00:00.000" />
+				</ClientUIDialogPanel>
+				<ClientUIDialogPanel class="ScoreEntry">
+					<Label class="ScorePos" text="2" />
+					<Label class="ScoreText" id="ScoreName2" text="Player" />
+					<Label class="ScoreTime" id="ScoreTime2" text="00:00.000" />
+					<Label class="ScoreTime" id="ScoreDiff2" text="-00:00.000" />
+				</ClientUIDialogPanel>
+				<ClientUIDialogPanel class="ScoreEntry">
+					<Label class="ScorePos" text="3" />
+					<Label class="ScoreText" id="ScoreName3" text="Player" />
+					<Label class="ScoreTime" id="ScoreTime3" text="00:00.000" />
+					<Label class="ScoreTime" id="ScoreDiff3" text="-00:00.000" />
+				</ClientUIDialogPanel>
+				<ClientUIDialogPanel class="ScoreEntry">
+					<Label class="ScorePos" text="4" />
+					<Label class="ScoreText" id="ScoreName4" text="Player" />
+					<Label class="ScoreTime" id="ScoreTime4" text="00:00.000" />
+					<Label class="ScoreTime" id="ScoreDiff4" text="-00:00.000" />
+				</ClientUIDialogPanel>
+		
+			</ClientUIDialogPanel>
+			
+			
+			<ClientUIDialogPanel class="TimeSection">
+				<ClientUIDialogPanel class="ScoreEntry">
+					<Label class="ScorePos" text="" />
+					<Label class="ScoreText" id="TimeName" text="Player" />
+					<Label class="ScoreTime" id="CurrentTime" text="00:00.000" />
+					<Label class="ScoreTime" id="CurrentTimeDiff" text="+00:00.000" />
+				</ClientUIDialogPanel>		
+			</ClientUIDialogPanel>
+		
+			
+		</ClientUIDialogPanel>
+	</ClientUIDialogPanel>
+</root>
