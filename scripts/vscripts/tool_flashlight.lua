@@ -6,21 +6,24 @@ local controller = nil
 local currentPlayer = nil
 local handID = 0
 local handAttachment = nil
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.2
 
 local lightKeyvals = {
 	classname = "light_spot";
 	targetname = "flashlight_light";
 	enabled = 0;
 	color = "209 192 184 255";
-	brightness = 3;
+	brightness = 4;
 	range = 3000;
 	indirectlight = 0;
 	attenuation1 = 0.3;
 	attenuation2 = 0;
 	falloff = 10;
-	innerconeangle = 10;
-	outerconeangle = 20;
+	innerconeangle = 15;
+	outerconeangle = 230;
 	castshadows = 1;
+	lightcookie = "flashlight";
 }
 
 function Precache(context)
@@ -32,6 +35,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	controller = pHand
 	currentPlayer = pPlayer
 	handAttachment = pHandAttachment
+	pickupTime = Time()
 	
 	print("SetEquipped")
 	
@@ -76,7 +80,10 @@ function OnHandleInput(input)
 	if input.buttonsPressed:IsBitSet(nIN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(nIN_TRIGGER)
-		OnTriggerPressed(self)
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			OnTriggerPressed(self)
+		end
 	end
 	
 	-- Catch the unpress even, so you don't drop the tool.

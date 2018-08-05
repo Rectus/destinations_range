@@ -29,6 +29,7 @@ local SPIN_CHECK_INTERVAL = 0.05
 local SPIN_POSE_INTERVAL = 0.011
 local FIRE_RUMBLE_INTERVAL = 0.01
 local FIRE_RUMBLE_TIME = 0.2
+local PICKUP_FIRE_DELAY = 0.5
 
 local SHOT_TRACE_DISTANCE = 16384
 local DAMAGE = 150
@@ -42,6 +43,7 @@ local STATE_CYCLING_COCKED = 4
 local state = STATE_READY
 
 local isCarried = false
+local pickupTime = 0
 local controller = nil
 local currentPlayer = nil
 local handID = 0
@@ -74,7 +76,6 @@ function Precache(context)
 	PrecacheParticle("particles/weapons/mares_leg_shell_casing.vpcf", context)
 	PrecacheParticle("particles/weapons/mares_leg_muzzle_flash.vpcf", context)
 	
-	PrecacheModel("models/weapons/hand_dummy.vmdl", context)
 	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
 end
 
@@ -98,6 +99,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	currentPlayer = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
+	pickupTime = Time()
 	
 	local child = thisEntity:FirstMoveChild()
 
@@ -176,7 +178,7 @@ function OnHandleInput( input )
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
 		
-		if state == STATE_READY
+		if state == STATE_READY and Time() > pickupTime + PICKUP_FIRE_DELAY
 		then
 			Fire()	
 		end
@@ -232,7 +234,7 @@ function TraceShot()
 
 	}
 	local tracerEndPos = traceTable.endpos
-	if g_VRScript.fallController:IsDebugDrawEnabled()
+	if g_VRScript.playerPhysController and g_VRScript.playerPhysController:IsDebugDrawEnabled()
 	then
 		DebugDrawLine(traceTable.startpos, traceTable.endpos, 255, 0, 0, false, 0.1)
 	end
@@ -241,7 +243,7 @@ function TraceShot()
 	
 	if traceTable.hit
 	then
-		if g_VRScript.fallController:IsDebugDrawEnabled()
+		if g_VRScript.playerPhysController and g_VRScript.playerPhysController:IsDebugDrawEnabled()
 		then
 			DebugDrawLine(traceTable.startpos, traceTable.pos, 0, 255, 0, false, 0.2)
 		end
@@ -447,7 +449,7 @@ function GetLeverTorque()
 	local dotVal = torqueVector:Dot(acc) + gravFactor
 	
 	
-	if g_VRScript.fallController:IsDebugDrawEnabled() then
+	if g_VRScript.playerPhysController and g_VRScript.playerPhysController:IsDebugDrawEnabled() then
 		DebugDrawLine(pivot, massCenter, 255, 255, 0, false, SPIN_POSE_INTERVAL)
 		DebugDrawLine(pivot, pivot + torqueVector:Normalized() * dotVal, 255, 0, 255, false, SPIN_POSE_INTERVAL)
 		DebugDrawLine(pivot, pivot + acc:Normalized() * torqueVector:Dot(acc), 128, 0, 255, false, SPIN_POSE_INTERVAL)

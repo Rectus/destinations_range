@@ -16,6 +16,9 @@ local sunAngles = nil
 local startAngles = nil
 local startSunAngles = nil
 
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
+
 local sunKeyvals = 
 {
 	targetname = "pole_compass";
@@ -84,6 +87,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
+	pickupTime = Time()
 	
 	ParticleManager:DestroyParticle(sunParticle, false)
 	
@@ -137,11 +141,14 @@ function OnHandleInput(input)
 	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
-		triggerHeld = true
-		startAngles = handAttachment:GetAngles()
-		
-		if envEnt then
-			startSunAngles = envEnt:GetAngles()
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			triggerHeld = true
+			startAngles = handAttachment:GetAngles()
+			
+			if envEnt then
+				startSunAngles = envEnt:GetAngles()
+			end
 		end
 		
 		input.buttonsPressed:ClearBit(IN_TRIGGER)

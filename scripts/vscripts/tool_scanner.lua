@@ -22,7 +22,7 @@
 	THE SOFTWARE.
 ]]--
 
-require("particle_system")
+--require("particle_system")
 
 local PUNT_IMPULSE = 1000
 local MAX_PULL_IMPULSE = 250
@@ -37,6 +37,7 @@ local BEAM_SCAN_INTERVAL = 0.01
 local SCAN_TIME = 1
 local PUNT_DISTANCE = 512
 
+local isCarried = false
 local playerEnt = nil
 local handID = 0
 local handEnt = nil
@@ -49,6 +50,9 @@ local scanStartTime = 0
 local scanDirection = nil
 local screen = nil
 local screenText = nil
+
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
 
 local screenKeyvals = {
 	classname = "point_clientui_world_panel";
@@ -90,6 +94,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
+	pickupTime = Time()
 	
 	if not screen or not IsValidEntity(screen)
 	then
@@ -156,7 +161,10 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		TriggerPressed(self)
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			TriggerPressed(self)
+		end
 	end
 		
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 

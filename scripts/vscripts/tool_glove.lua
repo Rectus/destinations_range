@@ -34,6 +34,8 @@ local physGlove = nil
 local toolTarget = nil
 local physConstraint = nil
 local lastFireTime = 0
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
 
 
 local constraintKeyvals = {
@@ -87,6 +89,7 @@ function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
+	pickupTime = Time()
 	
 	handAttachment:AddEffects(32)
 	
@@ -141,7 +144,10 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		OnTriggerPressed(self)
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			OnTriggerPressed(self)
+		end
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 

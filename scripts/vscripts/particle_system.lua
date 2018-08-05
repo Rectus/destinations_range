@@ -1,5 +1,5 @@
 --[[
-	Wrapper class for particle systems.
+	Legacy wrapper class for particle systems. Deprecated, please use the native API functions instead.
 	
 	Copyright (c) 2016 Rectus
 	

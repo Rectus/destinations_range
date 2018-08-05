@@ -26,8 +26,10 @@
 local FIRE_RUMBLE_INTERVAL = 0.02
 local FIRE_RUMBLE_TIME = 0.4
 local ROCKET_OFFSET = Vector(30, 0, 0)
+local PICKUP_FIRE_DELAY = 0.5
 
 local isCarried = false
+local pickupTime = 0
 local playerEnt = nil
 local controller = nil
 local handID = 0
@@ -76,7 +78,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	controller = pHand
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
-
+	pickupTime = Time()
 
 	
 	if not alreadyPickedUp and not fired
@@ -136,7 +138,7 @@ function OnHandleInput( input )
 	local IN_GRIP = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
 
 	
-	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
+	if input.buttonsPressed:IsBitSet(IN_TRIGGER) and Time() > pickupTime + PICKUP_FIRE_DELAY
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
 		OnTriggerPressed()

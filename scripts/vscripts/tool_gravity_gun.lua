@@ -48,6 +48,9 @@ local isCarried = false
 local beamParticle = nil
 local isTargeting = false
 
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.2
+
 local pulledEntities = {"prop_physics"; "prop_physics_override"; "simple_physics_prop";
 	"prop_destinations_physics"; "prop_destinations_tool"; "prop_destinations_game_trophy"}
 
@@ -63,6 +66,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
+	pickupTime = Time()
 	
 	if not beamParticle or not IsValidEntity(beamParticle)
 	then
@@ -85,15 +89,20 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	local paintColor = thisEntity:GetRenderColor()
 	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
+	playerEnt:AllowTeleportFromHand(handID, false)
+	
 	return true
 end
 
 
 function SetUnequipped()
+
+	playerEnt:AllowTeleportFromHand(handID, true)
 		
 	playerEnt = nil
 	handEnt = nil
 	isCarried = false
+	
 	
 	pulledObject = nil
 	isCarrying = false
@@ -113,7 +122,7 @@ end
 function OnHandleInput( input )
 	if not playerEnt
 	then 
-		return
+		return input
 	end
 
 	-- Even uglier lua ternary operator
@@ -126,7 +135,10 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		Punt(self)
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			Punt(self)
+		end
 	end
 		
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
@@ -154,14 +166,12 @@ function OnHandleInput( input )
 	end
 	
 	-- Needed to disable teleports
-	if input.buttonsDown:IsBitSet(IN_PAD) 
-	then
-		input.buttonsDown:ClearBit(IN_PAD)
-	end	
-	if input.buttonsDown:IsBitSet(IN_PAD_TOUCH) 
-	then
-		input.buttonsDown:ClearBit(IN_PAD_TOUCH)
-	end
+	
+	--input.buttonsDown:ClearBit(IN_PAD)
+	--input.buttonsDown:ClearBit(IN_PAD_TOUCH)
+	--input.buttonsPressed:ClearBit(IN_PAD_TOUCH)
+	--input.buttonsReleased:ClearBit(IN_PAD_TOUCH)
+
 
 	return input;
 end

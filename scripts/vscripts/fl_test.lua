@@ -4,6 +4,9 @@
  --
  --===========================================================================--
  
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.2
+ 
  local m_bIsEquipped = false; -- keep track of whether we are equipped or not
  local m_hHand = nil; -- keep a handle to the hand that is holding the tool
  local m_nHandID = -1; -- keep track of the hand index that is holding the tool (0==right, 1==left)
@@ -62,6 +65,7 @@
  	m_hHandAttachment = pHandAttachment;
  	m_hPlayer = pPlayer;
  	m_bIsEquipped = true;
+ 	pickupTime = Time();
  
  	-- create the trackpad particle system
  	local particleName = "particles/tool_fx/controller_trackpad_position_dot.vpcf";
@@ -89,6 +93,8 @@
  	local paintColor = thisEntity:GetRenderColor()
 	m_hHandAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
  
+ 	m_hPlayer:AllowTeleportFromHand(m_nHandID, false)
+ 
  	return true;
  end
  
@@ -98,6 +104,8 @@
  ---------------------------------------------------------------------------
  function SetUnequipped()
  	print( "================  SetUnequipped() ");
+ 	
+ 	m_hPlayer:AllowTeleportFromHand(m_nHandID, true)
  
  	local paintColor = m_hHandAttachment:GetRenderColor()
 	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
@@ -109,10 +117,24 @@
  	m_bIsEquipped = false;
  
  	ReleaseFireButton();
- 
- 	if ( m_particleTrackpad ~= nil ) then
- 		ParticleManager:DestroyParticle( m_particleTrackpad, true );
- 		m_particleTrackpad = nil;
+ 	
+ 	if m_bFlashlightOn then
+	 	if ( m_hFlashlightBeam ~= nil ) then
+	 		ParticleManager:DestroyParticle( m_hFlashlightBeam, true );
+	 	end
+	 	
+	 	local modelAttachmentIndex = thisEntity:ScriptLookupAttachment( "flashlight_beam" );
+	 	local vecStartPost = thisEntity:GetAttachmentOrigin( modelAttachmentIndex );
+	 	local angAttachment = thisEntity:GetAttachmentAngles( modelAttachmentIndex );
+	 	local direction = -thisEntity:GetForwardVector();	
+ 		local vecEndPos = (vecStartPost+(direction*190));
+	 	
+	 	local particleName = "particles/tool_fx/flashlight_thirdperson.vpcf";
+	 	m_hFlashlightBeam = ParticleManager:CreateParticle(particleName, PATTACH_POINT_FOLLOW, thisEntity);
+	 	ParticleManager:SetParticleControlEnt( m_hFlashlightBeam, 0, thisEntity, PATTACH_POINT_FOLLOW, "flashlight_beam", Vector(0,0,0), true );
+	 	ParticleManager:SetParticleControlEnt( m_hFlashlightBeam, 1, thisEntity, PATTACH_POINT_FOLLOW, "flashlight_beam", Vector(0,0,0), true );
+	 	ParticleManager:SetParticleControl( m_hFlashlightBeam, 2, vecEndPos );
+	 	ParticleManager:SetParticleControl( m_hFlashlightBeam, 5, Vector( m_tLightColors[m_nLightColor][1], m_tLightColors[m_nLightColor][2], m_tLightColors[m_nLightColor][3] ) );
  	end
  
  	return true;
@@ -207,8 +229,12 @@
  	-- make sure we let the code know the trigger has been released
  	ReleaseFireButton();
  	-- force the flashlight to go off when we release it
- 	TurnFlashlightOff();
+ 	--TurnFlashlightOff();
  	-- this calls C++ code on the prop tool entity and forces it to be dropped by the player
+ 	
+ 	-- Recreate sprite on the unheld prop
+ 	
+ 	
  	thisEntity:ForceDropTool();
  	print( "-------------------DropTool" );
  end
@@ -326,7 +352,10 @@
  		-- now clear it because we don't want any other tools to do anything with the trigger press
  		input.buttonsPressed:ClearBit( nIN_TRIGGER );
  
- 		PressFireButton();
+ 		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+ 			PressFireButton();
+ 		end
  	end
  
  	-- this checks if the TRIGGER has just been released
@@ -445,35 +474,38 @@
  	ParticleManager:SetParticleControlEnt( m_hFlashlightBeam, 1, m_hHandAttachment, PATTACH_POINT_FOLLOW, "flashlight_beam", Vector(0,0,0), true );
  	ParticleManager:SetParticleControl( m_hFlashlightBeam, 2, vecEndPos );
  	ParticleManager:SetParticleControl( m_hFlashlightBeam, 5, Vector( m_tLightColors[m_nLightColor][1], m_tLightColors[m_nLightColor][2], m_tLightColors[m_nLightColor][3] ) );
- 
- 	local lightTable = 
- 	{
- 		origin = vecStartPost,
- 		angles = angAttachment,
- 		targetname = "light"..thisEntity:entindex(),
- 		enabled = "1",
- 		color = ""..m_tLightColors[m_nLightColor][1].." "..m_tLightColors[m_nLightColor][2].." "..m_tLightColors[m_nLightColor][3].." 255",
- 		brightness = "1.5",
- 		range = "400",
- 		castshadows = "1",
- 		shadowtexturewidth = "64",
- 		shadowtextureheight = "64",
- 		style = "0",
- 		fademindist = "0",
- 		fademaxdist = "4000",
- 		bouncescale = "1.0",
- 		renderdiffuse = "1",
- 		renderspecular = "1",
- 		directlight = "2",
- 		indirectlight = "0",
- 		attenuation1 = "0.0",
- 		attenuation2 = "1.0",	
- 		innerconeangle = "20",
- 		outerconeangle = "32"
- 	}
- 	m_hLight = SpawnEntityFromTableSynchronous( "light_spot", lightTable )
- 	m_hLight:SetAngles( angAttachment[1], angAttachment[2], angAttachment[3] );
- 	m_hLight:SetParent(thisEntity, "flashlight_beam")
+ 	
+ 	if not m_hLight or not IsValidEntity(m_hLight) then
+	 	local lightTable = 
+	 	{
+	 		origin = vecStartPost,
+	 		angles = angAttachment,
+	 		targetname = "light"..thisEntity:entindex(),
+	 		enabled = "1",
+	 		color = ""..m_tLightColors[m_nLightColor][1].." "..m_tLightColors[m_nLightColor][2].." "..m_tLightColors[m_nLightColor][3].." 255",
+	 		brightness = "1.5",
+	 		range = "400",
+	 		castshadows = "1",
+	 		--shadowtexturewidth = "64",
+	 		--shadowtextureheight = "64",
+	 		style = "0",
+	 		fademindist = "0",
+	 		fademaxdist = "4000",
+	 		bouncescale = "1.0",
+	 		renderdiffuse = "1",
+	 		renderspecular = "1",
+	 		directlight = "2",
+	 		indirectlight = "0",
+	 		attenuation1 = "0.0",
+	 		attenuation2 = "1.0",	
+	 		innerconeangle = "20",
+	 		outerconeangle = "32",
+	 		lightcookie = "flashlight"
+	 	}
+	 	m_hLight = SpawnEntityFromTableSynchronous( "light_spot", lightTable )
+	 	m_hLight:SetAngles( angAttachment[1], angAttachment[2], angAttachment[3] );
+	 	m_hLight:SetParent(thisEntity, "flashlight_beam")
+ 	end
  end
  
  function TurnFlashlightOff()

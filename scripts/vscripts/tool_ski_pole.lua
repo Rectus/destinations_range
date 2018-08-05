@@ -99,6 +99,9 @@ local sprayParticle = nil
 local skiParticleL = nil
 local skiParticleR = nil
 
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
+
 local animKeyvals = 
 {
 	targetname = "pole_anim";
@@ -152,6 +155,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handAttachment = pHandAttachment
 	isCarried = true
 	gripLocked = false
+	pickupTime = Time()
 	
 	poleAnim:SetParent(handAttachment, "")
 	poleAnim:SetOrigin(handAttachment:GetOrigin())
@@ -169,7 +173,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	end
 	poleAnim:SetPoseParameter("pole_length", poleLength)
 
-	playerPhys = g_VRScript.fallController
+	playerPhys = g_VRScript.playerPhysController
 	thisEntity:SetThink(TracePush, "trace", PUSH_TRACE_INTERVAL)
 	thisEntity:SetThink(UpdateSkis, "update_ski", 0)
 	
@@ -283,9 +287,12 @@ function OnHandleInput(input)
 	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
-		triggerHeld = true
-		thisEntity:SetThink(TriggerThink, "trigger", 0.5)
-		RumbleController(1, 0.4, 20)
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			triggerHeld = true
+			thisEntity:SetThink(TriggerThink, "trigger", 0.5)
+			RumbleController(1, 0.4, 20)
+		end
 		
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
 	end		

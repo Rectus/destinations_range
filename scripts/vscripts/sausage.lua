@@ -6,9 +6,14 @@ local KEYVALS = {
 	vscripts = "sausage"
 }
 
+function Activate()
+	thisEntity:EnableUse(false)
+	thisEntity:SetThink(EnablePickup, "enable", 0.2)
+end
 
-
-
+function EnablePickup()
+	thisEntity:EnableUse(true)
+end
 
 function OnPickedUp(self, hand)
 	

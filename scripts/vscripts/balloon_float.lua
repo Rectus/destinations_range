@@ -1,20 +1,22 @@
 
 
-local EXPLOSION_RANGE = 50
-local EXPLOSION_MAX_IMPULSE = 50
-local BASE_IMPULSE = 6
+local EXPLOSION_RANGE = 100
+local EXPLOSION_MAX_IMPULSE = 200
+
+local BASE_IMPULSE = 6.5
+local MASS_FACTOR = 0.01
 
 local exploded = false
 
-local explosionKeyvals = {
+--[[local explosionKeyvals = {
 	fireballsprite = "sprites/zerogxplode.spr";
 	iMagnitude = 30;
 	rendermode = "kRenderTransAdd"
-}
+}]]
 
 function Precache(context)
 	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
-	PrecacheEntityFromTable("env_explosion", explosionKeyvals, context)
+	--PrecacheEntityFromTable("env_explosion", explosionKeyvals, context)
 end
 
 function Think()
@@ -25,12 +27,10 @@ function Think()
 	end
 
 	local scale = thisEntity:GetModelScale()
-	local scaleFactor = scale
-	if scale < 1
-	then
-		scaleFactor = scale * scale * scale
-	end
+	local scaleFactor = RemapVal(scale, 1, 2, 1, 1.3)
+
 	
+	thisEntity:SetMass(MASS_FACTOR * scaleFactor)
 	thisEntity:ApplyAbsVelocityImpulse(Vector(0, 0, BASE_IMPULSE * scaleFactor))
 
 	return 0.02
@@ -53,23 +53,22 @@ function Explode(self)
 
 	exploded = true
 	
-	local pushEnt = Entities:FindByClassname(nil, "prop_destinations_physics")
 	
-	while pushEnt 
+	local entities = Entities:FindAllInSphere(thisEntity:GetOrigin(), EXPLOSION_RANGE)
+	
+	for _,dmgEnt in ipairs(entities) 
 	do
-		if pushEnt ~= thisEntity
+		if IsValidEntity(dmgEnt) and dmgEnt:IsAlive() and dmgEnt ~= thisEntity
 		then
-			local distance = (pushEnt:GetCenter() - thisEntity:GetCenter()):Length()
+			local distance = (dmgEnt:GetCenter() - thisEntity:GetCenter()):Length()
+				
+			local magnitude = (EXPLOSION_MAX_IMPULSE - EXPLOSION_MAX_IMPULSE * distance / EXPLOSION_RANGE)			
+			local impulse = (dmgEnt:GetCenter() - thisEntity:GetCenter()):Normalized() * magnitude
 			
-			if distance < EXPLOSION_RANGE
-			then
-				local magnitude = (EXPLOSION_MAX_IMPULSE - EXPLOSION_MAX_IMPULSE * distance / EXPLOSION_RANGE)
-				local impulse = (pushEnt:GetCenter() - thisEntity:GetCenter()):Normalized() * magnitude
-				pushEnt:ApplyAbsVelocityImpulse(impulse)
-			end
+			dmgEnt:ApplyAbsVelocityImpulse(impulse)
 		end
-		pushEnt = Entities:FindByClassname(pushEnt, "prop_destinations_physics")
 	end
+
 	
 	local explosion = ParticleManager:CreateParticle("particles/tool_fx/drone_explosion01_flame01.vpcf", PATTACH_CUSTOMORIGIN, nil)
 	ParticleManager:SetParticleControl(explosion, 0, thisEntity:GetCenter())

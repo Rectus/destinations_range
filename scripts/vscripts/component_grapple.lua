@@ -704,6 +704,11 @@ function TraceGrappleObstacles()
 	if traceTable.hit then
 		--DebugDrawLine(traceTable.startpos, traceTable.pos, 255, 0, 0, false, TRACE_OBSTACLE_INTERVAL)
 		
+		-- Don't create corner on pulled prop
+		if grapplePulledEnt and traceTable.enthit and traceTable.enthit == grapplePulledEnt then
+			return GRAPPLE_TRACE_OBSTACLE_INTERVAL
+		end
+		
 		anchorPoint = traceTable.pos
 		
 		local hitPos = traceTable.pos

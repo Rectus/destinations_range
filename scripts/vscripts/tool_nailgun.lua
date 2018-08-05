@@ -50,6 +50,9 @@ local firstEnt = nil
 local firstEntTarget = nil
 local screen = nil
 
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
+
 local jointArray = {}
 
 local physicsEntities = {
@@ -127,6 +130,7 @@ function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
+	pickupTime = Time()
 	
 	
 	if not screen or not IsValidEntity(screen)
@@ -156,11 +160,15 @@ function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
 	local paintColor = thisEntity:GetRenderColor()
 	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
+	playerEnt:AllowTeleportFromHand(handID, false)
+	
 	return true
 end
 
 
 function SetUnequipped()
+
+	playerEnt:AllowTeleportFromHand(handID, true)
 
 	local paintColor = handAttachment:GetRenderColor()
 	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
@@ -196,7 +204,10 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		OnTriggerPressed(self)
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			OnTriggerPressed(self)
+		end
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
@@ -416,9 +427,9 @@ function RemoveJoints(entity)
 	do
 		if joint.firstEnt == entity or joint.secondEnt == entity
 		then
-			joint.firstTarget:Kill()
-			joint.secondTarget: Kill()
-			joint.jointEnt:Kill()
+			if IsValidEntity(joint.firstTarget) then joint.firstTarget:Kill() end
+			if IsValidEntity(joint.secondTarget) then joint.secondTarget: Kill() end
+			if IsValidEntity(joint.jointEnt) then joint.jointEnt:Kill() end
 			
 			table.remove(jointArray, i)
 			print("Removed joint " .. i)

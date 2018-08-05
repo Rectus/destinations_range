@@ -74,6 +74,9 @@ local isTargeting = false
 local targetFound = false
 local isToungueLaunched = false
 
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
+
 local pulledEntities = {"prop_physics"; "prop_physics_override"; "simple_physics_prop";
 	"prop_destinations_physics"; "prop_destinations_tool"; "prop_destinations_game_trophy"}
 
@@ -106,6 +109,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
+	pickupTime = Time()
 	
 	
 	beamParticle = ParticleManager:CreateParticle("particles/item_laser_pointer.vpcf", 
@@ -162,13 +166,16 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		OnTriggerPressed(self)
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			OnTriggerPressed()
+		end
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
 	then
 		input.buttonsReleased:ClearBit(IN_TRIGGER)
-		OnTriggerUnpressed(self)
+		OnTriggerUnpressed()
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_GRIP)
@@ -205,7 +212,7 @@ end
 
 
 
-function OnTriggerPressed(self)
+function OnTriggerPressed()
 
 	if targetFound
 	then
@@ -219,7 +226,7 @@ function OnTriggerPressed(self)
 end
 
 
-function OnTriggerUnpressed(self)
+function OnTriggerUnpressed()
 	
 	if isToungueLaunched
 	then
@@ -238,13 +245,13 @@ function OnTriggerUnpressed(self)
 end
 
 
-function LaunchTongue(self)
+function LaunchTongue()
 	if playerEnt then
 		
 		handAttachment:SetSequence("rappel")
 		holdingObject = false
 		
-		if TraceTongue(self)
+		if TraceTongue()
 		then
 			StartSoundEvent("Barnacle.TongueAttack", handAttachment)
 			StartSoundEvent("Barnacle.TongueFly", handAttachment)
@@ -301,8 +308,8 @@ function ReleaseTongue(instant)
 	if playerMoved
 	then
 		playerMoved = false
-		g_VRScript.fallController:RemoveConstraint(playerEnt, thisEntity)
-		g_VRScript.fallController:EnableGravity(playerEnt, thisEntity)
+		g_VRScript.playerPhysController:RemoveConstraint(playerEnt, thisEntity)
+		g_VRScript.playerPhysController:EnableGravity(playerEnt, thisEntity)
 		gravityEnabled = true
 
 	end
@@ -364,7 +371,7 @@ function RetractToungue()
 end
 
 
-function TraceTongue(self)
+function TraceTongue()
 	local traceTable =
 	{
 		startpos = GetMuzzlePos();
@@ -431,7 +438,7 @@ function TraceTongue(self)
 end
 
 
-function TraceBeam(self)
+function TraceBeam()
 	if not isTargeting
 	then 
 		return nil
@@ -504,7 +511,7 @@ function TraceBeam(self)
 end
 
 
-function TongueTravelFrame(self)
+function TongueTravelFrame()
 	if not isPulling then
 		return nil
 	end
@@ -534,9 +541,9 @@ function TongueTravelFrame(self)
 			end
 			
 			playerMoved = true
-			g_VRScript.fallController:AddConstraint(playerEnt, thisEntity)
+			g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity)
 			
-			g_VRScript.fallController:DisableGravity(playerEnt, thisEntity)
+			g_VRScript.playerPhysController:DisableGravity(playerEnt, thisEntity)
 			gravityEnabled = false
 					
 			
@@ -567,7 +574,7 @@ function TongueDelayPosFixup()
 end
 
 
-function TonguePullFrame(self)
+function TonguePullFrame()
 	
 	pullDelay = false
 	
@@ -610,16 +617,16 @@ function PullPlayer()
 		
 		if not gravityEnabled
 		then
-			g_VRScript.fallController:EnableGravity(playerEnt, thisEntity)
+			g_VRScript.playerPhysController:EnableGravity(playerEnt, thisEntity)
 			gravityEnabled = true		
 		end		
 		
-		if g_VRScript.fallController:IsPlayerOnGround(playerEnt) then
+		if g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt) then
 			return
 		end
 		
 	elseif gravityEnabled then
-			g_VRScript.fallController:DisableGravity(playerEnt, thisEntity)
+			g_VRScript.playerPhysController:DisableGravity(playerEnt, thisEntity)
 			gravityEnabled = false
 	end
 
@@ -652,26 +659,26 @@ function PullPlayer()
 		end
 				
 		-- Prevent player from going through floors
-		if pullVector.z < 0 and g_VRScript.fallController:TracePlayerHeight(playerEnt) <= 0
+		if pullVector.z < 0 and g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) <= 0
 		then
 			pullVector = pullVector - Vector(0, 0, pullVector.z)
 		end
 	
-		g_VRScript.fallController:AddVelocity(playerEnt, pullVector)
+		g_VRScript.playerPhysController:AddVelocity(playerEnt, pullVector)
 		--playerEnt:GetHMDAnchor():SetOrigin(GetMuzzlePos() - gunRelativePos + pullVector)
 	
 	else
-		g_VRScript.fallController:StickFrame(playerEnt)
+		g_VRScript.playerPhysController:StickFrame(playerEnt)
 		if distance < TONGUE_PULL_PLAYER_EASE_DISTANCE
 		then 
 			pullVector = pullVector * distance / TONGUE_PULL_PLAYER_EASE_DISTANCE
 		end
 		-- Prevent player from going through floors
-		if pullVector.z < 0 and g_VRScript.fallController:TracePlayerHeight(playerEnt) <= 0
+		if pullVector.z < 0 and g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) <= 0
 		then
 			pullVector = pullVector - Vector(0, 0, pullVector.z)
 		end
-		g_VRScript.fallController:MovePlayer(playerEnt, pullVector)
+		g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector)
 		--playerEnt:GetHMDAnchor():SetOrigin(GetMuzzlePos() - gunRelativePos + pullVector)
 	end
 	
@@ -717,6 +724,11 @@ function TraceGrappleObstacles()
 	-- Obstacle between player and grappling point
 	if traceTable.hit then
 		--DebugDrawLine(traceTable.startpos, traceTable.pos, 255, 0, 0, false, TRACE_OBSTACLE_INTERVAL)
+		
+		-- Don't create corner on pulled prop
+		if pulledEnt and traceTable.enthit and traceTable.enthit == pulledEnt then
+			return TRACE_OBSTACLE_INTERVAL
+		end
 		
 		anchorPoint = traceTable.pos
 		
@@ -788,7 +800,7 @@ function TraceGrappleObstacles()
 	UpdateTongueParticleFront()
 	
 	-- Draw grapple path
-	if g_VRScript.fallController:IsDebugDrawEnabled()
+	if g_VRScript.playerPhysController:IsDebugDrawEnabled()
 	then
 		local prev = pullEndpoint
 		
@@ -1109,7 +1121,7 @@ end
 
 
 
-function TongueAnimationFrame(self)
+function TongueAnimationFrame()
 if not isPulling
 	then
 		return nil

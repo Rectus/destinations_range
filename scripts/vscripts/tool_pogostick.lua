@@ -65,7 +65,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handAttachment:SetSequence("contract")
 	local color = thisEntity:GetRenderColor()
 	handAttachment:SetRenderColor(color.x, color.y, color.z)
-	g_VRScript.fallController:AddConstraint(playerEnt, thisEntity)
+	g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity)
 	
 	thisEntity:SetThink(TracePush, "trace_push", 0.5)
 	playerMoved = false
@@ -79,7 +79,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 end
 
 function SetUnequipped()
-	g_VRScript.fallController:RemoveConstraint(playerEnt, thisEntity)
+	g_VRScript.playerPhysController:RemoveConstraint(playerEnt, thisEntity)
 	isTargeting = false
 	
 	playerEnt = nil
@@ -170,12 +170,12 @@ function TracePush(self)
 		local impulse = jumpDir * -distance * SPRING_FORCE * -Clamp((jumpDir:Dot(traceTable.normal) + 0.1), -1, 0) 
 			- jumpDir * triggerValue * BOOST_FORCE
 		
-		if g_VRScript.fallController:IsPlayerOnGround(playerEnt)
+		if g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
 		then
 			impulse = Vector(0, 0, impulse.z)
 		end
 		
-		g_VRScript.fallController:AddVelocity(playerEnt, impulse)		
+		g_VRScript.playerPhysController:AddVelocity(playerEnt, impulse)		
 	
 	else
 		handAttachment:SetPoseParameter("spring", 0)
@@ -185,7 +185,7 @@ function TracePush(self)
 			playerMoved = false
 			--[[if playLifted
 			then
-				g_VRScript.fallController:RemoveConstraint(playerEnt, thisEntity)
+				g_VRScript.playerPhysController:RemoveConstraint(playerEnt, thisEntity)
 				playLifted = false
 			end]]
 		end	

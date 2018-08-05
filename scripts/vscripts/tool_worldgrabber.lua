@@ -135,7 +135,7 @@ end
 function OnTriggerPressed(self)
 	grabEndpoint = GetMuzzlePos()
 	isGrabbing = true
-	g_VRScript.fallController:AddConstraint(playerEnt, thisEntity, true)
+	g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity, true)
 	thisEntity:SetThink(GrabMoveFrame, "grab_move")
 	
 	
@@ -159,7 +159,7 @@ function ReleaseHold(self)
 	startAngles = nil
 	RumbleController(thisEntity, 2, 0.4, 20)
 	
-	g_VRScript.fallController:RemoveConstraint(playerEnt, thisEntity)
+	g_VRScript.playerPhysController:RemoveConstraint(playerEnt, thisEntity)
 	
 end
 
@@ -201,7 +201,7 @@ function GrabMoveFrame(self)
 		return nil
 	end
 	
-	if not g_VRScript.fallController:IsActive(playerEnt, thisEntity)
+	if not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
 	then
 		return GRAB_MOVE_INTERVAL
 	end
@@ -284,7 +284,7 @@ function GrabMoveFrame(self)
 			pullVector = pullVector * distance / GRAB_PULL_PLAYER_EASE_DISTANCE
 		end
 		-- Prevent player from going through floors
-		if pullVector.z < 0 and g_VRScript.fallController:TracePlayerHeight(playerEnt) <= 0
+		if pullVector.z < 0 and g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) <= 0
 		then
 			pullVector = pullVector - Vector(0, 0, pullVector.z)
 		end

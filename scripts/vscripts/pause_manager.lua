@@ -3,273 +3,17 @@
 CPauseManager = class(
 	{
 		players = nil;
-		thinkEnt = nil
+		thinkEnt = nil;
+		spawnItems = nil
 	}, 	
 	{
-		THINK_INTERVAL = 0.02,
-		SPAWN_ITEMS = 
-		{
-			{
-				name = "Locomotion tool",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/tools/locomotion_tool_base.vmdl";
-					vscripts = "tool_locomotion";
-					HasCollisionInHand = 0;
-				}
-			},
-			{
-				name = "Longsword",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/weapons/longsword.vmdl";
-					vscripts = "tool_sword";
-					rendercolor = "240 240 160";
-					HasCollisionInHand = 0;
-				}
-			},
-			{
-				name = "Spraypaint can",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/tools/spraycan.vmdl";
-					vscripts = "tool_spraycan";
-					health = 100;
-					--physdamagescale = 1;
-					
-				}
-			},
-			{
-				name = "Recurve bow",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/weapons/bow.vmdl";
-					vscripts = "tool_bow";
-					HasCollisionInHand = 0;
-				}
-			},
-			{
-				name = "Ski pole",
-				img = "file://{resources}/images/tool_skipole.png",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "ski_pole_spawned",
-					model = "models/props_slope/ski_pole_tool.vmdl";
-					vscripts = "tool_ski_pole";
-					HasCollisionInHand = 0;
-				}
-			},
-			{
-				name = "Boxing glove (left)",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/props_gameplay/boxing_gloves001_left.vmdl";
-					vscripts = "tool_glove";
-					HasCollisionInHand = 0;
-				}
-			},
-			{
-				name = "Boxing glove (right)",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/props_gameplay/boxing_gloves001_right.vmdl";
-					vscripts = "tool_glove";
-					HasCollisionInHand = 0;
-				}
-			},
-			{
-				name = "Jetpack",
-				img = "file://{resources}/images/tool_jetpack.png",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/tools/jetpack.vmdl";
-					vscripts = "tool_jetpack";
-					massScale = 0.2;
-				}
-			},
-			{
-				name = "Gravity Gun",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/weapons/hl2/w_physics_reference.vmdl";
-					vscripts = "tool_gravity_gun";
-					massScale = 0.2;
-					HasCollisionInHand = 1;
-				}
-			},
-			{
-				name = "Suction cup",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/weapons/suction_cup.vmdl";
-					vscripts = "tool_suction_cup";
-					HasCollisionInHand = 1;
-				}
-			},
-			{
-				name = "M72 LAW Rocket launcher",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/weapons/law_weapon.vmdl";
-					vscripts = "tool_law";
-					HasCollisionInHand = 1;
-				}
-			},
-			{
-				name = "Barnacle gun",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/weapons/barnacle_gun.vmdl";
-					vscripts = "tool_barnacle_gun";
-					HasCollisionInHand = 0;
-					scales = "0.8 0.8 0.8"
-				}
-			},
-			{
-				name = "Nailgun",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/tools/nailgun.vmdl";
-					vscripts = "tool_nailgun";
-					HasCollisionInHand = 1;
-				}
-			},
-			{
-				name = "Mare's leg",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/weapons/mares_leg.vmdl";
-					vscripts = "tool_mares_leg";
-					HasCollisionInHand = 1;
-				}
-			},
-			{
-				name = "Pogo stick",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/tools/pogostick.vmdl";
-					vscripts = "tool_pogostick";
-					HasCollisionInHand = 0;
-					rendercolor = "250 0 0";
-				}
-			},
-			{
-				name = "Entity scanner",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/tools/scanner.vmdl";
-					vscripts = "tool_scanner";
-					HasCollisionInHand = 1;
-				}
-			},
-			{
-				name = "Flashlight (Valve)",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/props_gameplay/flashlight001.vmdl";
-					vscripts = "fl_test";
-					HasCollisionInHand = 1;
-				}
-			},
-			{
-				name = "Flashlight (rusty)",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/props_beach/flashlight.vmdl";
-					vscripts = "tool_flashlight";
-					skin = "unlit";
-					HasCollisionInHand = 1;
-				}
-			},
-			{
-				name = "Sunlight adjustment tool",
-				img = "",
-				isTool = true,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/tools/sun_tool.vmdl";
-					vscripts = "sun_tool";
-				}
-			},
-			{
-				name = "LAW Rocket (deployed)",
-				img = "",
-				isTool = false,
-				keyvals =
-				{
-					targetname = "rocket",
-					vscripts = "law_rocket";
-					model = "models/weapons/law_rocket.vmdl";	
-				}
-			},
-			{
-				name = "Gold bar",
-				img = "",
-				isTool = false,
-				keyvals =
-				{
-					targetname = "",
-					model = "models/props_range/gold_bar.vmdl";
-				}
-			},
-		},
+		THINK_INTERVAL = 0.02	
 	},
 	nil
 )
 
-function CPauseManager.constructor(self)
+function CPauseManager.constructor(self, spawnItems)
+	self.spawnItems = spawnItems
 	self.players = {}
 	self.thinkEnt = SpawnEntityFromTableSynchronous("logic_script", 
 		{targetname = "pause_think_ent", vscripts = "player_pause_ent"})
@@ -285,6 +29,29 @@ function CPauseManager:Init()
 	CustomGameEventManager:RegisterListener("pause_panel_spawn_jetpack", self.SpawnJetpack)
 
 end
+
+
+function CPauseManager:DoPrecache(context)
+	for i, item in ipairs(self.spawnItems) do
+	
+		PrecacheModel(item.keyvals.model, context)
+		
+		if item.modelPrecache then
+			for j, model in ipairs(item.modelPrecache) do
+	
+				PrecacheModel(model, context)
+			end
+		end
+		
+		if item.particlePrecache then
+			for j, particle in ipairs(item.particlePrecache) do
+	
+				PrecacheParticle(particle, context)
+			end
+		end
+	end
+end
+
 
 function CPauseManager:Think()
 	local playerList = Entities:FindAllByClassname("player")
@@ -353,7 +120,7 @@ end
 
 
 function CPauseManager:PopulateItems(playerEnt, panel)
-	for i, item in ipairs(self.SPAWN_ITEMS) do
+	for i, item in ipairs(self.spawnItems) do
 	
 		local data =
 		{
@@ -415,7 +182,10 @@ function CPauseManager:TeleportPlayer(player, destination)
 
 	player:GetHMDAnchor():SetOrigin(destination:GetOrigin() + Vector(0, 0, -32) 
 		+ Vector(localPlayerOrigin.x, localPlayerOrigin.y, 0))
-	g_VRScript.fallController:SetVelocity(player, Vector(0,0,0))
+		
+	if g_VRScript.playerPhysController then
+		g_VRScript.playerPhysController:SetVelocity(player, Vector(0,0,0))
+	end
 	
 	EmitSoundOnClient("Slope.UITeleport", player)
 
@@ -455,7 +225,7 @@ function CPauseManager:SpawnItem(data)
 	
 	print("Spawning item ID: " .. data.itemID)
 	
-	local item = manager.SPAWN_ITEMS[data.itemID]
+	local item = manager.spawnItems[data.itemID]
 	
 	if not IsValidEntity(player) or not IsValidEntity(panel) then
 		return

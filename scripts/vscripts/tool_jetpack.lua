@@ -53,6 +53,9 @@ local triggerPressed = false
 local gripLocked = false
 local lockedPanel = nil
 
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
+
 
 local PACK_KEYVALS = {
 	classname = "prop_dynamic"; 
@@ -70,6 +73,9 @@ local SPHERE_KEYVALS = {
 
 function Precache(context)
 	PrecacheParticle("particles/tools/jetpack_exhaust.vpcf", context)
+	PrecacheParticle("particles/tools/jetpack_navsphere.vpcf", context)
+	PrecacheModel(SPHERE_KEYVALS.model, context)
+	PrecacheModel(PACK_KEYVALS.model, context)
 end
 
 
@@ -78,6 +84,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handEnt = pHand
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
+	pickupTime = Time()
 
 	handAttachment:SetSingleMeshGroup("equipped")
 
@@ -201,7 +208,10 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		triggerPressed = true
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			triggerPressed = true
+		end
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
@@ -362,11 +372,11 @@ function JetpackThrust(self)
 	local sphereOrigin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("navsphere"))
 	
 	if padMovement then
-		if g_VRScript.fallController:TrySetDragConstraint(playerEnt, thisEntity) then
-			g_VRScript.fallController:SetDrag(playerEnt, thisEntity, 1e-4, 2, nil, nil)
+		if g_VRScript.playerPhysController:TrySetDragConstraint(playerEnt, thisEntity) then
+			g_VRScript.playerPhysController:SetDrag(playerEnt, thisEntity, 1e-4, 2, nil, nil)
 		end
 	else
-		g_VRScript.fallController:RemoveDragConstraint(playerEnt, thisEntity)
+		g_VRScript.playerPhysController:RemoveDragConstraint(playerEnt, thisEntity)
 	end 
 	
 	if padMovement or triggerValue >0.01 then
@@ -397,7 +407,7 @@ function JetpackThrust(self)
 		
 		ParticleManager:SetParticleControl(sphere, 2, sphereOrigin + verticalVector * 4)
 		
-		local playerHeight = g_VRScript.fallController:TracePlayerHeight(playerEnt) 
+		local playerHeight = g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) 
 		
 		if playerHeight < GROUND_EFFECT_HEIGHT
 		then
@@ -406,14 +416,14 @@ function JetpackThrust(self)
 		
 		local thrustVector = (horizontalVec * THRUST_HORIZONTAL_SPEED) + (verticalVector * THRUST_VERTICAL_SPEED)
 		
-		g_VRScript.fallController:AddVelocity(playerEnt, thrustVector * THRUST_INTERVAL)
+		g_VRScript.playerPhysController:AddVelocity(playerEnt, thrustVector * THRUST_INTERVAL)
 		
 	else
 		ParticleManager:SetParticleControl(sphere, 1, sphereOrigin)
 		ParticleManager:SetParticleControl(sphere, 2, sphereOrigin)
 	end
 	
-	local dispVel = g_VRScript.fallController:GetVelocity(playerEnt) * (4 / THRUST_VERTICAL_SPEED)
+	local dispVel = g_VRScript.playerPhysController:GetVelocity(playerEnt) * (4 / THRUST_VERTICAL_SPEED)
 	if dispVel:Length() > 4
 	then
 		dispVel = dispVel:Normalized() * 4

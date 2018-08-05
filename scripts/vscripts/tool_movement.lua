@@ -223,14 +223,14 @@ function ReleaseHold(self)
 	startAngles = nil
 	RumbleController(thisEntity, 2, 0.4, 20)
 	
-	g_VRScript.fallController:RemoveConstraint(playerEnt, thisEntity)
+	g_VRScript.playerPhysController:RemoveConstraint(playerEnt, thisEntity)
 	
 end
 
 
 function PadMove(self)
 
-	if not padMovement or isGrabbing or not g_VRScript.fallController:IsActive(playerEnt, thisEntity)
+	if not padMovement or isGrabbing or not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
 	then
 		return
 	end
@@ -248,11 +248,11 @@ function PadMove(self)
 		moveVector = moveVector:Normalized() * MOVE_CAP_FACTOR
 	end
 	
-	if g_VRScript.fallController:IsPlayerOnGround(playerEnt)
+	if g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
 	then
-		g_VRScript.fallController:MovePlayer(playerEnt, moveVector * MOVE_SPEED * PAD_MOVE_INTERVAL, true)
+		g_VRScript.playerPhysController:MovePlayer(playerEnt, moveVector * MOVE_SPEED * PAD_MOVE_INTERVAL, true)
 	else
-		g_VRScript.fallController:AddVelocity(playerEnt, moveVector * MOVE_SPEED * PAD_MOVE_INTERVAL * AIR_CONTROL_FACTOR)
+		g_VRScript.playerPhysController:AddVelocity(playerEnt, moveVector * MOVE_SPEED * PAD_MOVE_INTERVAL * AIR_CONTROL_FACTOR)
 	end
 	
 	
@@ -315,7 +315,7 @@ function TraceGrab()
 		--DebugDrawBox(traceTable.pos, traceTable.min, traceTable.max, 0, 0, 255, 0, 2)
 		
 		grabEndpoint = GetMuzzlePos()
-		g_VRScript.fallController:AddConstraint(playerEnt, thisEntity, true)
+		g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity, true)
 		thisEntity:SetThink(GrabMoveFrame, "grab_move")
 		
 		
@@ -347,7 +347,7 @@ function GrabRotateFrame(self)
 		return nil
 	end
 	
-	if not g_VRScript.fallController:IsActive(playerEnt, thisEntity)
+	if not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
 	then
 		return GRAB_MOVE_INTERVAL
 	end
@@ -424,7 +424,7 @@ function GrabMoveFrame()
 		return nil
 	end
 	
-	if not g_VRScript.fallController:IsActive(playerEnt, thisEntity)
+	if not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
 	then
 		return GRAB_MOVE_INTERVAL
 	end
@@ -469,12 +469,12 @@ function GrabMoveFrame()
 			pullVector = pullVector * distance / GRAB_PULL_PLAYER_EASE_DISTANCE
 		end
 		-- Prevent player from going through floors
-		if pullVector.z < 0 and g_VRScript.fallController:TracePlayerHeight(playerEnt) <= 0
+		if pullVector.z < 0 and g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) <= 0
 		then
 			pullVector = pullVector - Vector(0, 0, pullVector.z)
 		end
 			
-		g_VRScript.fallController:MovePlayer(playerEnt, pullVector, false)
+		g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector, false)
 	end
 		
 	return GRAB_MOVE_INTERVAL

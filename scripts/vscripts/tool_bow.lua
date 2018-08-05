@@ -72,6 +72,12 @@ local ARROW_KEYVALS = {
 	vscripts = "tool_bow_arrow"
 }
 
+function Precache(context)
+	PrecacheModel(DRAW_TOOL_KEYVALS.model, context)
+	PrecacheModel(ARROW_KEYVALS.model, context)
+	PrecacheModel(BOW_VIEW_KEYVALS.model, context)
+end
+
 function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand

@@ -127,6 +127,9 @@ local configScreen = nil
 local holoEmitterParticle = -1
 local gravEmitterParticle = -1
 
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
+
 local grappleKeyvals = 
 {
 	classname = "prop_dynamic";
@@ -202,6 +205,7 @@ function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
 	handAttachment = pHandAttachment
 	isCarried = true
 	otherHandObj = nil
+	pickupTime = Time()
 	
 	if not originEnt
 	then
@@ -234,7 +238,7 @@ function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
 	end
 	
 	if triggerMode == TRIGGER_MODE_GRAPPLE then
-		EnableGrapple(grapple, playerEnt, thisEntity, handAttachment, g_VRScript.fallController)
+		EnableGrapple(grapple, playerEnt, thisEntity, handAttachment, g_VRScript.playerPhysController)
 	end
 	
 	playerEnt:AllowTeleportFromHand(handID, teleportPassthrough)
@@ -298,7 +302,7 @@ function SetUnequipped()
 		jetpackThrusting = false
 	end
 	
-	g_VRScript.fallController:RemoveDragConstraint(playerEnt, thisEntity)
+	g_VRScript.playerPhysController:RemoveDragConstraint(playerEnt, thisEntity)
 	DisableGravEffects()
 	
 	
@@ -373,9 +377,9 @@ function UpdateScreen()
 
 
 	local time = LocalTime()
-	--local playerSpeed = math.floor(g_VRScript.fallController:GetVelocity(playerEnt):Length())
+	--local playerSpeed = math.floor(g_VRScript.playerPhysController:GetVelocity(playerEnt):Length())
 	local playerSpeed = handEnt:GetVelocity():Length() * 0.0254
-	local playerAlt = g_VRScript.fallController:GetPlayerHeight(playerEnt) * 0.0254
+	local playerAlt = g_VRScript.playerPhysController:GetPlayerHeight(playerEnt) * 0.0254
 
 	CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_update_display", 
 		{
@@ -406,8 +410,11 @@ function OnHandleInput(input)
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		OnTriggerPressed()
-		triggerIn = true
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			OnTriggerPressed()
+			triggerIn = true
+		end
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
@@ -540,7 +547,7 @@ function OnTriggerPressed()
 		if TraceGrab()
 		then
 			isGrabbing = true
-			g_VRScript.fallController:AddConstraint(playerEnt, thisEntity, true)
+			g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity, true)
 			thisEntity:SetThink(GrabMoveFrame, "grab_move")
 		end
 		
@@ -551,7 +558,7 @@ function OnTriggerPressed()
 		grabIn = true
 		isGrabbing = TraceGrab()
 		
-		g_VRScript.fallController:AddConstraint(playerEnt, thisEntity, isGrabbing)
+		g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity, isGrabbing)
 
 	elseif triggerMode == TRIGGER_MODE_GRAPPLE then
 		LaunchGrapple()
@@ -587,7 +594,9 @@ function ReleaseHold()
 	startAngles = nil
 	RumbleController(2, 0.1, 100)
 	grapple:SetSequence("idle")
-	g_VRScript.fallController:RemoveConstraint(playerEnt, thisEntity)
+	g_VRScript.playerPhysController:RemoveConstraint(playerEnt, thisEntity)
+	g_VRScript.playerPhysController:SetVelocity(playerEnt, -GetPhysVelocity(thisEntity))
+	
 	if grabEnt and IsValidEntity(grabEnt) then
 		grabEnt:Kill()
 	end
@@ -610,7 +619,7 @@ function ApplyConfig(eventSourceIndex, data)
 			end
 			
 			if triggerMode ~= TRIGGER_MODE_GRAPPLE and data.val == TRIGGER_MODE_GRAPPLE then
-				EnableGrapple(grapple, playerEnt, thisEntity, handAttachment, g_VRScript.fallController)
+				EnableGrapple(grapple, playerEnt, thisEntity, handAttachment, g_VRScript.playerPhysController)
 			end
 			
 			if (triggerMode ~= TRIGGER_MODE_FLY and triggerMode ~= TRIGGER_MODE_JETPACK) and
@@ -651,7 +660,7 @@ end
 
 function PadMove()
 
-	if not padTouch or grabIn or not g_VRScript.fallController:IsActive(playerEnt, thisEntity)
+	if not padTouch or grabIn or not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
 		or (padMode == PAD_MODE_PUSH and not padIn) then
 
 		return
@@ -694,9 +703,9 @@ function PadMove()
 		speed = speed * MOVE_SPEED_RUN_FACTOR
 	end
 	
-	if g_VRScript.fallController:IsPlayerOnGround(playerEnt)
+	if g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
 	then
-		g_VRScript.fallController:MovePlayer(playerEnt, moveVector * speed, true, true)
+		g_VRScript.playerPhysController:MovePlayer(playerEnt, moveVector * speed, true, true)
 	else
 		local multiplier = 1
 		
@@ -704,7 +713,7 @@ function PadMove()
 			multiplier = JETPACK_PAD_FACTOR
 		end
 	
-		g_VRScript.fallController:AddVelocity(playerEnt, moveVector * speed * multiplier * AIR_CONTROL_FACTOR, false)
+		g_VRScript.playerPhysController:AddVelocity(playerEnt, moveVector * speed * multiplier * AIR_CONTROL_FACTOR, false)
 	end
 end
 
@@ -816,7 +825,7 @@ function GrabMoveFrame()
 		return nil
 	end
 	
-	if not g_VRScript.fallController:IsActive(playerEnt, thisEntity)
+	if not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
 	then
 		return GRAB_MOVE_INTERVAL
 	end
@@ -841,13 +850,13 @@ function GrabMoveFrame()
 	local rotMoveVec = GrabRotateFrame()
 	
 
-	if triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND and not g_VRScript.fallController:IsPlayerOnGround(playerEnt)
+	if triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND and not g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
 	then
 		local vec = rotMoveVec + pullVector 
-		g_VRScript.fallController:AddVelocity(playerEnt, Vector(vec.x, vec.y, 0))
+		g_VRScript.playerPhysController:AddVelocity(playerEnt, Vector(vec.x, vec.y, 0))
 	else
 		local grounded = (triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND and not isGrabbing)
-		g_VRScript.fallController:MovePlayer(playerEnt, rotMoveVec + pullVector, false, grounded)
+		g_VRScript.playerPhysController:MovePlayer(playerEnt, rotMoveVec + pullVector, false, grounded)
 	end
 	
 		
@@ -862,7 +871,7 @@ function GrabRotateFrame()
 		return Vector(0,0,0)
 	end
 	
-	if not g_VRScript.fallController:IsActive(playerEnt, thisEntity) or playerEnt:IsContentBrowserShowing()
+	if not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity) or playerEnt:IsContentBrowserShowing()
 	then
 		return Vector(0,0,0)
 	end
@@ -962,7 +971,7 @@ function GrabRotateFrame()
 					playerEnt:GetHMDAnchor():SetAngles(endRot.x, endRot.y, endRot.z)
 					local moveVector = RotatePosition(rotateOrigin, rotation, playerEnt:GetHMDAnchor():GetOrigin())
 					--playerEnt:GetHMDAnchor():SetOrigin(moveVector)
-					--g_VRScript.fallController:MovePlayer(playerEnt, moveVector - playerEnt:GetHMDAnchor():GetOrigin())
+					--g_VRScript.playerPhysController:MovePlayer(playerEnt, moveVector - playerEnt:GetHMDAnchor():GetOrigin())
 					return moveVector - playerEnt:GetHMDAnchor():GetOrigin()
 				end
 				
@@ -1020,7 +1029,7 @@ function FlyThrust()
 	
 	if triggerMode ~= TRIGGER_MODE_FLY and triggerMode ~= TRIGGER_MODE_JETPACK 
 	then 
-		g_VRScript.fallController:RemoveDragConstraint(playerEnt, thisEntity)
+		g_VRScript.playerPhysController:RemoveDragConstraint(playerEnt, thisEntity)
 		jetpackThrusting = false
 		return
 	end
@@ -1039,12 +1048,12 @@ function FlyThrust()
 	end
 	
 	
-	if padTouch and not g_VRScript.fallController:IsPlayerOnGround(playerEnt) then
-		if g_VRScript.fallController:TrySetDragConstraint(playerEnt, thisEntity) then
-			g_VRScript.fallController:SetDrag(playerEnt, thisEntity, 1e-4, 2, nil, nil)
+	if padTouch and not g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt) then
+		if g_VRScript.playerPhysController:TrySetDragConstraint(playerEnt, thisEntity) then
+			g_VRScript.playerPhysController:SetDrag(playerEnt, thisEntity, 1e-4, 2, nil, nil)
 		end
 	else
-		g_VRScript.fallController:RemoveDragConstraint(playerEnt, thisEntity)
+		g_VRScript.playerPhysController:RemoveDragConstraint(playerEnt, thisEntity)
 	end 
 	
 	if triggerValue > 0.05 then
@@ -1058,14 +1067,14 @@ function FlyThrust()
 				verticalVector = verticalVector * TRIGGER_IN_BOOST
 			end
 			
-			local playerHeight = g_VRScript.fallController:TracePlayerHeight(playerEnt) 
+			local playerHeight = g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) 
 			
 			if playerHeight < GROUND_EFFECT_HEIGHT
 			then
 				verticalVector = verticalVector * (1 + GROUND_EFFECT_FACTOR * (1 - playerHeight / GROUND_EFFECT_HEIGHT))
 			end
 			
-			g_VRScript.fallController:AddVelocity(playerEnt, verticalVector * THRUST_VERTICAL_SPEED * MOVE_THINK_INTERVAL)
+			g_VRScript.playerPhysController:AddVelocity(playerEnt, verticalVector * THRUST_VERTICAL_SPEED * MOVE_THINK_INTERVAL)
 			
 		elseif triggerMode == TRIGGER_MODE_FLY then
 		
@@ -1086,7 +1095,7 @@ function FlyThrust()
 				thrustVector = thrustVector * TRIGGER_IN_BOOST
 			end
 			
-			local playerHeight = g_VRScript.fallController:TracePlayerHeight(playerEnt) 
+			local playerHeight = g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) 
 			
 			if playerHeight < GROUND_EFFECT_HEIGHT
 			then
@@ -1095,7 +1104,7 @@ function FlyThrust()
 			
 			local hoverThrust = Vector(0, 0, FLY_HOVER_THRUST)
 			
-			g_VRScript.fallController:AddVelocity(playerEnt, 
+			g_VRScript.playerPhysController:AddVelocity(playerEnt, 
 				(thrustVector * THRUST_VERTICAL_SPEED + hoverThrust) * MOVE_THINK_INTERVAL)
 
 		end

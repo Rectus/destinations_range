@@ -1,9 +1,56 @@
 
 
 print("Arm IK script")
+require "utils.deepprint"
+
+function PrintTable(table, level, maxlevel)
+
+	local indent = ""
+	
+	for i = 0, level - 1, 1
+	do
+		indent = indent .. " "
+	end
+
+	for key, value in pairs(table)
+	do
+		if value == _G
+		then
+			print(indent .. type(value) .. ": " .. tostring(key))
+			print(indent .. "Global table reference!")
+			
+		elseif value == table
+		then
+			print(indent .. type(value) .. ": " .. tostring(key))
+			print(indent .. "Self reference!")
+			
+		elseif type(value) == "table"	
+		then
+			print(indent .. type(value) .. ": " .. tostring(key))
+			if level < maxlevel
+			then
+				PrintTable(value, level + 1, maxlevel)
+			else
+				print("Max recursion!")
+			end
+			
+		elseif type(value) == "function"
+		then
+			print(indent .. type(value) .. ": " .. key)
+						
+		elseif type(value) == "userdata"
+		then
+			print(indent .. type(value) .. ": " .. key)
+			
+		else
+			print(indent .. key .. " = " .. tostring(value))
+		end
+	end
+end
+PrintTable(_G, 1, 10)
 
 -- This is broken AF at the moment
-
+--[[
 local chain = model:CreateIKChain("arm_ik", 
 	{
 		ik_root_bone = "base",
@@ -36,7 +83,7 @@ local chain = model:CreateIKChain("arm_ik",
 			--{joint = "arm", type = "hinge", max_angle = 45, min_angle = -45},
 			--{joint = "shoulder", type = "hinge", max_angle = 45, min_angle = -45},
 		};
-		
+		]]
 		--[[lockInfo = 
 		{	
 			boneInfluenceDriver = "hand", 
@@ -47,9 +94,9 @@ local chain = model:CreateIKChain("arm_ik",
 			hyperExtensionReleaseThreshold = 0.99
 		};]]
 
-
+--[[
 	}
-)
+)]]
 
 --[[print(model:CreateIKControlRig("bug", 
 	{

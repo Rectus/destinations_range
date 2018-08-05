@@ -43,9 +43,13 @@ local SPARY_MAX_RADIUS = 1.0
 local EXPLOSION_RANGE = 48
 local EXPLOSION_MAX_IMPULSE = 50
 
+local pickupTime = 0
+local PICKUP_TRIGGER_DELAY = 0.5
+
 local startSound = "tagmarker_start";
 local loopSound = "tagmarker_loop";
 local stopSound = "tagmarker_stop";
+
 
 function SpawnPanel()
 	
@@ -129,7 +133,6 @@ function OnTakeDamage(damageTable)
 				dmgEnt:SetRenderColor(color.x, color.y, color.z)
 	
 			end
-			dmgEnt = Entities:FindByClassname(dmgEnt, "prop_physics_override")
 		end
 	
 		thisEntity:AddEffects(32)	
@@ -150,6 +153,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	m_hPlayer = pPlayer;
 	m_bIsEquipped = true;
 	m_bIsFireButtonPressed = false;
+	pickupTime = Time();
 
 	-- create the trackpad particle system
 	
@@ -195,12 +199,14 @@ function Precache( context )
 	--Cache the models
 	PrecacheModel( "models/props_gameplay/airbrush_tool.vmdl", context );
 	PrecacheModel( "models/development/invisiblebox.vmdl", context );
+	PrecacheModel("models/tools/spraycan_colorwheel.vmdl", context );
 
 	--Cache the particles
 	PrecacheParticle( m_particleColored, context );	
 	PrecacheParticle( "particles/tool_fx/Paintinator_button_up.vpcf", context );
 	PrecacheParticle( "particles/tool_fx/controller_trackpad_position.vpcf", context );
 	PrecacheParticle( "particles/tool_fx/brush_spray.vpcf", context );
+	PrecacheParticle("particles/tools/spraypaint_pop.vpcf", context );
 end
 
 function StartPainting()
@@ -359,7 +365,10 @@ function OnHandleInput( input )
 	if ( input.buttonsPressed:IsBitSet( nIN_TRIGGER ) ) then
 		--print( "TRIGGER is pressed" );
 		input.buttonsPressed:ClearBit( nIN_TRIGGER );
-		PressFireButton();
+		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		then
+			PressFireButton();
+		end
 	end
 
 	if ( input.buttonsReleased:IsBitSet( nIN_TRIGGER ) ) then

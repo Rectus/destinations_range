@@ -52,7 +52,7 @@ function Precache(context)
 end
 
 function EnableDamage(usingPlayer)
-	Fire(self)
+	Fire(usingPlayer)
 end
 
 
@@ -133,7 +133,6 @@ function Explode(normal)
 			DestroyDamageInfo(dmg)
 
 		end
-		dmgEnt = Entities:FindByClassname(dmgEnt, "prop_physics_override")
 	end
 	
 	--local explosion = SpawnEntityFromTableSynchronous("env_explosion", explosionKeyvals)

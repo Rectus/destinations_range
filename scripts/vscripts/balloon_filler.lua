@@ -33,6 +33,7 @@ local balloonKeyvals = {
 
 function Precache(context)
 	PrecacheEntityFromTable(balloonKeyvals.classname, ballonKeyvals, context)
+	PrecacheModel(balloonKeyvals.model, context)
 end
 
 function OnPressed(params)
@@ -41,6 +42,10 @@ function OnPressed(params)
 	then
 		usingPlayer = params.activator
 		scale = 0.2
+				
+		--[[for i = 0,63 do
+			print(i .. ": " .. tostring(usingPlayer:IsVRControllerButtonPressed(i)))
+		end ]]
 				
 		if usingPlayer:IsVRControllerButtonPressed(IN_USE_HAND0) 
 			and usingPlayer:IsVRControllerButtonPressed(IN_USE_HAND1)
@@ -75,6 +80,10 @@ function OnPressed(params)
 		StartSoundEvent("Balloon.Inflate", thisEntity)
 		thisEntity:SetThink(FillThink, "fill", FILL_INTERVAL)
 	end
+end
+
+function OnUnpressed(params)
+	print("unpressed")
 end
 
 function FillThink()
