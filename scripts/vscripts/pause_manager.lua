@@ -26,7 +26,6 @@ function CPauseManager:Init()
 	
 	CustomGameEventManager:RegisterListener("pause_panel_teleport", self.TeleportPlayerStart)
 	CustomGameEventManager:RegisterListener("pause_panel_spawn_item", self.SpawnItem)
-	CustomGameEventManager:RegisterListener("pause_panel_spawn_jetpack", self.SpawnJetpack)
 
 end
 
@@ -231,17 +230,19 @@ function CPauseManager:SpawnItem(data)
 		return
 	end
 	
-	local handID = CPauseManager:GetClosestHandID(player, panel:GetOrigin())
+	local handID = CPauseManager:GetClosestHandID(player, panel:GetOrigin()) -- Assume the closest hand to the panel clicked the button
 	
 	local keyvals = vlua.clone(item.keyvals)
 
 	keyvals.origin = player:GetHMDAvatar():GetVRHand(handID):GetOrigin()
+	keyvals.angles = player:GetHMDAvatar():GetAngles()
 		
 	if item.isTool then
 		local ent = SpawnEntityFromTableSynchronous("prop_destinations_tool", keyvals)
 	
 		player:EquipPropTool(ent, handID)
-		EmitSoundOn("default_equip", ent)
+		
+		EmitSoundOn("default_equip", player:GetHMDAvatar():GetVRHand(handID))
 		
 	else
 		SpawnEntityFromTableSynchronous("prop_destinations_physics", keyvals)

@@ -1,5 +1,5 @@
 --[[
-	Boxing sword script.
+	Sword script.
 	
 	Copyright (c) 2016 Rectus
 	
@@ -23,7 +23,7 @@
 ]]--
 
 
-
+local EFFECT_NODRAW = 32 -- Entity effect that disables renering a model
 
 local playerEnt = nil
 local handEnt = nil
@@ -31,7 +31,7 @@ local handID = 0
 local handAttachment = nil
 local isCarried = false
 local physSword = nil
-local toolTarget = nil
+local originEnt = nil
 local physConstraint = nil
 local lastFireTime = 0
 
@@ -44,6 +44,7 @@ local lastSoundTime = 0
 
 local pickupTime = 0
 local PICKUP_TRIGGER_DELAY = 0.5
+
 
 
 local constraintKeyvals = {
@@ -90,31 +91,16 @@ local swordKeyvals = {
 	--physdamagescale = 100	
 }
 
+local originKeyvals = {
+	classname = "prop_dynamic";
+	solid = 0;
+	--physdamagescale = 100	
+}
+
 
 function Activate()
 	--thisEntity:SetRenderColor(240, 240, 150)
-	
-	swordKeyvals.model = thisEntity:GetModelName()
-	swordKeyvals.angles = thisEntity:GetAngles()
-	swordKeyvals.origin = thisEntity:GetAbsOrigin()
-	
-	physSword = SpawnEntityFromTableSynchronous(swordKeyvals.classname, swordKeyvals)
-	physSword:EnableUse(false)
-	local paintColor = thisEntity:GetRenderColor()
-	physSword:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
-	
-	
-	thisEntity:SetEntityName(DoUniqueString("sword_ent"))	
-	physSword:SetEntityName(DoUniqueString("sword_phys"))
-	
-	constraintKeyvals.origin = thisEntity:GetAbsOrigin()
-	constraintKeyvals.attach2 = thisEntity:GetName()
-	constraintKeyvals.attach1 = physSword:GetName()
-
-	physConstraint = SpawnEntityFromTableSynchronous(constraintKeyvals.classname, constraintKeyvals)
-	physConstraint:SetEntityName(DoUniqueString("sword_const"))
-	physSword:SetParent(thisEntity, "")
-	physSword:AddEffects(32)
+		
 end
 
 
@@ -128,26 +114,49 @@ function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
 	isCarried = true
 	pickupTime = Time()
 	
-	handAttachment:AddEffects(32)
-	
-	physSword:SetParent(nil, "")
-	physSword:RemoveEffects(32)
-	DoEntFireByInstanceHandle(physConstraint, "TurnOn", "", 0, nil, nil)
-	
+	handAttachment:AddEffects(EFFECT_NODRAW)	
+	SpawnPhysProp()
+
 	local paintColor = thisEntity:GetRenderColor()
 	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	physSword:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	thisEntity:SetThink(SwordThink, "sword", 0)
 	
-	tracing = false
-	thisEntity:SetParent(nil, "")
-	DoEntFireByInstanceHandle(thisEntity, "enablemotion", "", 0 , thisEntity, thisEntity)
-	
-	StartSoundEvent("Sword.Draw", thisEntity)
+	tracing = false	
+	StartSoundEvent("Sword.Draw", handAttachment)
 	return true
 end
 
+
+function SpawnPhysProp()
+
+	swordKeyvals.model = handAttachment:GetModelName()
+	swordKeyvals.angles = handAttachment:GetAngles()
+	swordKeyvals.origin = handAttachment:GetAbsOrigin()
+	
+	physSword = SpawnEntityFromTableSynchronous(swordKeyvals.classname, swordKeyvals)
+	physSword:EnableUse(false)
+	
+	originKeyvals.model = handAttachment:GetModelName()
+	originKeyvals.angles = handAttachment:GetAngles()
+	originKeyvals.origin = handAttachment:GetAbsOrigin()
+	originEnt = SpawnEntityFromTableSynchronous(originKeyvals.classname, originKeyvals)
+	originEnt:AddEffects(EFFECT_NODRAW)	
+	originEnt:SetParent(handAttachment, "")
+	
+	originEnt:SetEntityName(DoUniqueString("sword_ent"))	
+	physSword:SetEntityName(DoUniqueString("sword_phys"))
+	
+	constraintKeyvals.origin = handAttachment:GetAbsOrigin()
+	constraintKeyvals.attach2 = originEnt:GetName()
+	constraintKeyvals.attach1 = physSword:GetName()
+
+	physConstraint = SpawnEntityFromTableSynchronous(constraintKeyvals.classname, constraintKeyvals)
+	physConstraint:SetEntityName(DoUniqueString("sword_const"))
+	
+	
+end
 
 
 
@@ -155,11 +164,10 @@ function SetUnequipped()
 
 	local paintColor = handAttachment:GetRenderColor()
 	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
-	
-	
-	physSword:AddEffects(32)
-	DoEntFireByInstanceHandle(physConstraint, "TurnOff", "", 0, nil, nil)
-	physSword:SetParent(thisEntity, "")
+		
+	if physConstraint and IsValidEntity(physConstraint) then physConstraint:Destroy() end
+	if originEnt and IsValidEntity(originEnt) then originEnt:Destroy() end
+	if physSword and IsValidEntity(physSword) then physSword:Destroy() end
 	
 	playerEnt = nil
 	handEnt = nil
@@ -181,15 +189,13 @@ function OnHandleInput( input )
 	local IN_GRIP = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
 	local IN_PAD = (handID == 0 and IN_PAD_HAND0 or IN_PAD_HAND1)
 	local IN_PAD_TOUCH = (handID == 0 and IN_PAD_TOUCH_HAND0 or IN_PAD_TOUCH_HAND1)
-	
 
-	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
 		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
 		then
-			OnTriggerPressed(self)
+			OnTriggerPressed()
 		end
 	end
 	
@@ -203,19 +209,6 @@ function OnHandleInput( input )
 		input.buttonsReleased:ClearBit(IN_GRIP)
 		thisEntity:ForceDropTool()
 	end
-	
-
-
-	-- Needed to disable teleports
-	--[[if input.buttonsDown:IsBitSet(IN_PAD) 
-	then
-		input.buttonsDown:ClearBit(IN_PAD)
-	
-	end	
-	if input.buttonsDown:IsBitSet(IN_PAD_TOUCH) 
-	then
-		input.buttonsDown:ClearBit(IN_PAD_TOUCH)
-	end]]
 
 	return input
 end
@@ -295,7 +288,7 @@ end
 function OnTriggerPressed()
 	if Time() > lastFireTime + 0.3 then
 		lastFireTime = Time()
-		physSword:ApplyAbsVelocityImpulse(thisEntity:GetAngles():Forward():Normalized() * 500)
+		physSword:ApplyAbsVelocityImpulse(physSword:GetAngles():Forward() * 500)
 	end
 end
 

@@ -1,4 +1,4 @@
-<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:vpcf19:version{aafc65d8-7a5a-4e01-bd8d-3ac118422503} -->
 {
 	_class = "CParticleSystemDefinition"
 	m_flConstantRadius = 0.1
@@ -16,7 +16,7 @@
 		{
 			_class = "C_OP_RemapCPtoVector"
 			m_nCPInput = 3
-			m_nFieldOutput = 6
+			m_nFieldOutput = "6"
 			m_vInputMax = [ 1.0, 1.0, 1.0 ]
 			m_vOutputMax = [ 1.0, 1.0, 1.0 ]
 		},
@@ -32,19 +32,19 @@
 		},
 		{
 			_class = "C_OP_Noise"
-			m_nFieldOutput = 7
+			m_nFieldOutput = "7"
 			m_flNoiseAnimationTimeScale = 3.0
 			m_bDisableOperator = true
 		},
 		{
 			_class = "C_OP_DistanceToCP"
-			m_nFieldOutput = 7
+			m_nFieldOutput = "7"
 			m_flInputMax = 2.0
 			m_bActiveRange = true
 		},
 		{
 			_class = "C_OP_DistanceToCP"
-			m_nFieldOutput = 7
+			m_nFieldOutput = "7"
 			m_flInputMax = 2.0
 			m_nStartCP = 1
 			m_bActiveRange = true
@@ -72,7 +72,11 @@
 	[
 		{
 			_class = "C_OP_InstantaneousEmitter"
-			m_nParticlesToEmit = 25
+			m_nParticlesToEmit = 
+			{
+				m_nType = "PF_TYPE_LITERAL"
+				m_flLiteralValue = 25.0
+			}
 		},
 	]
 	m_controlPointConfigurations = 
@@ -105,4 +109,11 @@
 		},
 	]
 	m_nMaxParticles = 25
+	m_nBehaviorVersion = 9
+	m_Children = 
+	[
+		{
+			m_ChildRef = resource:"particles/tools/bow_nock_guide_arrow.vpcf"
+		},
+	]
 }

@@ -19,6 +19,14 @@ function Precache(context)
 	--PrecacheEntityFromTable("env_explosion", explosionKeyvals, context)
 end
 
+function Activate(activateType)
+
+	if activateType == ACTIVATE_TYPE_ONRESTORE -- on game load
+	then		
+		EntFireByHandle(thisEntity, thisEntity, "CallScriptFunction", "EnableThink")
+	end
+end
+
 function Think()
 
 	if exploded

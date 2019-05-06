@@ -1,0 +1,455 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	m_meshList = 
+	{
+		m_meshList = 
+		[
+			{
+				m_meshName = "locomotion_tool_base"
+				m_meshFile = "models/tools/locomotion_tool_base.dmx"
+				m_materialSearchPath = "materials/models/tools"
+				m_bSkinParentedObjects = true
+				m_bLegacySkinParentedTransforms = false
+				m_bExpensiveTangents = false
+				m_bHighPrecisionTexCoords = false
+				m_bPerVertexCurvature = false
+				m_bBentNormals = false
+				m_bIgnoreCloth = false
+				m_bGetSkinningFromLod0 = false
+				m_pMorphInfo = null
+			},
+		]
+	}
+	m_clothProxyMeshList = 
+	{
+		_class = "CVClothProxyMeshList"
+		m_flClothEnableThreshold = 0.05
+		m_bCreateStaticBone = false
+		m_nMaxBonesPerVertex = 4
+		m_bRemoveUnusedBonesEnabled = false
+		m_bDriveMeshesWithBacksolvedJointsOnly = true
+		m_flMatchProxiesToMeshes = 1.0
+		m_flFallbackEnvelope = 1.0
+		m_nReservedInt = 0
+		m_bSoftSkinAnimation = false
+		m_bReservedBool2 = false
+		m_bReservedBool3 = false
+		m_bReservedBool4 = false
+		m_clothProxyMeshList = [  ]
+	}
+	m_physicsMeshList = 
+	{
+		m_meshList = 
+		[
+			{
+				m_meshName = "locomotion_tool_collision"
+				m_meshFile = "models/tools/locomotion_tool_collision.dmx"
+				m_bOneConvexPiece = false
+				m_flMaxError = 0.0
+				m_bUseExactGeometry = false
+				m_bAutoMass = true
+				m_flMassOverride = 100.0
+				m_bConcavePerJoint = false
+				m_bSelfCollisions = false
+				m_bForceKinematic = false
+				m_bIgnoreScale = false
+				m_bIgnoreSkeleton = false
+			},
+		]
+	}
+	m_pModelInfo = null
+	m_pBoneFlagList = 
+	{
+		m_pObject = null
+	}
+	m_pHitBoxSetLists = [  ]
+	m_pAttachmentLists = 
+	[
+		{
+			m_pObject = 
+			{
+				m_name = ""
+				m_attachments = 
+				[
+					{
+						m_name = "vr_controller_root"
+						m_influences = 
+						[
+							{
+								m_influenceName = "base"
+								m_vTranslationOffset = [ 0.0, 0.0, 0.0 ]
+								m_vRotationOffset = [ -90.0, 0.0, 30.0 ]
+								m_flWeight = 1.0
+								m_bRoot = false
+							},
+						]
+					},
+					{
+						m_name = "grapple_spot"
+						m_influences = 
+						[
+							{
+								m_influenceName = "grapple"
+								m_vTranslationOffset = [ 0.0, 2.0, 0.0 ]
+								m_vRotationOffset = [ 0.0, 0.0, 90.0 ]
+								m_flWeight = 1.0
+								m_bRoot = false
+							},
+						]
+					},
+					{
+						m_name = "pad_move"
+						m_influences = 
+						[
+							{
+								m_influenceName = "base"
+								m_vTranslationOffset = [ -1.82395, -0.773107, 0.0 ]
+								m_vRotationOffset = [ -90.0, 0.0, 35.0 ]
+								m_flWeight = 1.0
+								m_bRoot = false
+							},
+						]
+					},
+					{
+						m_name = "handle_screen"
+						m_influences = 
+						[
+							{
+								m_influenceName = "base"
+								m_vTranslationOffset = [ -4.170528, -2.577352, -0.511019 ]
+								m_vRotationOffset = [ 0.0, -90.0, -56.626755 ]
+								m_flWeight = 1.0
+								m_bRoot = false
+							},
+						]
+					},
+					{
+						m_name = "holo_screen_emit"
+						m_influences = 
+						[
+							{
+								m_influenceName = "base"
+								m_vTranslationOffset = [ -0.276482, 0.383116, 0.03 ]
+								m_vRotationOffset = [ 180.0, -0.000001, 145.0 ]
+								m_flWeight = 1.0
+								m_bRoot = false
+							},
+						]
+					},
+					{
+						m_name = "holo_screen"
+						m_influences = 
+						[
+							{
+								m_influenceName = "base"
+								m_vTranslationOffset = [ -2.005368, 1.627518, -0.0 ]
+								m_vRotationOffset = [ 0.0, -90.0, -35.000004 ]
+								m_flWeight = 1.0
+								m_bRoot = false
+							},
+						]
+					},
+					{
+						m_name = "beam"
+						m_influences = 
+						[
+							{
+								m_influenceName = "base"
+								m_vTranslationOffset = [ 1.35525, -0.23, 0.0 ]
+								m_vRotationOffset = [ -0.0, -0.0, 0.0 ]
+								m_flWeight = 1.0
+								m_bRoot = false
+							},
+						]
+					},
+					{
+						m_name = "wire"
+						m_influences = 
+						[
+							{
+								m_influenceName = "base"
+								m_vTranslationOffset = [ 0.699558, -0.18637, 0.0 ]
+								m_vRotationOffset = [ -0.0, -0.0, 0.0 ]
+								m_flWeight = 1.0
+								m_bRoot = false
+							},
+						]
+					},
+				]
+			}
+		},
+	]
+	m_pAnimGroup = 
+	{
+		m_pObject = 
+		{
+			m_Name = ""
+			m_pReferenceSkeleton = 
+			{
+				m_pObject = null
+			}
+			m_pBoneFlagList = 
+			{
+				m_pObject = null
+			}
+			m_pSeqGroup = 
+			{
+				m_pObject = null
+			}
+			m_pAnimGroups = [  ]
+			m_Vanim = 
+			[
+				{
+					m_Animationname = "@idle"
+					m_Filepath = "models/tools/locomotion_tool_anims/locomotion_tool_idle.dmx"
+					m_nStartframe = 0
+					m_nEndframe = 1
+					m_flFps = 60.0
+					m_Loop = 
+					{
+						m_bLoop = true
+						m_bSmoothLoop = false
+						m_nSmoothLoopStart = 0
+						m_nSmoothLoopEnd = 0
+						m_StartLoop = 
+						{
+							_class = "CVAnimCmdStartLoop"
+							m_bEnabled = false
+							m_nLoopRestart = 0
+						}
+					}
+					m_bHidden = false
+					m_bDisable = false
+					m_Activities = [  ]
+					m_AnimationEvents = [  ]
+					m_MotionFrames = [  ]
+					m_pIkRules = [  ]
+					m_pAlignAnimation = null
+					m_adjustAnimation = 
+					{
+						m_translation = [ 0.0, 0.0, 0.0 ]
+						m_rotation = [ 0.0, 0.0, 0.0 ]
+					}
+					m_Keywords = [  ]
+					m_sequenceParams = 
+					{
+						m_flFadeInTime = 0.2
+						m_flFadeOutTime = 0.2
+					}
+					m_folderName = ""
+					m_MotionFramesRootBone = ""
+				},
+				{
+					m_Animationname = "@spin_ccw"
+					m_Filepath = "models/tools/locomotion_tool_anims/locomotion_tool_spin_ccw.dmx"
+					m_nStartframe = 0
+					m_nEndframe = 20
+					m_flFps = 60.0
+					m_Loop = 
+					{
+						m_bLoop = false
+						m_bSmoothLoop = false
+						m_nSmoothLoopStart = 0
+						m_nSmoothLoopEnd = 0
+						m_StartLoop = 
+						{
+							_class = "CVAnimCmdStartLoop"
+							m_bEnabled = false
+							m_nLoopRestart = 0
+						}
+					}
+					m_bHidden = false
+					m_bDisable = false
+					m_Activities = [  ]
+					m_AnimationEvents = [  ]
+					m_MotionFrames = [  ]
+					m_pIkRules = [  ]
+					m_pAlignAnimation = null
+					m_adjustAnimation = 
+					{
+						m_translation = [ 0.0, 0.0, 0.0 ]
+						m_rotation = [ 0.0, 0.0, 0.0 ]
+					}
+					m_Keywords = [  ]
+					m_sequenceParams = 
+					{
+						m_flFadeInTime = 0.2
+						m_flFadeOutTime = 0.2
+					}
+					m_folderName = ""
+					m_MotionFramesRootBone = ""
+				},
+				{
+					m_Animationname = "@spin_cw"
+					m_Filepath = "models/tools/locomotion_tool_anims/locomotion_tool_spin_cw.dmx"
+					m_nStartframe = 0
+					m_nEndframe = 19
+					m_flFps = 60.0
+					m_Loop = 
+					{
+						m_bLoop = false
+						m_bSmoothLoop = false
+						m_nSmoothLoopStart = 0
+						m_nSmoothLoopEnd = 0
+						m_StartLoop = 
+						{
+							_class = "CVAnimCmdStartLoop"
+							m_bEnabled = false
+							m_nLoopRestart = 0
+						}
+					}
+					m_bHidden = false
+					m_bDisable = false
+					m_Activities = [  ]
+					m_AnimationEvents = [  ]
+					m_MotionFrames = [  ]
+					m_pIkRules = [  ]
+					m_pAlignAnimation = null
+					m_adjustAnimation = 
+					{
+						m_translation = [ 0.0, 0.0, 0.0 ]
+						m_rotation = [ 0.0, 0.0, 0.0 ]
+					}
+					m_Keywords = [  ]
+					m_sequenceParams = 
+					{
+						m_flFadeInTime = 0.2
+						m_flFadeOutTime = 0.2
+					}
+					m_folderName = ""
+					m_MotionFramesRootBone = ""
+				},
+				{
+					m_Animationname = "@spin_ccw_slow"
+					m_Filepath = "models/tools/locomotion_tool_anims/locomotion_tool_spin_ccw.dmx"
+					m_nStartframe = 0
+					m_nEndframe = 20
+					m_flFps = 20.0
+					m_Loop = 
+					{
+						m_bLoop = false
+						m_bSmoothLoop = false
+						m_nSmoothLoopStart = 0
+						m_nSmoothLoopEnd = 0
+						m_StartLoop = 
+						{
+							_class = "CVAnimCmdStartLoop"
+							m_bEnabled = false
+							m_nLoopRestart = 0
+						}
+					}
+					m_bHidden = false
+					m_bDisable = false
+					m_Activities = [  ]
+					m_AnimationEvents = [  ]
+					m_MotionFrames = [  ]
+					m_pIkRules = [  ]
+					m_pAlignAnimation = null
+					m_adjustAnimation = 
+					{
+						m_translation = [ 0.0, 0.0, 0.0 ]
+						m_rotation = [ 0.0, 0.0, 0.0 ]
+					}
+					m_Keywords = [  ]
+					m_sequenceParams = 
+					{
+						m_flFadeInTime = 0.2
+						m_flFadeOutTime = 0.2
+					}
+					m_folderName = ""
+					m_MotionFramesRootBone = ""
+				},
+				{
+					m_Animationname = "@spin_cw_slow"
+					m_Filepath = "models/tools/locomotion_tool_anims/locomotion_tool_spin_cw.dmx"
+					m_nStartframe = 0
+					m_nEndframe = 19
+					m_flFps = 20.0
+					m_Loop = 
+					{
+						m_bLoop = false
+						m_bSmoothLoop = false
+						m_nSmoothLoopStart = 0
+						m_nSmoothLoopEnd = 0
+						m_StartLoop = 
+						{
+							_class = "CVAnimCmdStartLoop"
+							m_bEnabled = false
+							m_nLoopRestart = 0
+						}
+					}
+					m_bHidden = false
+					m_bDisable = false
+					m_Activities = [  ]
+					m_AnimationEvents = [  ]
+					m_MotionFrames = [  ]
+					m_pIkRules = [  ]
+					m_pAlignAnimation = null
+					m_adjustAnimation = 
+					{
+						m_translation = [ 0.0, 0.0, 0.0 ]
+						m_rotation = [ 0.0, 0.0, 0.0 ]
+					}
+					m_Keywords = [  ]
+					m_sequenceParams = 
+					{
+						m_flFadeInTime = 0.2
+						m_flFadeOutTime = 0.2
+					}
+					m_folderName = ""
+					m_MotionFramesRootBone = ""
+				},
+			]
+			m_sScripts = 
+			[
+				"anim_locomotion_tool.lua",
+			]
+			m_folderNames = [  ]
+			m_sCompileScripts = [  ]
+		}
+	}
+	m_pMaterialGroupList = 
+	{
+		m_pObject = null
+	}
+	m_pMeshGroupList = 
+	{
+		m_pObject = null
+	}
+	m_pLodGroupList = 
+	{
+		m_pObject = null
+	}
+	m_pPropBreakableList = 
+	{
+		m_pObject = null
+	}
+	m_pPropDataList = 
+	{
+		m_pObject = null
+	}
+	m_pConstraintLists = [  ]
+	m_collision = "models\\tools\\locomotion_tool_base.collision"
+	m_softbody = ""
+	m_sMDLFilename = ""
+	m_sOffsetHitboxSets = [  ]
+	m_vHitboxSetOffset = [ 0.0, 0.0, 0.0 ]
+	m_scriptFiles = [  ]
+	m_pMaterialRemapList = null
+	m_flFbxScale = 1.0
+	m_flQCScale = 1.0
+	m_vOrigin = [ 0.0, 0.0, 0.0 ]
+	m_pPsfList = null
+	m_keyValueText = ""
+	m_bStaticProp = false
+	m_bEnableClothProcessing = true
+	m_flClothEnableThreshold = 0.05
+	m_nMaxClothVertsPerMesh = 2048
+	m_bBuildClothBoneHierarchy = false
+	m_nNavType = "AUTH_NAV_MESH"
+	m_bMakeUniqueVMeshes = false
+	m_bMakeImplicitBindPoseSequence = false
+	m_bAdjustSkeletonFromBoneFlags = false
+	m_bHiddenAssetFlag = false
+	m_pAnimGroups = [  ]
+}

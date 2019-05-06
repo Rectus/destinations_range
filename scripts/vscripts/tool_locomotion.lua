@@ -1,7 +1,7 @@
 --[[
 	Locomotion tool script.
 	
-	Copyright (c) 2017 Rectus
+	Copyright (c) 2017-2019 Rectus
 	
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -134,6 +134,7 @@ local grappleKeyvals =
 {
 	classname = "prop_dynamic";
 	model = "models/tools/locomotion_tool_grapple.vmdl";
+	targetname = "locomotion_grapple";
 	--DefaultAnim = "idle"
 }
 
@@ -141,6 +142,7 @@ local strapKeyvals =
 {
 	classname = "prop_dynamic";
 	model = "models/tools/locomotion_tool_strap.vmdl";
+	targetname = "locomotion_strap";
 	--DefaultAnim = "idle";
 	Collisions = "Not Solid"
 }
@@ -148,6 +150,7 @@ local strapKeyvals =
 
 local handleScreenKeyvals = {
 	classname = "point_clientui_world_panel";
+	targetname = "locomotion_handlescreen";
 	dialog_layout_name = "file://{resources}/layout/custom_destination/locomotion_tool_handle_display.xml";
 	panel_dpi = 50;
 	width = 1.0;
@@ -181,21 +184,55 @@ function Precache(context)
 end
 
 
-function Activate()
-	thisEntity:SetSequence("idle")
+function Activate(activateType)
 
-	grapple = SpawnEntityFromTableSynchronous(grappleKeyvals.classname, grappleKeyvals)
-	grapple:SetParent(thisEntity, "")
-	grapple:SetLocalOrigin(Vector(0,0,0))
-	grapple:SetLocalAngles(0,0,0)
+	thisEntity:SetSequence("idle")
+	if activateType == ACTIVATE_TYPE_ONRESTORE -- on game load
+	then
+			
+		-- Hack to properly handle restoration from saves, 
+		-- since variables written by Activate() on restore don't end up in the script scope.
+		EntFireByHandle(thisEntity, thisEntity, "CallScriptFunction", "RestoreState")
+		
+	else
+		grapple = SpawnEntityFromTableSynchronous(grappleKeyvals.classname, grappleKeyvals)
+		grapple:SetParent(thisEntity, "")
+		grapple:SetLocalOrigin(Vector(0,0,0))
+		grapple:SetLocalAngles(0,0,0)
+		
+		strap = SpawnEntityFromTableSynchronous(strapKeyvals.classname, strapKeyvals)
+		strap:SetParent(thisEntity, "")
+		strap:SetLocalOrigin(Vector(0,0,0))
+		strap:SetLocalAngles(0,0,0)
+		
+		CustomGameEventManager:RegisterListener("locomotion_tool_config", ApplyConfig)
+	end
 	
-	strap = SpawnEntityFromTableSynchronous(strapKeyvals.classname, strapKeyvals)
-	strap:SetParent(thisEntity, "")
-	strap:SetLocalOrigin(Vector(0,0,0))
-	strap:SetLocalAngles(0,0,0)
-	
+end
+
+
+function RestoreState()
+
+	thisEntity:GetOrCreatePrivateScriptScope() -- Script scopes do not seem to be properly created on restore
+
+	local children = thisEntity:GetChildren()
+	for idx, child in pairs(children)
+	do
+		if child:GetName() == grappleKeyvals.targetname
+		then
+			grapple = child
+		elseif child:GetName() == strapKeyvals.targetname
+		then
+			strap = child
+		elseif child:GetName() == handleScreen.targetname
+		then
+			handleScreen = child
+		end
+	end
+
 	CustomGameEventManager:RegisterListener("locomotion_tool_config", ApplyConfig)
 end
+
 
 
 function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
@@ -377,8 +414,9 @@ function UpdateScreen()
 
 
 	local time = LocalTime()
-	--local playerSpeed = math.floor(g_VRScript.playerPhysController:GetVelocity(playerEnt):Length())
-	local playerSpeed = handEnt:GetVelocity():Length() * 0.0254
+	local playerSpeed = (g_VRScript.playerPhysController:GetVelocity(playerEnt):Length() 
+		+ handEnt:GetVelocity():Length()) * 0.0254
+
 	local playerAlt = g_VRScript.playerPhysController:GetPlayerHeight(playerEnt) * 0.0254
 
 	CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_update_display", 
@@ -405,7 +443,6 @@ function OnHandleInput(input)
 	local IN_GRIP = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
 	local IN_PAD = (handID == 0 and IN_PAD_HAND0 or IN_PAD_HAND1)
 	local IN_PAD_TOUCH = (handID == 0 and IN_PAD_TOUCH_HAND0 or IN_PAD_TOUCH_HAND1)
-
 	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
@@ -424,23 +461,24 @@ function OnHandleInput(input)
 		triggerIn = false
 	end
 	
+	
 	if input.buttonsPressed:IsBitSet(IN_GRIP)
 	then
-		input.buttonsPressed:ClearBit(IN_GRIP)
+		--input.buttonsPressed:ClearBit(IN_GRIP)
 	end
 	
 	if input.buttonsDown:IsBitSet(IN_GRIP)
 	then
-		input.buttonsDown:ClearBit(IN_GRIP)
+		--input.buttonsDown:ClearBit(IN_GRIP)
 	end
 	
 	
 	if input.buttonsReleased:IsBitSet(IN_GRIP)
 	then
-		input.buttonsReleased:ClearBit(IN_GRIP)
-		thisEntity:ForceDropTool();
+		--input.buttonsReleased:ClearBit(IN_GRIP)
+		thisEntity:ForceDropTool()
 	end
-
+	
 	if input.buttonsPressed:IsBitSet(IN_PAD)
 	then
 		playerEnt:AllowTeleportFromHand(handID, teleportPassthrough and not playerEnt:IsContentBrowserShowing())
@@ -595,7 +633,7 @@ function ReleaseHold()
 	RumbleController(2, 0.1, 100)
 	grapple:SetSequence("idle")
 	g_VRScript.playerPhysController:RemoveConstraint(playerEnt, thisEntity)
-	g_VRScript.playerPhysController:SetVelocity(playerEnt, -GetPhysVelocity(thisEntity))
+	g_VRScript.playerPhysController:SetVelocity(playerEnt, -handEnt:GetVelocity())
 	
 	if grabEnt and IsValidEntity(grabEnt) then
 		grabEnt:Kill()
@@ -738,7 +776,7 @@ function FindTool(handID)
 		if tool ~= thisEntity
 		then
 			local scope = tool:GetPrivateScriptScope()
-			if scope.GetPlayerEnt and scope.GetPlayerEnt() == playerEnt
+			if scope and scope.GetPlayerEnt and scope.GetPlayerEnt() == playerEnt
 			then
 				return tool
 			end		

@@ -53,8 +53,7 @@ local triggerPressed = false
 local gripLocked = false
 local lockedPanel = nil
 
-local pickupTime = 0
-local PICKUP_TRIGGER_DELAY = 0.5
+local initialTriggerPress = true
 
 
 local PACK_KEYVALS = {
@@ -84,8 +83,8 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handEnt = pHand
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
-	pickupTime = Time()
-
+	initialTriggerPress = true
+	
 	handAttachment:SetSingleMeshGroup("equipped")
 
 	--sphere = SpawnEntityFromTableSynchronous(SPHERE_KEYVALS.classname, SPHERE_KEYVALS)
@@ -161,6 +160,7 @@ function OnHandleInput( input )
 			
 		if input.buttonsPressed:IsBitSet(IN_JOY_PUSH)
 		then
+			-- Broken
 			ToggleGripLock()
 		end
 		
@@ -208,7 +208,7 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		if not initialTriggerPress
 		then
 			triggerPressed = true
 		end
@@ -260,8 +260,18 @@ function OnHandleInput( input )
 		padVector = Vector(0,0,0)
 	end
 	
-	triggerValue = input.triggerValue
-
+	if initialTriggerPress
+	then
+		if input.triggerValue < 0.1
+		then
+			initialTriggerPress = false
+		end
+	
+		triggerValue = 0
+	else
+		triggerValue = input.triggerValue
+	end
+	
 	return input;
 end
 

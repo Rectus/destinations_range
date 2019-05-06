@@ -2,7 +2,7 @@
 	<styles>
 		<include src="file://{resources}/styles/base_styles.css" />
 		<include src="file://{resources}/styles/info_panels.css" /> 
-		<include src="file://{resources}/styles/custom_destination/example.css" />
+		<include src="file://{resources}/styles/custom_destination/tutorial_panels.css" />
 	</styles>
 
 	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
@@ -10,6 +10,7 @@
 			<Panel class="TextArea">
 				<Label class="Title" text="Jetpack" />
 				<Label class="Desc Big" text="Usage:\nThe trigger controls vertical thrust (analogue). The touchpad controls horizontal thrust, relative to the controller. \n\nMake sure to have the motion controllers in the correct hands for the jetpack to be aligned behind you." />
+				<Image class="TutorialImage" src="file://{resources}/images/tool_jetpack.png" scaling="stretch-to-fit-preserve-aspect"/>
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

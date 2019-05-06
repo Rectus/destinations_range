@@ -326,7 +326,7 @@ function RetractToungue()
 	end
 
 	local segment = ParticleManager:CreateParticle("particles/barnacle_tongue_retract.vpcf", 
-			PATTACH_WORLDORIGIN, handAttachment)
+			PATTACH_CUSTOMORIGIN, handAttachment)
 	
 	if tongueParticle > 0 then
 	
@@ -962,14 +962,14 @@ function UpdateTongueParticleFront()
 
 			ParticleManager:DestroyParticle(tongueParticle, true)
 			tongueParticle = ParticleManager:CreateParticle("particles/barnacle_tongue.vpcf", 
-				PATTACH_WORLDORIGIN, handAttachment)
+				PATTACH_CUSTOMORIGIN, handAttachment)
 			ParticleManager:SetParticleControl(tongueParticle, 0, grapplePoints[1])
 			ParticleManager:SetParticleControl(tongueParticle, 1, pullEndpoint)	
 	
 			
 		for idx = 1, #grapplePoints - #tonguePoints  do
 			local point = ParticleManager:CreateParticle("particles/barnacle_tongue.vpcf", 
-				PATTACH_WORLDORIGIN, handAttachment)
+				PATTACH_CUSTOMORIGIN, handAttachment)
 			ParticleManager:SetParticleControl(point, 1, grapplePoints[idx])
 			ParticleManager:SetParticleControl(point, 0, grapplePoints[idx + 1])
 
@@ -1001,21 +1001,21 @@ function UpdateTongueParticle()
 		if #tonguePoints == 0 then
 			ParticleManager:DestroyParticle(tongueParticle, true)
 			tongueParticle = ParticleManager:CreateParticle("particles/barnacle_tongue.vpcf", 
-				PATTACH_WORLDORIGIN, handAttachment)
+				PATTACH_CUSTOMORIGIN, handAttachment)
 			ParticleManager:SetParticleControl(tongueParticle, 0, grapplePoints[1])
 			ParticleManager:SetParticleControl(tongueParticle, 1, pullEndpoint)
 			
 		else	
 			ParticleManager:DestroyParticle(tonguePoints[#tonguePoints], true)
 			tonguePoints[#tonguePoints] = ParticleManager:CreateParticle("particles/barnacle_tongue.vpcf", 
-				PATTACH_WORLDORIGIN, handAttachment)
+				PATTACH_CUSTOMORIGIN, handAttachment)
 			ParticleManager:SetParticleControl(tonguePoints[#tonguePoints], 0, grapplePoints[#tonguePoints + 1])
 			ParticleManager:SetParticleControl(tonguePoints[#tonguePoints], 1, grapplePoints[#tonguePoints])
 		end
 			
 		for idx = #tonguePoints + 1, #grapplePoints  do
 			local point = ParticleManager:CreateParticle("particles/barnacle_tongue.vpcf", 
-				PATTACH_WORLDORIGIN, handAttachment)
+				PATTACH_CUSTOMORIGIN, handAttachment)
 			ParticleManager:SetParticleControl(point, 1, grapplePoints[idx])
 				
 			if idx + 1 > #grapplePoints then

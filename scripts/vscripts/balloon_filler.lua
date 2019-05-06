@@ -1,6 +1,4 @@
 
-local IN_USE_HAND0 = 24
-local IN_USE_HAND1 = 25
 local FILL_INTERVAL = 0.02
 local FILL_SPEED = 0.02
 local MAX_SCALE = 4
@@ -14,7 +12,7 @@ local COLOR_VALUES =
 	255
 }
 
-local button = nil
+local hand = nil
 local usingPlayer = nil
 local balloon = nil
 local scale = 0
@@ -46,32 +44,31 @@ function OnPressed(params)
 		--[[for i = 0,63 do
 			print(i .. ": " .. tostring(usingPlayer:IsVRControllerButtonPressed(i)))
 		end ]]
-				
-		if usingPlayer:IsVRControllerButtonPressed(IN_USE_HAND0) 
-			and usingPlayer:IsVRControllerButtonPressed(IN_USE_HAND1)
+
+		if usingPlayer:IsActionActiveForHand(0, DEFAULT_USE)
+			and usingPlayer:IsActionActiveForHand(1, DEFAULT_USE)
 		then
 			local hand0 = usingPlayer:GetHMDAvatar():GetVRHand(0)
 			local hand1 = usingPlayer:GetHMDAvatar():GetVRHand(1)
 			
 			-- get the closest hand
-			if (hand0:GetCenter() - thisEntity:GetCenter()):Length() <
-				(hand0:GetCenter() - thisEntity:GetCenter()):Length()
+			if (hand0:GetCenter() - thisEntity:GetAbsOrigin()):Length() <
+				(hand0:GetCenter() - thisEntity:GetAbsOrigin()):Length()
 			then
-				button = IN_USE_HAND0
+				hand = 0
 				
 			else
-				button = IN_USE_HAND1
-			
+				hand = 1		
 			end
 		
-		elseif usingPlayer:IsVRControllerButtonPressed(IN_USE_HAND0) 
+		elseif usingPlayer:IsActionActiveForHand(0, DEFAULT_USE) 
 		then
-			button = IN_USE_HAND0
+			hand = 0
 		else 
-			button = IN_USE_HAND1
+			hand = 1
 		end
 		
-		balloonKeyvals.origin = thisEntity:GetCenter() + Vector(-3, 0, 6)
+		balloonKeyvals.origin = thisEntity:GetCenter() + Vector(-3, 0, 5.5)
 		balloonKeyvals.targetname = DoUniqueString("balloon")
 		balloonKeyvals.rendercolor = COLOR_VALUES[RandomInt(1, 5)] .. " " .. COLOR_VALUES[RandomInt(1, 5)] .. 
 			" " .. COLOR_VALUES[RandomInt(1, 5)] .. " 255"
@@ -82,13 +79,14 @@ function OnPressed(params)
 	end
 end
 
+-- This does not track whether the player is still actually pressing the button.
 function OnUnpressed(params)
-	print("unpressed")
+	
 end
 
 function FillThink()
 
-	if usingPlayer:IsVRControllerButtonPressed(button) 
+	if usingPlayer:IsActionActiveForHand(hand, DEFAULT_USE) 
 	then
 		scale = scale + FILL_SPEED
 	

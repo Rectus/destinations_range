@@ -222,8 +222,7 @@ end
 function Punt(self)
 	if isCarrying
 	then
-		pulledObject:ApplyAbsVelocityImpulse(thisEntity:GetAngles():Forward():Normalized() * PUNT_IMPULSE)
-	
+		pulledObject:ApplyAbsVelocityImpulse(handAttachment:GetAngles():Forward() * PUNT_IMPULSE)
 		pulledObject = nil
 		isCarrying = false
 		StopSoundEvent("Physcannon.HoldLoop", thisEntity)
@@ -235,7 +234,7 @@ function Punt(self)
 		
 		if ent
 		then
-			ent:ApplyAbsVelocityImpulse(thisEntity:GetAngles():Forward():Normalized() * PUNT_IMPULSE)
+			ent:ApplyAbsVelocityImpulse(handAttachment:GetAngles():Forward() * PUNT_IMPULSE)
 			StartSoundEvent("Physcannon.Launch", thisEntity)
 		else
 			StartSoundEvent("Physcannon.Dryfire", thisEntity)
@@ -329,8 +328,7 @@ function TracePunt(self)
 	local traceTable =
 	{
 		startpos = GetMuzzlePos();
-		endpos = GetMuzzlePos() + RotatePosition(Vector(0,0,0), 
-				RotateOrientation(handAttachment:GetAngles(), QAngle(0, 0, 0)), Vector(PUNT_DISTANCE, 0, 0));
+		endpos = GetMuzzlePos() + handAttachment:GetAngles():Forward() * PUNT_DISTANCE;
 		ignore = playerEnt
 
 	}

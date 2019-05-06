@@ -50,6 +50,7 @@ local rocketKeyvals =
 local loadedRocketKeyvals = 
 {
 	classname = "prop_dynamic";
+	targetname = "loaded_rocket";
 	model = "models/weapons/law_rocket_packed.vmdl";
 }
 	
@@ -63,13 +64,41 @@ function Precache(context)
 end
 
 
-function Activate()
-	thisEntity:SetSequence("folded")
+function Activate(activateType)
 	
-	loadedRocket = SpawnEntityFromTableSynchronous(loadedRocketKeyvals.classname, loadedRocketKeyvals)
-	loadedRocket:SetParent(thisEntity, "rocket_loaded")
-	loadedRocket:SetLocalOrigin(Vector(0,0,0))
-	loadedRocket:SetLocalAngles(0,0,0)
+	if activateType == ACTIVATE_TYPE_ONRESTORE -- on game load
+	then
+		EntFireByHandle(thisEntity, thisEntity, "CallScriptFunction", "RestoreState")
+	else
+		thisEntity:SetSequence("folded")
+		loadedRocket = SpawnEntityFromTableSynchronous(loadedRocketKeyvals.classname, loadedRocketKeyvals)
+		loadedRocket:SetParent(thisEntity, "rocket_loaded")
+		loadedRocket:SetLocalOrigin(Vector(0,0,0))
+		loadedRocket:SetLocalAngles(0,0,0)
+	end
+end
+
+function RestoreState()
+
+	thisEntity:GetOrCreatePrivateScriptScope() -- Script scopes do not seem to be properly created on restore
+
+	local children = thisEntity:GetChildren()
+	for idx, child in pairs(children)
+	do
+		if child:GetName() == loadedRocketKeyvals.targetname
+		then
+			loadedRocket = child
+		end
+	end
+
+	if not loadedRocket
+	then
+		fired = true
+		alreadyPickedUp = true
+	elseif thisEntity:GetSequence() == "extended"
+	then
+	end
+
 end
 
 
@@ -79,6 +108,8 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	pickupTime = Time()
+	
+	isCarried = true
 
 	
 	if not alreadyPickedUp and not fired
@@ -110,8 +141,8 @@ function SetUnequipped()
 
 	if fired
 	then
-		thisEntity:SetSingleMeshGroup("loaded") -- Fixes issue with model dissappearing if dropped with the fired group set.
-		thisEntity:SetContextThink("set_mesh", function () thisEntity:SetSingleMeshGroup("fired") end, 0)
+		--thisEntity:SetSingleMeshGroup("loaded") -- Fixes issue with model dissappearing if dropped with the fired group set.
+		--thisEntity:SetContextThink("set_mesh", function () thisEntity:SetSingleMeshGroup("fired") end, 0)
 		
 	elseif IsValidEntity(loadedRocket) then
 		loadedRocket:SetParent(thisEntity, "rocket_loaded")
@@ -126,6 +157,8 @@ function SetUnequipped()
 	controller = nil
 	playerEnt = nil
 	handAttachment = nil
+	
+	isCarried = false
 
 	return true
 end
@@ -172,19 +205,19 @@ function OnTriggerPressed()
 		end
 	
 		fired = true
-		StartSoundEvent("Law.Fire", thisEntity)
+		StartSoundEventFromPosition("Law.Fire", prop:GetCenter()) 
 		
 		local backblast = ParticleManager:CreateParticle("particles/weapons/law_backblast.vpcf", 
-			PATTACH_POINT, thisEntity)
+			PATTACH_POINT, prop)
 		ParticleManager:SetParticleControlEnt(backblast, 
-			0, handAttachment, PATTACH_POINT, "backblast", Vector(0, 0, 0), true)
+			0, prop, PATTACH_POINT, "backblast", Vector(0, 0, 0), true)
 	
 		local attachment = prop:ScriptLookupAttachment("rocket_spawn")
 	
 		if IsValidEntity(loadedRocket) then
 			loadedRocket:Kill()
 		end
-	
+
 		rocketKeyvals.origin = prop:GetAttachmentOrigin(attachment)
 		rocketKeyvals.angles = prop:GetAttachmentAngles(attachment)
 		rocket = SpawnEntityFromTableSynchronous("prop_physics_override", rocketKeyvals)

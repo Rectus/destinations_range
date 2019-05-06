@@ -158,7 +158,7 @@ function TracePush(self)
 	
 		if not playerMoved
 		then
-			StartSoundEvent("SkiPole.Hit", thisEntity)
+			StartSoundEvent("SkiPole.Hit", handAttachment)
 			RumbleController(2, 0.2, 20)
 			playerMoved = true
 			

@@ -1,4 +1,4 @@
-<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:vpcf19:version{aafc65d8-7a5a-4e01-bd8d-3ac118422503} -->
 {
 	_class = "CParticleSystemDefinition"
 	m_Operators = 
@@ -12,7 +12,7 @@
 		},
 		{
 			_class = "C_OP_PercentageBetweenCPLerpCPs"
-			m_nFieldOutput = 10
+			m_nFieldOutput = "10"
 			m_bDisableOperator = true
 		},
 		{
@@ -55,12 +55,13 @@
 					m_model = resource:"models/tools/locomotion_tool_grapple.vmdl"
 				},
 			]
+			m_bForceLoopingAnimation = true
 		},
 	]
 	m_Initializers = 
 	[
 		{
-			_class = "C_INIT_CreateSequentialPath"
+			_class = "C_INIT_CreateSequentialPathV2"
 			m_flNumToAssign = 50.0
 			m_PathParams = 
 			{
@@ -78,22 +79,33 @@
 			m_flSpeedMin = 2000.0
 			m_flSpeedMax = 2000.0
 			m_nEndControlPointNumber = 0
-			m_bTrailBias = true
+		},
+		{
+			_class = "C_INIT_NormalAlignToCP"
+			m_nControlPointNumber = 1
 		},
 	]
 	m_Emitters = 
 	[
 		{
 			_class = "C_OP_InstantaneousEmitter"
-			m_nParticlesToEmit = 1
 			m_nMaxEmittedPerFrame = 100
+			m_nParticlesToEmit = 
+			{
+				m_nType = "PF_TYPE_LITERAL"
+				m_flLiteralValue = 1.0
+			}
 		},
 	]
 	m_ForceGenerators = 
 	[
 		{
 			_class = "C_OP_AttractToControlPoint"
-			m_fForceAmount = 1000.0
+			m_fForceAmount = 
+			{
+				m_nType = "PF_TYPE_LITERAL"
+				m_flLiteralValue = 1000.0
+			}
 			m_fFalloffPower = 1.0
 			m_bDisableOperator = true
 		},
@@ -123,4 +135,6 @@
 	m_ConstantNormal = [ 1.0, 0.0, 0.0 ]
 	m_flConstantRadius = 1.0
 	m_nMaxParticles = 1
+	m_nBehaviorVersion = 9
+	m_nFirstMultipleOverride_BackwardCompat = 2
 }

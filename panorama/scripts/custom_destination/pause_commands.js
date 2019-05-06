@@ -10,9 +10,25 @@ function RegisterPanel(data)
 	{
 		playerID = data.id;
 		panelID = data.panel;
-		//$("#PausePanel").AddClass("Activated");
-		
+		$("#PausePanel").AddClass("Visible");
 		GameEvents.Unsubscribe(registerEventID);
+	}
+}
+
+function SetVisible(data)
+{
+	if(data.id != panelID)
+	{
+		return;
+	}
+	
+	if(data.visible)
+	{
+		$("#PausePanel").AddClass("Visible");
+	}
+	else
+	{
+		$("#PausePanel").RemoveClass("Visible");
 	}
 }
 

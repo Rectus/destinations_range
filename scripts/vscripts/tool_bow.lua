@@ -1,7 +1,7 @@
 --[[
 	Bow entity script
 	
-	Copyright (c) 2017 Rectus
+	Copyright (c) 2017-2019 Rectus
 	
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,8 @@ local handAttachment = nil
 local FIRE_RUMBLE_INTERVAL = 0.02
 local FIRE_RUMBLE_TIME = 0.1
 local THINK_INTERVAL = 0.02
-local FIRE_DELAY = 0.1
+local DRAW_FIRE_DELAY = 0.1
+local FIRE_THINK_DELAY = 0.2
 
 local bowView = nil
 local drawTool = nil
@@ -85,8 +86,6 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handAttachment = pHandAttachment
 	arrowNocked = false
 	
-	
-	
 	bowView = SpawnEntityFromTableSynchronous(BOW_VIEW_KEYVALS.classname, BOW_VIEW_KEYVALS)
 	bowView:SetParent(handAttachment, "")
 	bowView:SetLocalOrigin(Vector(0,0,0))
@@ -133,18 +132,6 @@ function OnHandleInput(input)
 	local nIN_TRIGGER = IN_USE_HAND1; if (handID == 0) then nIN_TRIGGER = IN_USE_HAND0 end;
 	local nIN_GRIP = IN_GRIP_HAND1; if (handID == 0) then nIN_GRIP = IN_GRIP_HAND0 end;
 	
-	if input.buttonsPressed:IsBitSet(nIN_TRIGGER)
-	then
-		input.buttonsPressed:ClearBit(nIN_TRIGGER)
-
-	end
-	
-	-- Catch the unpress event, so you don't drop the tool.
-	if input.buttonsReleased:IsBitSet(nIN_TRIGGER) 
-	then
-		input.buttonsReleased:ClearBit(nIN_TRIGGER)
-	end
-	
 	if input.buttonsReleased:IsBitSet(nIN_GRIP)
 	then
 		input.buttonsReleased:ClearBit(nIN_GRIP)
@@ -160,11 +147,20 @@ function BowThink()
 	then
 		return nil
 	end
+	
+	local drawPulling = false
+	
+	if not drawTool or not IsValidEntity(drawTool)
+	then
+		drawTool = SpawnEntityFromTableSynchronous(DRAW_TOOL_KEYVALS.classname, DRAW_TOOL_KEYVALS)
+		drawTool:SetParent(bowView, "draw_guide")
+		drawTool:SetLocalOrigin(Vector(0,0,0))
+		drawTool:SetLocalAngles(0, 0, 0)
+		
+	else
+		drawPulling = drawTool:GetOrCreatePrivateScriptScope():IsPulling()
+	end
 
-	local idx = handAttachment:ScriptLookupAttachment("pivot")	
-	local pivotOrigin = handAttachment:GetAttachmentOrigin(idx)
-	local toolOrigin = drawTool:GetOrCreatePrivateScriptScope():GetToolOrigin()
-	local drawPulling = drawTool:GetOrCreatePrivateScriptScope():IsPulling()
 	
 	local paintColor = handAttachment:GetRenderColor()
 	bowView:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
@@ -176,7 +172,7 @@ function BowThink()
 		drawTime = Time()
 	elseif arrowNocked and not drawPulling
 	then
-		if Time() > drawTime + FIRE_DELAY
+		if Time() > drawTime + DRAW_FIRE_DELAY
 		then
 			FireArrow()
 			bowView:SetSequence("release")
@@ -187,6 +183,12 @@ function BowThink()
 			arrow = nil
 		end	
 		arrowNocked = false
+		
+		bowView:SetLocalOrigin(Vector(0,0,0))	
+		bowView:SetLocalAngles(0, 0, 0)
+		
+		return FIRE_THINK_DELAY
+		
 	elseif not arrowNocked and not drawPulling then
 		CheckArrows()
 	end
@@ -194,6 +196,10 @@ function BowThink()
 	--DebugDrawLine(pivotOrigin, toolOrigin, 0, 255, 0, false, THINK_INTERVAL)
 	if drawPulling
 	then
+		local idx = handAttachment:ScriptLookupAttachment("pivot")	
+		local pivotOrigin = handAttachment:GetAttachmentOrigin(idx)
+		local toolOrigin = drawTool:GetOrCreatePrivateScriptScope():GetToolOrigin()
+	
 		local drawVec = (pivotOrigin - toolOrigin)
 		local drawLength = drawVec:Length()
 		
@@ -263,6 +269,13 @@ function CheckArrows()
 		
 			return
 		end
+		
+		-- Hack to move the hidden held tool entity to the correct position
+		if otherHandProp:GetClassname() == "prop_destinations_tool" and nockGuideParticle == -1
+		then
+			otherHandProp:SetAbsOrigin(propHand:GetAbsOrigin())
+		end
+		
 		
 		local idx = otherHandProp:ScriptLookupAttachment("arrow_nock")	
 		local propNockOrigin = otherHandProp:GetAttachmentOrigin(idx)

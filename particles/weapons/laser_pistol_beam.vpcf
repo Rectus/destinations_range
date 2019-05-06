@@ -1,0 +1,79 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:vpcf1:version{d47d07e6-072c-49cb-9718-5bfd8d6c3d21} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_nTopology = "PARTICLE_TOPOLOGY_LINES"
+	m_flConstantRadius = 1.0
+	m_controlPointConfigurations = 
+	[
+		{
+			m_name = "preview"
+			m_drivers = 
+			[
+				{
+					m_iAttachType = "PATTACH_WORLDORIGIN"
+					m_vecOffset = [ 0.0, 0.0, 0.0 ]
+					m_angOffset = [ null, null, null ]
+					m_entityName = "self"
+				},
+			]
+		},
+	]
+	m_nMaxParticles = 50
+	m_Operators = 
+	[
+		{
+			_class = "C_OP_BasicMovement"
+		},
+		{
+			_class = "C_OP_Decay"
+			m_nOpEndCapState = 1
+		},
+		{
+			_class = "C_OP_MaintainSequentialPath"
+			m_bUseParticleCount = true
+			m_PathParams = 
+			{
+				m_nEndControlPointNumber = 1
+			}
+		},
+		{
+			_class = "C_OP_CycleScalar"
+			m_flStartValue = 0.9
+			m_flCycleTime = 0.4
+		},
+		{
+			_class = "C_OP_DistanceBetweenCPs"
+			m_flInputMax = 8192.0
+			m_flOutputMin = 1.5
+		},
+	]
+	m_Renderers = 
+	[
+		{
+			_class = "C_OP_RenderRopes"
+			m_flSelfIllumAmount = 1.0
+			m_flDiffuseAmount = 0.0
+			m_bAdditive = true
+			m_flOverbrightFactor = 500.0
+			m_hTexture = resource:"materials/particle/cache_finder_beam.vtex"
+			m_nOpEndCapState = 0
+		},
+	]
+	m_Emitters = 
+	[
+		{
+			_class = "C_OP_MaintainEmitter"
+			m_nParticlesToMaintain = 20
+		},
+	]
+	m_Children = 
+	[
+		{
+			m_ChildRef = resource:"particles/weapons/laser_pistol_beam_ionization.vpcf"
+		},
+		{
+			m_ChildRef = resource:"particles/weapons/laser_pistol_beam_glare.vpcf"
+		},
+	]
+	m_ConstantColor = [ 114, 6, 255, 255 ]
+}

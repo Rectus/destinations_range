@@ -4,7 +4,7 @@ local handEnt = nil
 local handID = 0
 local handAttachment = nil
 local sun = nil
-local sunParticle = nil
+local sunParticle = -1
 
 local triggerHeld = false
 
@@ -21,7 +21,7 @@ local PICKUP_TRIGGER_DELAY = 0.5
 
 local sunKeyvals = 
 {
-	targetname = "pole_compass";
+	targetname = "sun_prop";
 	model = "models/tools/sun_tool_sun.vmdl";
 	solid = 0
 }
@@ -31,14 +31,56 @@ function Precache(context)
 	PrecacheParticle("particles/tools/sun_tool_glow.vpcf", context)
 end
 
-function Activate()
-	
-	sunKeyvals.origin = thisEntity:GetOrigin()
-	sunKeyvals.angles = thisEntity:GetAngles()	
-	sun = SpawnEntityFromTableSynchronous("prop_dynamic", sunKeyvals)
-	sun:SetParent(thisEntity, "sun")
-	sun:SetLocalOrigin(Vector(0,0,0))
-	
+function Activate(activateType)
+
+	if activateType == ACTIVATE_TYPE_ONRESTORE -- on game load
+	then
+			
+		-- Hack to properly handle restoration from saves, 
+		-- since variables written by Activate() on restore don't end up in the script scope.
+		DoEntFireByInstanceHandle(thisEntity, "CallScriptFunction", "RestoreState", 0, thisEntity, thisEntity)
+		
+	else
+		sunKeyvals.origin = thisEntity:GetOrigin()
+		sunKeyvals.angles = thisEntity:GetAngles()	
+		sun = SpawnEntityFromTableSynchronous("prop_dynamic", sunKeyvals)
+		sun:SetParent(thisEntity, "sun")
+		sun:SetLocalOrigin(Vector(0,0,0))
+		
+		thisEntity:SetThink(AddParticle, "particle", 0.1)
+		
+		envEnt = Entities:FindByClassname(nil, "light_environment")
+		
+		if envEnt then
+		
+			thisEntity:SetThink(UpdateSun, "sun", SUN_UPDATE_INTERVAL)
+			
+		end
+	end
+
+end
+
+function RestoreState()
+
+	thisEntity:GetOrCreatePrivateScriptScope() -- Script scopes do not seem to be properly created on restore
+
+	local children = thisEntity:GetChildren()
+	for idx, child in pairs(children)
+	do
+		if child:GetName() == sunKeyvals.targetname
+		then
+			sun = child
+		end
+	end
+
+	if(not sun)
+	then
+		sunKeyvals.origin = thisEntity:GetOrigin()
+		sunKeyvals.angles = thisEntity:GetAngles()	
+		sun = SpawnEntityFromTableSynchronous("prop_dynamic", sunKeyvals)
+		sun:SetParent(thisEntity, "sun")
+		sun:SetLocalOrigin(Vector(0,0,0))
+	end
 	thisEntity:SetThink(AddParticle, "particle", 0.1)
 	
 	envEnt = Entities:FindByClassname(nil, "light_environment")
@@ -88,6 +130,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handAttachment = pHandAttachment
 	isCarried = true
 	pickupTime = Time()
+
 	
 	ParticleManager:DestroyParticle(sunParticle, false)
 	

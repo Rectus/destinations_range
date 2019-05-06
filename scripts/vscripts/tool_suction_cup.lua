@@ -72,7 +72,7 @@ local attachedKeyvals = {
 	model = "models/weapons/suction_cup.vmdl";
 	solid = 0
 }
-
+--[[
 local constraintKeyvals = {
 	classname = "phys_constraint";
 	targetname = "";
@@ -83,7 +83,40 @@ local constraintKeyvals = {
 	enablelinearconstraint = 1;
 	enableangularconstraint = 1
 }
+constraintKeyvals["spawnflags#0"] = "1"]]
+
+local constraintKeyvals = {
+	classname = "phys_genericconstraint";
+	targetname = "";
+	attach1 = "";
+	attach2 = "";
+	
+	linear_motion_x = "JOINT_MOTION_LOCKED";
+	linear_frequency_x = 10;
+	linear_damping_ratio_x = 0.8;
+	
+	linear_motion_y = "JOINT_MOTION_LOCKED";
+	linear_frequency_y = 10;
+	linear_damping_ratio_y = 0.8;
+	
+	linear_motion_z = "JOINT_MOTION_LOCKED";
+	linear_frequency_z = 10;
+	linear_damping_ratio_z = 0.8;
+	
+	angular_motion_x = "JOINT_MOTION_LOCKED";
+	angular_frequency_x = 20;
+	angular_damping_ratio_x = 10;
+	
+	angular_motion_y = "JOINT_MOTION_LOCKED";
+	angular_frequency_y = 20;
+	angular_damping_ratio_y = 10;
+	
+	angular_motion_z = "JOINT_MOTION_LOCKED";
+	angular_frequency_z = 20;
+	angular_damping_ratio_z = 10;
+}
 constraintKeyvals["spawnflags#0"] = "1"
+
 
 local viewKeyvals = {
 	classname = "prop_destinations_physics";
@@ -121,32 +154,29 @@ end
 
 
 function SpawnProps()
-	attachedKeyvals.origin = thisEntity:GetOrigin()
-	attachedKeyvals.angles = thisEntity:GetAngles()
-	propAttached = SpawnEntityFromTableSynchronous(attachedKeyvals.classname, attachedKeyvals)
-	propAttached:SetOrigin(thisEntity:GetOrigin())
-	--DoEntFireByInstanceHandle(propAttached, "SetBodygroup", "off", 0, nil, nil)
-	propAttached:AddEffects(32)	
-	--DoEntFireByInstanceHandle(propAttached, "SetSequence", "idle", 0, nil, nil)
 	
 	viewKeyvals.model = thisEntity:GetModelName()
-	viewKeyvals.angles = thisEntity:GetAngles()
-	viewKeyvals.origin = thisEntity:GetAbsOrigin()
+	viewKeyvals.angles = handAttachment:GetAngles()
+	viewKeyvals.origin = handAttachment:GetAbsOrigin()
 	
 	physProp = SpawnEntityFromTableSynchronous(viewKeyvals.classname, viewKeyvals)
 	physProp:EnableUse(false)
 	
-	thisEntity:SetEntityName(DoUniqueString("suction_cup_ent"))	
+	attachedKeyvals.model = thisEntity:GetModelName()
+	attachedKeyvals.origin = handAttachment:GetAbsOrigin()
+	attachedKeyvals.angles = handAttachment:GetAngles()
+	propAttached = SpawnEntityFromTableSynchronous(attachedKeyvals.classname, attachedKeyvals)
+	propAttached:SetParent(handAttachment, "")
+	propAttached:AddEffects(32)	
+	
+	propAttached:SetEntityName(DoUniqueString("suction_cup_ent"))	
 	physProp:SetEntityName(DoUniqueString("suction_cup_phys"))
 	
-	constraintKeyvals.origin = thisEntity:GetAbsOrigin()
-	constraintKeyvals.attach2 = thisEntity:GetName()
+	constraintKeyvals.origin = handAttachment:GetAbsOrigin()
+	constraintKeyvals.attach2 = propAttached:GetName()
 	constraintKeyvals.attach1 = physProp:GetName()
 
 	physConstraint = SpawnEntityFromTableSynchronous(constraintKeyvals.classname, constraintKeyvals)
-	physConstraint:SetEntityName(DoUniqueString("suction_cup_const"))
-	DoEntFireByInstanceHandle(physConstraint, "TurnOn", "", 0, nil, nil)
-	physProp:SetParent(nil, "")
 end
 
 
@@ -159,9 +189,9 @@ function SetUnequipped()
 	local paintColor = handAttachment:GetRenderColor()
 	thisEntity:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
-	physConstraint:Kill()
-	physProp:Kill()
-	propAttached:Kill()
+	if physConstraint and IsValidEntity(physConstraint) then physConstraint:Destroy() end
+	if propAttached and IsValidEntity(propAttached) then propAttached:Destroy() end
+	if physProp and IsValidEntity(physProp) then physProp:Destroy() end
 	
 	physConstraint = nil
 	physProp = nil
@@ -182,7 +212,6 @@ function OnHandleInput( input )
 		return
 	end
 
-	-- Even uglier ternary operator
 	local IN_TRIGGER = (handID == 0 and IN_USE_HAND0 or IN_USE_HAND1)
 	local IN_GRIP = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
 
@@ -215,9 +244,10 @@ function OnTriggerPressed(self)
 	if isGrabbing
 	then
 		ReleaseHold(self)
+		RumbleController(1, 0.1, 40)
 	else
 		--physProp:SetSingleMeshGroup("no_phys")	
-		--physProp:SetAbsOrigin(thisEntity:GetAbsOrigin())
+		physProp:SetAbsOrigin(handAttachment:GetAbsOrigin())
 	end
 	isTargeting = false
 
@@ -230,7 +260,7 @@ function OnTriggerUnpressed(self)
 		thisEntity:SetThink(TraceGrab, "trace_grab", 0.5)
 		targetFound = false
 		isTargeting = true
-		physProp:SetSingleMeshGroup("on")
+		--physProp:SetSingleMeshGroup("on")
 	end
 end
 
@@ -239,23 +269,23 @@ end
 function ReleaseHold(self)
 	isGrabbing = false
 
-	--DoEntFireByInstanceHandle(propAttached, "SetBodygroup", "off", 0, nil, nil)
-	--DoEntFireByInstanceHandle(handAttachment, "SetBodygroup", "on", 0, nil, nil)
 	
-	StartSoundEvent("Suctioncup.Release", thisEntity)
+	StartSoundEvent("Suctioncup.Release", handAttachment)
 	RumbleController(2, 0.4, 20)
 	
-	if physProp then
-		physProp:SetAbsOrigin(propAttached:GetAbsOrigin() + RotatePosition(Vector(0,0,0), 
-				RotateOrientation(propAttached:GetAngles(), MUZZLE_ANGLES_OFFSET), Vector(-2, 0, 0)))
-		physProp:SetParent(nil, "")
-		DoEntFireByInstanceHandle(physConstraint, "TurnOn", "", 0, nil, nil)
-		physProp:SetSingleMeshGroup("on")
+	if physProp and IsValidEntity(physProp)
+	then
+		--physProp:SetSingleMeshGroup("on")
 		propAttached:AddEffects(32)	
 		physProp:RemoveEffects(32)	
+		propAttached:SetParent(handAttachment, "")
+		propAttached:SetAbsOrigin(handAttachment:GetOrigin())
+		physProp:SetAbsOrigin(handAttachment:GetOrigin())
+		local ang = handAttachment:GetAngles()
+		propAttached:SetAngles(ang.x, ang.y, ang.z)
 	end
 	
-	if grabbedEnt
+	if grabbedEnt and IsValidEntity(grabbedEnt)
 	then
 		grabbedEnt:SetParent(nil, "")
 		grabbedEnt = nil
@@ -325,8 +355,8 @@ function TraceGrab(self)
 		targetFound = true
 		isTargeting = false
 		isGrabbing = true
-		StartSoundEvent("Suctioncup.Attach", thisEntity)
-		RumbleController(2, 0.2, 20)
+		StartSoundEvent("Suctioncup.Attach", handAttachment)
+		RumbleController(2, 0.15, 30)
 	
 		if grabbedEnt
 		then
@@ -337,21 +367,19 @@ function TraceGrab(self)
 			g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity, true)
 
 			thisEntity:SetThink(GrabMoveFrame, "grab_move")
-			--DoEntFireByInstanceHandle(propAttached, "SetBodygroup", "on", 0, nil, nil)
-			--DoEntFireByInstanceHandle(handAttachment, "SetBodygroup", "off", 0, nil, nil)
+
 			physProp:AddEffects(32)	
 			propAttached:RemoveEffects(32)	
-			physProp:SetSingleMeshGroup("no_phys")
+			--physProp:SetSingleMeshGroup("no_phys")			
 			
-			physProp:SetParent(thisEntity, "")
-			DoEntFireByInstanceHandle(physConstraint, "TurnOff", "", 0, nil, nil)
-			
+			propAttached:SetParent(nil, "")
 			propAttached:SetOrigin(grabEndpoint + RotatePosition(Vector(0,0,0), 
 				RotateOrientation(physProp:GetAngles(), CARRY_ANGLES), Vector(0, 0, 0)))
 			
 			local fixupAngle = QAngle(90, 0, 0)
-			local normalAngles = RotateOrientation(VectorToAngles(traceTable.normal), fixupAngle)	
-			propAttached:SetAngles(normalAngles.x, normalAngles.y, normalAngles.z)
+			local normalAngles = RotateOrientation(VectorToAngles(-traceTable.normal), fixupAngle)
+			propAttached:SetForwardVector(normalAngles:Forward()) 
+			--propAttached:SetAngles(normalAngles.x, normalAngles.y, normalAngles.z)
 			-- TODO: roll the attached prop to match tool
 		end	
 		
@@ -371,8 +399,6 @@ function GrabMoveFrame(self)
 		return nil
 	end
 	
-	physProp:SetAbsOrigin(handAttachment:GetAbsOrigin())
-	
 	if not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
 	then
 		if (grabEndpoint - handEnt:GetOrigin()):Length() > RELEASE_DISTANCE
@@ -388,10 +414,7 @@ function GrabMoveFrame(self)
 	end
 	
 	local pullVector = nil
-	local pullPos = GetControllerPos() --handEnt:GetOrigin() - RotatePosition(Vector(0,0,0), 
-			--RotateOrientation(handEnt:GetAngles(), CARRY_ANGLES), MUZZLE_OFFSET) 
-			--+ RotatePosition(Vector(0,0,0), handEnt:GetAngles(), CARRY_OFFSET)
-	
+	local pullPos = GetControllerPos() 
 	local gunRelativePos = pullPos - playerEnt:GetHMDAnchor():GetOrigin()
 	
 	
@@ -412,7 +435,6 @@ function GrabMoveFrame(self)
 			pullVector = pullVector - Vector(0, 0, pullVector.z)
 		end
 		g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector)
-		--playerEnt:GetHMDAnchor():SetOrigin(playerEnt:GetHMDAnchor():GetOrigin() + pullVector)
 	end
 		
 	return GRAB_MOVE_INTERVAL
@@ -452,7 +474,7 @@ function GetGrabPos()
 end
 
 function GetControllerPos()
-	local idx = thisEntity:ScriptLookupAttachment("grabpos")
-	return thisEntity:GetAttachmentOrigin(idx)
+	local idx = handAttachment:ScriptLookupAttachment("grabpos")
+	return handAttachment:GetAttachmentOrigin(idx)
 end
 

@@ -1,0 +1,681 @@
+<!-- schema text {7e125a45-3d83-4043-b292-9e24f8ef27b4} generic {198980d8-3a93-4919-b4c6-dd1fb07a3a4b} -->
+CAuthPhysModel CAuthPhysModel_0
+{
+	CAuthPhysCollisionAttributes m_CollisionAttributes = CAuthPhysCollisionAttributes
+	{
+		string m_CollisionGroup = "default"
+		string[] m_InteractAs = 
+		[
+			
+		]
+		string[] m_InteractWith = 
+		[
+			
+		]
+		string[] m_InteractExclude = 
+		[
+			
+		]
+	}
+	string m_DMXReference = ""
+	string m_embeddedKeyvalues = ""
+	CAuthPhysBody[] m_Bodies = 
+	[
+		
+	]
+	CAuthPhysJoint[] m_Joints = 
+	[
+		
+	]
+	CAuthPhysFx m_Fx = CAuthPhysFx
+	{
+		CAuthPhysFx::CQuad[] m_Quads = 
+		[
+			CAuthPhysFx::CQuad
+			{
+				uint[] m_nNodes = 
+				[
+					4,
+					1,
+					0,
+					3
+				]
+				bool m_bUseRods = false
+			},
+			CAuthPhysFx::CQuad
+			{
+				uint[] m_nNodes = 
+				[
+					5,
+					2,
+					1,
+					4
+				]
+				bool m_bUseRods = false
+			},
+			CAuthPhysFx::CQuad
+			{
+				uint[] m_nNodes = 
+				[
+					7,
+					4,
+					3,
+					6
+				]
+				bool m_bUseRods = false
+			},
+			CAuthPhysFx::CQuad
+			{
+				uint[] m_nNodes = 
+				[
+					8,
+					5,
+					4,
+					7
+				]
+				bool m_bUseRods = false
+			}
+		]
+		CAuthPhysFx::CRod[] m_Rods = 
+		[
+			
+		]
+		CAuthPhysFx::CSpring[] m_Springs = 
+		[
+			
+		]
+		CAuthPhysFx::CConstraint[] m_Constraints = 
+		[
+			
+		]
+		CAuthPhysFx::CCapsule[] m_Capsules = 
+		[
+			
+		]
+		CAuthPhysFx::CBone[] m_Nodes = 
+		[
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = false
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.000000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = -1
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap1"
+				float(8) m_Transform = ( -4.205549, -5.442040, 0.000000, 0.000000, 0.983206, -0.182500, -0.000000, 0.000000 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			},
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = true
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.000000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = 0
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap2"
+				float(8) m_Transform = ( -4.346315, -5.808156, 0.000000, 0.000000, 0.707161, -0.067545, 0.700631, 0.066921 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			},
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = true
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.500000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = 1
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap3"
+				float(8) m_Transform = ( -4.932645, -8.849422, 0.000000, 0.000000, 0.703969, -0.066539, 0.703969, 0.066539 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			},
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = false
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.000000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = -1
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap1l"
+				float(8) m_Transform = ( -4.205548, -5.442040, 0.590552, 0.000000, 0.983206, -0.182500, -0.000000, 0.000000 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			},
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = true
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.000000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = 3
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap2l"
+				float(8) m_Transform = ( -4.346314, -5.808156, 0.590552, 0.000000, 0.707161, -0.067545, 0.700631, 0.066921 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			},
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = true
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.500000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = 4
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap3l"
+				float(8) m_Transform = ( -4.932643, -8.849421, 0.590552, 0.000000, 0.703969, -0.066539, 0.703969, 0.066539 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			},
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = false
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.000000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = -1
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap1r"
+				float(8) m_Transform = ( -4.205549, -5.442040, -0.590551, 0.000000, 0.983206, -0.182500, -0.000000, 0.000000 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			},
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = true
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.000000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = 6
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap2r"
+				float(8) m_Transform = ( -4.346315, -5.808156, -0.590551, 0.000000, 0.707161, -0.067545, 0.700630, 0.066921 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			},
+			CAuthPhysFx::CBone
+			{
+				bool m_bSimulated = true
+				bool m_bForceSimulated = false
+				bool m_bFreeRotation = true
+				bool m_bAnimRotation = false
+				bool m_bVirtual = false
+				bool m_bNeedNodeBase = false
+				bool m_bNeedsWorldCollision = false
+				bool m_bOsOffset = false
+				bool m_bSuspenders = false
+				float m_flWorldFriction = 0.000000
+				float m_flGroundFriction = 0.000000
+				float m_flLegacyStretchForce = 0.000000
+				float m_flMass = 1.000000
+				float m_flMassBias = 0.500000
+				int m_nFollowParent = -1
+				float m_flFollowWeight = 0.000000
+				float m_flCollisionRadius = 0.000000
+				FeNodeIntegrator_t m_Integrator = FeNodeIntegrator_t
+				{
+					float flPointDamping = 0.000000
+					float flAnimationForceAttraction = 0.000000
+					float flAnimationVertexAttraction = 0.000000
+					float flGravity = 360.000000
+				}
+				bool m_bHasMassOverride = false
+				uint m_nCollisionMask = 65535
+				int m_nParent = 7
+				FeSoftParent_t[] m_SoftParents = 
+				[
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					},
+					FeSoftParent_t
+					{
+						int nParent = -1
+						float flAlpha = 0.000000
+					}
+				]
+				string m_Name = "strap3r"
+				float(8) m_Transform = ( -4.932646, -8.849425, -0.590550, 0.000000, 0.703969, -0.066539, 0.703969, 0.066539 )
+				bool m_bUseRods = false
+				float m_flMakeRods = 0.000000
+				float m_flLocalForce = 1.000000
+				float m_flLocalRotation = 0.000000
+				float m_flBendStiffness = 0.000000
+				float m_flStrayRadiusInv = 0.000000
+				float m_flStrayRadiusRelaxationFactor = 1.000000
+			}
+		]
+		CAuthPhysFx::CCollisionSphere[] m_CollisionSpheres = 
+		[
+			
+		]
+		CAuthPhysFx::CCollisionPlane[] m_CollisionPlanes = 
+		[
+			
+		]
+		FeNodeBase_t[] m_PresetNodeBases = 
+		[
+			
+		]
+		FeTaperedCapsuleStretch_t[] m_TaperedCapsuleStretches = 
+		[
+			
+		]
+		FeTaperedCapsuleRigid_t[] m_TaperedCapsuleRigids = 
+		[
+			
+		]
+		FeSphereRigid_t[] m_SphereRigids = 
+		[
+			
+		]
+		CAuthPhysFx::CCtrlOffset[] m_CtrlOffsets = 
+		[
+			
+		]
+		FeFitInfluence_t[] m_FitInfluences = 
+		[
+			
+		]
+		float m_flDefaultSurfaceStretch = 0.000000
+		float m_flDefaultThreadStretch = 0.000000
+		float m_flDefaultGravityScale = 1.000000
+		float m_flDefaultVelAirDrag = 0.000000
+		float m_flDefaultExpAirDrag = 0.000000
+		float m_flDefaultVelQuadAirDrag = 0.000000
+		float m_flDefaultExpQuadAirDrag = 0.000000
+		float m_flDefaultVelRodAirDrag = 0.000000
+		float m_flDefaultExpRodAirDrag = 0.000000
+		float m_flQuadVelocitySmoothRate = 0.800000
+		float m_flRodVelocitySmoothRate = 0.000000
+		float m_flWindage = 0.000000
+		float m_flWindDrag = 0.000000
+		int m_nQuadVelocitySmoothIterations = 0
+		int m_nRodVelocitySmoothIterations = 0
+		float m_flDefaultGroundFriction = 0.000000
+		float m_flDefaultWorldCollisionPenetration = 0.000000
+		float m_flAddWorldCollisionRadius = 2.000000
+		float m_flLocalForce = 1.000000
+		float m_flLocalRotation = 0.000000
+		float m_flVolumetricSolveAmount = 0.000000
+		float m_flAddCurvature = 0.000000
+		float m_flQuadBendTolerance = 0.050000
+		bool m_bFollowTheLead = false
+		bool m_bUsePerNodeLocalForceAndRotation = false
+		bool m_bUninertialRods = false
+		bool m_bExplicitMasses = false
+		bool m_bUnitlessDamping = true
+		bool m_bForceWorldCollisionOnAllNodes = false
+		int m_nMergePriority = 2
+		bool m_bNewStyle = true
+		bool m_bCanCollideWithWorldMeshes = false
+		bool m_bCanCollideWithWorldCapsulesAndSpheres = false
+		bool m_bCanCollideWithWorldHulls = false
+		bool m_bAddStiffnessRods = true
+		bool m_bRigidEdgeHinges = false
+		bool m_bSoftSkinAnimation = false
+	}
+}

@@ -26,6 +26,17 @@ local SPAWN_ITEMS =
 		}
 	},
 	{
+		name = "Paper plane",
+		img = "",
+		isTool = false,
+		keyvals =
+		{
+			targetname = "",
+			model = "models/props_toys/paper_plane1.vmdl";
+			vscripts = "prop_paper_plane";
+		}
+	},
+	{
 		name = "Round bomb",
 		img = "",
 		isTool = false,
@@ -64,12 +75,14 @@ local SPAWN_ITEMS =
 			model = "models/tools/spraycan.vmdl";
 			vscripts = "tool_spraycan";
 			health = 100;
+			HasCollisionInHand = 1;
 			--physdamagescale = 1;
 			
 		},
 		modelPrecache = 
 		{
-			"models/tools/spraycan_colorwheel.vmdl"
+			"models/tools/spraycan_colorwheel.vmdl";
+			"models/development/invisiblebox.vmdl"
 		}
 	},
 	{
@@ -141,6 +154,7 @@ local SPAWN_ITEMS =
 			model = "models/tools/jetpack.vmdl";
 			vscripts = "tool_jetpack";
 			massScale = 0.2;
+			HasCollisionInHand = 0;
 		},
 		modelPrecache = 
 		{
@@ -170,7 +184,7 @@ local SPAWN_ITEMS =
 			targetname = "",
 			model = "models/weapons/suction_cup.vmdl";
 			vscripts = "tool_suction_cup";
-			HasCollisionInHand = 1;
+			HasCollisionInHand = 0;
 		}
 	},
 	{
@@ -191,7 +205,7 @@ local SPAWN_ITEMS =
 		}
 	},
 	{
-		name = "Barnacle grapple",
+		name = "Barnacle Grapple",
 		img = "",
 		isTool = true,
 		keyvals =
@@ -286,6 +300,7 @@ local SPAWN_ITEMS =
 			targetname = "",
 			model = "models/tools/sun_tool.vmdl";
 			vscripts = "sun_tool";
+			HasCollisionInHand = 1;
 		},
 		modelPrecache = 
 		{

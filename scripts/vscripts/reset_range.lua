@@ -20,7 +20,7 @@ function Reset()
 		barrelEnt:SetOrigin(barrels[barrelEnt].origin)
 		local angles = barrels[barrelEnt].angles
 		barrelEnt:SetAngles(angles.x, angles.y, angles.z)
-		
+		EntFireByHandle(thisEntity, barrelEnt, "Wake")
 		barrelEnt = Entities:FindByName(barrelEnt, "barrel")
 	end
 	

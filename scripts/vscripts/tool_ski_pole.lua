@@ -1,7 +1,7 @@
 --[[
 	Ski pole entity script
 	
-	Copyright (c) 2017 Rectus
+	Copyright (c) 2017-2019 Rectus
 	
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -106,6 +106,7 @@ local animKeyvals =
 {
 	targetname = "pole_anim";
 	model = "models/props_slope/ski_pole_tool_animated.vmdl";
+	targetname = "pole_anim";
 	solid = 0
 }
 
@@ -113,6 +114,7 @@ local compassKeyvals =
 {
 	targetname = "pole_compass";
 	model = "models/props_slope/ski_pole_tool_compass.vmdl";
+	targetname = "pole_compass";
 	vscripts = "compass";
 	solid = 0
 }
@@ -126,27 +128,60 @@ function Precache(context)
 	
 end
 
-function Activate()
+function Activate(activateType)
 
-	animKeyvals.origin = thisEntity:GetOrigin()
-	animKeyvals.angles = thisEntity:GetAngles()
-	poleAnim = SpawnEntityFromTableSynchronous("prop_dynamic", animKeyvals)
-	poleAnim:SetParent(thisEntity, "")
-	poleAnim:SetOrigin(thisEntity:GetOrigin())
-	poleAnim:SetLocalAngles(0,0,0)
-	
+	if activateType == ACTIVATE_TYPE_ONRESTORE -- on game load
+	then
+			
+		-- Hack to properly handle restoration from saves, 
+		-- since variables written by Activate() on restore don't end up in the script scope.
+		DoEntFireByInstanceHandle(thisEntity, "CallScriptFunction", "RestoreState", 0, thisEntity, thisEntity)
+		
+	else
+
+		animKeyvals.origin = thisEntity:GetOrigin()
+		animKeyvals.angles = thisEntity:GetAngles()
+		poleAnim = SpawnEntityFromTableSynchronous("prop_dynamic", animKeyvals)
+		poleAnim:SetParent(thisEntity, "")
+		poleAnim:SetOrigin(thisEntity:GetOrigin())
+		poleAnim:SetLocalAngles(0,0,0)
+		
+		DoEntFireByInstanceHandle(poleAnim, "SetAnimationNoReset", "retracted", 0 , nil, nil)
+		DoEntFireByInstanceHandle(poleAnim, "SetDefaultAnimation", "retracted", 0 , nil, nil)
+		
+		compassKeyvals.origin = thisEntity:GetOrigin()
+		compassKeyvals.angles = thisEntity:GetAngles()	
+		compass = SpawnEntityFromTableSynchronous("prop_dynamic", compassKeyvals)
+		compass:SetParent(thisEntity, "compass")
+		compass:SetLocalOrigin(Vector(0,0,0))
+		
+		CustomGameEventManager:RegisterListener("pause_panel_toggle_skis", ToggleSkis)
+	end
+end
+
+function RestoreState()
+
+	thisEntity:GetOrCreatePrivateScriptScope() -- Script scopes do not seem to be properly created on restore
+
+	local children = thisEntity:GetChildren()
+	for idx, child in pairs(children)
+	do
+		print(child:GetName())
+		if child:GetName() == animKeyvals.targetname
+		then
+			poleAnim = child
+		elseif child:GetName() == compassKeyvals.targetname
+		then
+			compass = child
+		end
+	end
+
 	DoEntFireByInstanceHandle(poleAnim, "SetAnimationNoReset", "retracted", 0 , nil, nil)
 	DoEntFireByInstanceHandle(poleAnim, "SetDefaultAnimation", "retracted", 0 , nil, nil)
-	
-	compassKeyvals.origin = thisEntity:GetOrigin()
-	compassKeyvals.angles = thisEntity:GetAngles()	
-	compass = SpawnEntityFromTableSynchronous("prop_dynamic", compassKeyvals)
-	compass:SetParent(thisEntity, "compass")
-	compass:SetLocalOrigin(Vector(0,0,0))
-	
 	CustomGameEventManager:RegisterListener("pause_panel_toggle_skis", ToggleSkis)
-
+	
 end
+
 
 function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
@@ -252,6 +287,7 @@ function OnHandleInput(input)
 	local IN_PAD = (handID == 0 and IN_PAD_HAND0 or IN_PAD_HAND1)
 	
 
+	--[[
 	if playerEnt:GetVRControllerType() == VR_CONTROLLER_TYPE_TOUCH then
 		
 		local IN_GRIP_HOLD = (handID == 0 and IN_PAD_HAND0 or IN_PAD_HAND1)
@@ -281,7 +317,7 @@ function OnHandleInput(input)
 			input.buttonsReleased:ClearBit(IN_PAD)
 		end
 	end
-	
+	]]
 	
 
 	
@@ -328,6 +364,7 @@ function OnHandleInput(input)
 	end]]
 	
 	
+	--[[
 	if input.buttonsPressed:IsBitSet(IN_GRIP)
 	then
 		input.buttonsPressed:ClearBit(IN_GRIP)
@@ -368,7 +405,7 @@ function OnHandleInput(input)
 			EmitSoundOn("Pole.Fail", handAttachment)
 		end
 	end
-
+	]]
 	return input
 end
 

@@ -24,9 +24,7 @@ function SetUnequipped()
 	handAttachment = nil
 	
 	isPulling = false
-	thisEntity:SetThink(Release, "release_delay", 0.1)
-	thisEntity:SetAbsOrigin(Vector(-100000, -100000, -100000))
-	thisEntity:SetLocalAngles(0, 0, 0)
+	thisEntity:Kill()
 
 	return true
 end
@@ -42,7 +40,6 @@ function OnHandleInput(input)
 
 	end
 	
-	-- Catch the unpress event, so you don't drop the tool.
 	if input.buttonsReleased:IsBitSet(nIN_TRIGGER) 
 	then
 		input.buttonsReleased:ClearBit(nIN_TRIGGER)
@@ -59,10 +56,6 @@ function OnHandleInput(input)
 	return input;
 end
 
-function Release()
-	thisEntity:SetLocalOrigin(Vector(0,0,0))
-	thisEntity:SetLocalAngles(0, 0, 0)
-end
 
 
 function GetToolOrigin()

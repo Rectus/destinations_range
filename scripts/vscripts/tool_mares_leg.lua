@@ -202,7 +202,7 @@ end
 
 function Fire()
 	state = STATE_FIRED
-	StartSoundEvent("Maresleg.Fire", handAttachment)
+	StartSoundEventFromPosition("Maresleg.Fire", handAttachment:GetCenter())
 	
 	
 	local muzzleFlash = ParticleManager:CreateParticle("particles/weapons/mares_leg_muzzle_flash.vpcf", 

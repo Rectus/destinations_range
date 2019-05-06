@@ -150,7 +150,7 @@ function LaunchGrapple()
 	
 		if not grappleTargetFound
 		then
-			StartSoundEvent("Grapple_Miss", grappleBaseEnt)
+			StartSoundEvent("Grapple_Miss", grappleHandAttachment)
 			return
 		end
 	
@@ -170,7 +170,7 @@ function LaunchGrapple()
 			local smoke = ParticleManager:CreateParticle("particles/tools/grapple_launch.vpcf", 
 				PATTACH_ABSORIGIN, grappleHook)
 			ParticleManager:SetParticleControlEnt(smoke, 
-				0, grappleHook, PATTACH_POINT_FOLLOW, "", Vector(0, 0, 0), false)
+				0, grappleHook, PATTACH_CUSTOMORIGIN_FOLLOW, nil, Vector(0, 0, 0), false)
 			
 		
 			grappleDistanceLeft = (grapplePullEndpoint - GetMuzzlePos()):Length()
@@ -266,7 +266,7 @@ function RetractGrappleLine()
 	end
 
 	local segment = ParticleManager:CreateParticle("particles/tools/grapple_wire_retract.vpcf", 
-			PATTACH_WORLDORIGIN, grappleHandAttachment)
+			PATTACH_CUSTOMORIGIN, grappleHandAttachment)
 	
 	if grappleWireParticle > 0 then
 	
@@ -274,7 +274,7 @@ function RetractGrappleLine()
 		grappleWireParticle = 0
 	
 		ParticleManager:SetParticleControl(segment, 1, grapplePullEndpoint)
-		ParticleManager:SetParticleControlForward(segment, 1, grappleHook:GetAngles():Forward())
+		ParticleManager:SetParticleControlForward(segment, 1, grapplePullEndpoint - grappleHandAttachment:GetOrigin())
 		
 		if #grappleWireRetractPoints > 0 then
 			ParticleManager:SetParticleControl(segment, 0, grappleWireRetractPoints[1])
@@ -314,6 +314,7 @@ function RetractGrappleLine()
 		
 		ParticleManager:SetParticleControlEnt(segment, 0, grappleHandAttachment, 
 			PATTACH_POINT_FOLLOW, "wire", Vector(0,0,0), true)
+		ParticleManager:SetParticleControl(segment, 0, GetMuzzlePos())
 		grappleHook:SetParent(grappleHandAttachment, "")
 		grappleHook:SetLocalOrigin(Vector(0,0,0))
 		grappleHook:SetLocalAngles(0,0,0)
@@ -948,14 +949,14 @@ function UpdateGrappleLineParticleFront()
 
 			ParticleManager:DestroyParticle(grappleWireParticle, true)
 			grappleWireParticle = ParticleManager:CreateParticle("particles/tools/grapple_wire.vpcf", 
-				PATTACH_WORLDORIGIN, grappleHandAttachment)
+				PATTACH_CUSTOMORIGIN, grappleHandAttachment)
 			ParticleManager:SetParticleControl(grappleWireParticle, 0, grapplePoints[1])
 			SetWireEndpoint()
 	
 			
 		for idx = 1, #grapplePoints - #grappleWirePoints  do
 			local point = ParticleManager:CreateParticle("particles/tools/grapple_wire.vpcf", 
-				PATTACH_WORLDORIGIN, grappleHandAttachment)
+				PATTACH_CUSTOMORIGIN, grappleHandAttachment)
 			ParticleManager:SetParticleControl(point, 1, grapplePoints[idx])
 			ParticleManager:SetParticleControl(point, 0, grapplePoints[idx + 1])
 
@@ -987,21 +988,21 @@ function UpdateGrappleLineParticle()
 		if #grappleWirePoints == 0 then
 			ParticleManager:DestroyParticle(grappleWireParticle, true)
 			grappleWireParticle = ParticleManager:CreateParticle("particles/tools/grapple_wire.vpcf", 
-				PATTACH_WORLDORIGIN, grappleHandAttachment)
+				PATTACH_CUSTOMORIGIN, grappleHandAttachment)
 			ParticleManager:SetParticleControl(grappleWireParticle, 0, grapplePoints[1])
 			SetWireEndpoint()
 			
 		else	
 			ParticleManager:DestroyParticle(grappleWirePoints[#grappleWirePoints], true)
 			grappleWirePoints[#grappleWirePoints] = ParticleManager:CreateParticle("particles/tools/grapple_wire.vpcf", 
-				PATTACH_WORLDORIGIN, grappleHandAttachment)
+				PATTACH_CUSTOMORIGIN, grappleHandAttachment)
 			ParticleManager:SetParticleControl(grappleWirePoints[#grappleWirePoints], 0, grapplePoints[#grappleWirePoints + 1])
 			ParticleManager:SetParticleControl(grappleWirePoints[#grappleWirePoints], 1, grapplePoints[#grappleWirePoints])
 		end
 			
 		for idx = #grappleWirePoints + 1, #grapplePoints  do
 			local point = ParticleManager:CreateParticle("particles/tools/grapple_wire.vpcf", 
-				PATTACH_WORLDORIGIN, grappleHandAttachment)
+				PATTACH_CUSTOMORIGIN, grappleHandAttachment)
 			ParticleManager:SetParticleControl(point, 1, grapplePoints[idx])
 				
 			if idx + 1 > #grapplePoints then
