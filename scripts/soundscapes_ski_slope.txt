@@ -1,0 +1,52 @@
+
+"ski_slope" 
+{
+	"playlooping"
+	{
+		"volume"		"0.15"
+		"pitch"			"100"
+		//"soundlevel" 	"SNDLVL_60dB"
+		"wave"			"sounds/diagnostics/wind_light_foliage_lp_01.vsnd"
+	}
+	
+
+	
+	"playlooping"
+	{
+
+		"volume"		"0.15, 0.2"
+		"pitch"			"90, 100"
+		"soundlevel" 	"SNDLVL_60dB"
+		"wave"			"sounds/ski_slope/wind_constant.vsnd"
+	}
+
+}
+
+"cabin" 
+{
+	"playlooping"
+	{
+		"volume"		"0.7"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"		"0"
+		"wave"			"sounds/ski_slope/fireplace.vsnd"
+	}
+	
+
+	
+	"playlooping"
+	{
+
+		"volume"		"0.2"
+		"pitch"			"90"
+		"soundlevel" 	"SNDLVL_60dB"
+		"position"		"1"
+		"wave"			"sounds/ski_slope/wind_constant.vsnd"
+	}
+
+}
+
+
+
+	

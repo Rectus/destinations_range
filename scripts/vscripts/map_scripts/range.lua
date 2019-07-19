@@ -10,7 +10,7 @@ local SPAWN_ITEMS =
 {
 	{
 		name = "Locomotion tool",
-		img = "",
+		img = "file://{resources}/images/tool_locomotion.png",
 		isTool = true,
 		keyvals =
 		{
@@ -23,6 +23,18 @@ local SPAWN_ITEMS =
 		{
 			"models/tools/locomotion_tool_grapple.vmdl",
 			"models/tools/locomotion_tool_strap.vmdl"
+		}
+	},
+	{
+		name = "Laser pistol",
+		img = "",
+		isTool = true,
+		keyvals =
+		{
+			targetname = "",
+			model = "models/weapons/laser_pistol.vmdl";
+			vscripts = "tool_laser_pistol";
+			HasCollisionInHand = 0;
 		}
 	},
 	{
@@ -353,25 +365,43 @@ g_VRScript.playerPhysController:Init()
 -- Enables pauisng player movement and the spawn menu.
 g_VRScript.pauseManager = CPauseManager(SPAWN_ITEMS)
 
+-- If uncommented, enables the pause menu to store player data when they connect.
+--g_VRScript.pauseManager:ListenPlayerConnect()
+
 -- Precache all the assets used by the spawn menu. 
 function OnPrecache(context)
 	g_VRScript.pauseManager:DoPrecache(context)
+	PrecacheModel("models/editor/axis_helper.vmdl", context)
 end
 
 function OnActivate()
 	g_VRScript.pauseManager:Init()
 	CustomGameEventManager:RegisterListener("toggle_debug_draw", ToggleDebugDraw)
+	g_VRScript.debugEnabled = false
 end
 
 
 function ToggleDebugDraw()
 	g_VRScript.playerPhysController:ToggleDebugDraw()
+	g_VRScript.debugEnabled = not g_VRScript.debugEnabled
 end
 
 
+-- Utility function for passing call through to functions if debug mode is enabled.
+-- Note that arguments are evaluated regardless of if the function gets called.
+function _G.DebugCall(func, ...)
+	if g_VRScript.debugEnabled
+	then
+		return func(...)
+	end
+	return nil
+end
+
 
 -- Utility function for printing large scopes
-function PrintTable(table, level, maxlevel)
+function _G.PrintTable(table, level, maxlevel)
+	level = level or 0
+	maxlevel = maxlevel or 8
 
 	local indent = ""
 	
@@ -415,3 +445,5 @@ function PrintTable(table, level, maxlevel)
 		end
 	end
 end
+
+ 

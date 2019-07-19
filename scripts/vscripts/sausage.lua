@@ -15,7 +15,7 @@ function EnablePickup()
 	thisEntity:EnableUse(true)
 end
 
-function OnPickedUp(self, hand)
+function OnPickedUp(this, hand)
 	
 	local sausage = SpawnSausage()
 	StartSoundEvent("Attempt.Grab", sausage)
@@ -44,4 +44,16 @@ function SpawnSausage()
 	sausage:ApplyLocalAngularVelocityImpulse(RotationDeltaAsAngularVelocity(QAngle(0,0,-90), ang) * 0.3)
 	
 	return sausage
+end
+
+function OnEaten(eater, mouthPos)
+
+	StartSoundEvent("Attempt.Grab", thisEntity)
+	
+	thisEntity:ApplyAbsVelocityImpulse((thisEntity:GetCenter() - mouthPos):Normalized() * 100)
+	thisEntity:ApplyAbsVelocityImpulse(Vector(RandomFloat(-5, 5),RandomFloat(-5, 5), RandomFloat(20, 80)))
+	thisEntity:ApplyLocalAngularVelocityImpulse(Vector(RandomFloat(-20, 20), RandomFloat(50, 500), RandomFloat(-20, 20)))
+	thisEntity:ApplyLocalAngularVelocityImpulse(RotationDeltaAsAngularVelocity(QAngle(0,0,-90), thisEntity:GetAngles()) * 0.3)
+	
+	return nil 
 end

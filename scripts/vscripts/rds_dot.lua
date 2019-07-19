@@ -4,7 +4,7 @@ LENS_POS = Vector(0, 0, 1.5)
 DOT_MOVE_FACTOR = 2.0
 DOT_UPDATE_INTERVAL = 0.05
 
-function Think(self)
+function Think()
 	local player = Entities:FindByClassname(nil, "player")
 	local closestPlayer = nil
 	local distance = 0

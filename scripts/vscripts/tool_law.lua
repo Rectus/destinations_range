@@ -102,7 +102,7 @@ function RestoreState()
 end
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	controller = pHand
 	playerEnt = pPlayer
@@ -235,7 +235,7 @@ function OnTriggerPressed()
 end
 
 
-function FireRumble(self)
+function FireRumble()
 	if controller
 	then
 		controller:FireHapticPulse(2)

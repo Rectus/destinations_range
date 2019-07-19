@@ -27,7 +27,7 @@ local GRAPPLE_MAX_DISTANCE = 3000
 
 local GRAPPLE_SPEED = 64
 local GRAPPLE_PULL_FORCE = 200
-local GRAPPLE_PULL_INTERVAL = 0.022
+local GRAPPLE_PULL_INTERVAL = 0.010
 local GRAPPLE_PULL_DELAY = 0.5
 local GRAPPLE_REEL_SOUND_INTERVAL = 10
 local GRAPPLE_REEL_ANIM_INTERVAL = 0.2
@@ -333,7 +333,7 @@ function GrappleHookRenderDelay()
 end
 
 
-function TraceGrapple(self)
+function TraceGrapple(this)
 	local traceTable =
 	{
 		startpos = GetMuzzlePos();
@@ -400,7 +400,7 @@ function TraceGrapple(self)
 end
 
 
-function TraceBeam(self)
+function TraceBeam(this)
 	if not grappleIsTargeting
 	then 
 		return nil
@@ -485,7 +485,7 @@ function TraceBeam(self)
 end
 
 
-function GrappleTravelFrame(self)
+function GrappleTravelFrame(this)
 	if not grappleIsPulling then
 		return nil
 	end
@@ -566,7 +566,7 @@ function LineDelayPosFixup()
 end
 
 
-function GrapplePullFrame(self)
+function GrapplePullFrame(this)
 	
 	grapplePullDelay = false
 	
@@ -1070,7 +1070,7 @@ end
 
 
 
-function GrappleAnimationFrame(self)
+function GrappleAnimationFrame()
 if not grappleIsPulling
 	then
 		RumbleController(1, 0.1, 100)

@@ -19,8 +19,8 @@
 		<DestinationsTutorialPanel id="testclass6" />
 		<DestinationsWelcomePanel id="testclass7" />
 		<FriendsItem id="testclass8" />
-		<GameTrophyAppLogoPanel id="testclass9" />
-		<GameTrophyDetailsPanel id="testclass10" />
+		<!--<GameTrophyAppLogoPanel id="testclass9" />-->
+		<!--<GameTrophyDetailsPanel id="testclass10" />-->
 		<HTML id="testclass11" />
 		<LobbyItem id="testclass12" />
 		<!--<snippet id="testclass13" />-->
@@ -30,7 +30,7 @@
 		<SteamToursNotifications id="testclass17" />
 		<SteamToursPlayerBillboard id="testclass18" />
 		<SteamToursRecentApps id="testclass19" />
-		<SteamToursUGCImage id="testclass20" />
+		<!--<SteamToursUGCImage id="testclass20" />-->
 		<TrackpadUIPanel id="testclass21" />
 		<Label id="testclass22" />
 		<DropDown id="testclass23" />

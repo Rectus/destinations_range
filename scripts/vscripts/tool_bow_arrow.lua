@@ -110,7 +110,7 @@ function CheckParentAttachment(ent)
 	return ""
 end
 
-function OnPickedUp(self, hand)
+function OnPickedUp(this, hand)
 	tracing = false
 	decay = false
 	carrier = hand:GetPlayer()
@@ -118,7 +118,7 @@ function OnPickedUp(self, hand)
 	DoEntFireByInstanceHandle(thisEntity, "enablemotion", "", 0 , thisEntity, thisEntity)
 end
 
-function OnDropped(self, hand)
+function OnDropped(this, hand)
 	carrier = nil
 end
 

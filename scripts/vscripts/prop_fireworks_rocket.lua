@@ -137,7 +137,7 @@ function Fire(player)
 end
 
 
-function ThrustThink(self)	
+function ThrustThink()	
 	local forwardDir = thisEntity:GetAngles():Forward()
 	thisEntity:ApplyAbsVelocityImpulse(forwardDir * ROCKET_THRUST * THRUST_INTERVAL)
 	

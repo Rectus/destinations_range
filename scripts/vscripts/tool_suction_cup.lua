@@ -22,18 +22,17 @@
 	THE SOFTWARE.
 ]]--
 
-
-
+local MathUtils = require "libraries.mathutils"
 
 local GRAB_MAX_DISTANCE = 3
 local GRAB_PULL_MIN_DISTANCE = 0.1
-local GRAB_MOVE_INTERVAL = 0.022
+local GRAB_MOVE_INTERVAL = 0.01
 local MUZZLE_OFFSET = Vector(0, 0, -0.2)
 local MUZZLE_ANGLES_OFFSET = QAngle(90, 0, 0) 
 
 local GRAB_PULL_PLAYER_SPEED = 8
 local GRAB_PULL_PLAYER_EASE_DISTANCE = 16
-local GRAB_TRACE_INTERVAL = 0.011
+local GRAB_TRACE_INTERVAL = 0.008
 local RELEASE_DISTANCE = 8
 
 local CARRY_OFFSET = Vector(3.5, 0, -3)
@@ -72,18 +71,7 @@ local attachedKeyvals = {
 	model = "models/weapons/suction_cup.vmdl";
 	solid = 0
 }
---[[
-local constraintKeyvals = {
-	classname = "phys_constraint";
-	targetname = "";
-	attach1 = "";
-	attach2 = "";
-	linearfrequency = 10;
-	lineardampingratio = 2.0;
-	enablelinearconstraint = 1;
-	enableangularconstraint = 1
-}
-constraintKeyvals["spawnflags#0"] = "1"]]
+
 
 local constraintKeyvals = {
 	classname = "phys_genericconstraint";
@@ -130,7 +118,7 @@ function Precache(context)
 end
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
@@ -183,7 +171,7 @@ end
 function SetUnequipped()
 	if isGrabbing
 	then
-		ReleaseHold(self)
+		ReleaseHold()
 	end
 	
 	local paintColor = handAttachment:GetRenderColor()
@@ -213,37 +201,26 @@ function OnHandleInput( input )
 	end
 
 	local IN_TRIGGER = (handID == 0 and IN_USE_HAND0 or IN_USE_HAND1)
-	local IN_GRIP = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
 
-	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
-		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		OnTriggerPressed(self)
+		OnTriggerPressed()
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
 	then
-		input.buttonsReleased:ClearBit(IN_TRIGGER)
-		OnTriggerUnpressed(self)
+		OnTriggerUnpressed()
 	end
-	
-	if input.buttonsReleased:IsBitSet(IN_GRIP)
-	then
-		input.buttonsReleased:ClearBit(IN_GRIP)
-		thisEntity:ForceDropTool();
-	end
-
 
 	return input;
 end
 
 
-function OnTriggerPressed(self)
+function OnTriggerPressed()
 	
 	if isGrabbing
 	then
-		ReleaseHold(self)
+		ReleaseHold()
 		RumbleController(1, 0.1, 40)
 	else
 		--physProp:SetSingleMeshGroup("no_phys")	
@@ -254,7 +231,7 @@ function OnTriggerPressed(self)
 end
 
 
-function OnTriggerUnpressed(self)
+function OnTriggerUnpressed()
 	if not isGrabbing
 	then
 		thisEntity:SetThink(TraceGrab, "trace_grab", 0.5)
@@ -266,7 +243,7 @@ end
 
 
 
-function ReleaseHold(self)
+function ReleaseHold()
 	isGrabbing = false
 
 	
@@ -275,7 +252,6 @@ function ReleaseHold(self)
 	
 	if physProp and IsValidEntity(physProp)
 	then
-		--physProp:SetSingleMeshGroup("on")
 		propAttached:AddEffects(32)	
 		physProp:RemoveEffects(32)	
 		propAttached:SetParent(handAttachment, "")
@@ -299,7 +275,7 @@ function ReleaseHold(self)
 end
 
 
-function TraceGrab(self)
+function TraceGrab()
 	if not isTargeting
 	then 
 		return nil
@@ -369,18 +345,17 @@ function TraceGrab(self)
 			thisEntity:SetThink(GrabMoveFrame, "grab_move")
 
 			physProp:AddEffects(32)	
-			propAttached:RemoveEffects(32)	
-			--physProp:SetSingleMeshGroup("no_phys")			
+			propAttached:RemoveEffects(32)				
 			
 			propAttached:SetParent(nil, "")
 			propAttached:SetOrigin(grabEndpoint + RotatePosition(Vector(0,0,0), 
 				RotateOrientation(physProp:GetAngles(), CARRY_ANGLES), Vector(0, 0, 0)))
 			
 			local fixupAngle = QAngle(90, 0, 0)
-			local normalAngles = RotateOrientation(VectorToAngles(-traceTable.normal), fixupAngle)
-			propAttached:SetForwardVector(normalAngles:Forward()) 
-			--propAttached:SetAngles(normalAngles.x, normalAngles.y, normalAngles.z)
-			-- TODO: roll the attached prop to match tool
+			local normalAngles = RotateOrientation(VectorToAngles(traceTable.normal), fixupAngle)
+			local yaw = MathUtils.TransformMatrix(physProp):GetInverse():GetOrientation().y
+			local orientation = RotateOrientation(normalAngles, QAngle(0, AngleDiff(normalAngles.y, yaw), 0))
+			propAttached:SetAngles(orientation.x, orientation.y, orientation.z)
 		end	
 		
 		return nil
@@ -393,7 +368,7 @@ end
 
 
 
-function GrabMoveFrame(self)
+function GrabMoveFrame()
 	if not isGrabbing
 	then
 		return nil
@@ -403,7 +378,7 @@ function GrabMoveFrame(self)
 	then
 		if (grabEndpoint - handEnt:GetOrigin()):Length() > RELEASE_DISTANCE
 		then
-			ReleaseHold(self)
+			ReleaseHold()
 			thisEntity:SetThink(TraceGrab, "trace_grab", 0.5)
 			targetFound = false
 			isTargeting = true
@@ -429,12 +404,8 @@ function GrabMoveFrame(self)
 		then 
 			pullVector = pullVector * distance / GRAB_PULL_PLAYER_EASE_DISTANCE
 		end
-		-- Prevent player from going through floors
-		if pullVector.z < 0 and g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) <= 0
-		then
-			pullVector = pullVector - Vector(0, 0, pullVector.z)
-		end
-		g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector)
+
+		g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector, false, false, thisEntity)
 	end
 		
 	return GRAB_MOVE_INTERVAL

@@ -4,6 +4,7 @@
 @define background_base: #00a0a0a0;
 @define background_trans: #00c0c000;
 
+
 .ConfigPanel {
 	background-color: gradient( radial, 50% 50%, 0% 0%, 50% 50%, from( background_base ), to( background_trans ) );
 	opacity-mask: url( "file://{resources}/images/custom_destination/holoscreen_opacity.png") 0.6;
@@ -19,6 +20,17 @@
 
 .ConfigPanel.Visible {
 	opacity: 1;
+}
+
+
+.ConfigPanelHorizontalPane {
+	width: fit-children;
+	height: fit-children;
+	padding: 0px;
+	padding-bottom: 0px;
+	vertical-align: top;
+	horizontal-align: left;
+	flow-children: right;
 }
 
 
@@ -40,23 +52,23 @@
 }
 
 .ConfigPanelDescriptionBox {
-	background-color: #00c0c0a0;
-	width: 100%;
+	background-color: #00a0a0a0;
+	width: 60%;
 	height: fit-children;
 	border-radius: 10px;
-	min-height: 150px;
-	padding: 25px;
+	min-height: 280px;
+	padding: 15px;
 	padding-top: 25px;
 	padding-bottom: 25px;
 	vertical-align: top;
-	margin: 20px;
+	margin: 0px;
 	horizontal-align: center;
 }
 
 .ConfigPanelDescriptionText {
 	background-color: gradient( radial, 50% 50%, 0% 0%, 50% 50%, from( #00c0c040 ), to( #00c0c000 ) );
 	width: 100%;
-	font-size: 20px;
+	font-size: 27px;
 	text-align: left;
 	color: text_color;
 }
@@ -78,15 +90,15 @@
 
 .ConfigPanelButtonHeadingText {
 	width: 100%;
-	font-size: 25px;
+	font-size: 27px;
 	text-align: left;
 	color: text_color;
 }
 
 .ConfigPanelButtonPane {
 	background-color: gradient( radial, 50% 50%, 0% 0%, 50% 50%, from( #00c0c040 ), to( #00c0c000 ) );
-	width: 100%;
-	height: fit-children;
+	width: fit-children;
+	height: 130px;
 	padding: 10px;
 
 	padding-bottom: 0px;
@@ -102,7 +114,7 @@
 	padding: 20px;
 
 	margin: 4px;
-	background-color: #00a0a060;
+	background-color: #00a0a080;
 	flow-children: right;
 	
 	/*transition-property: border;
@@ -120,7 +132,7 @@
 
 .ConfigPanelButton:hover,
 .ConfigPanelButton:focus {
-	//background-color: #00d0d070;	
+	//background-color: #00d0d090;	
 	//pre-transform-scale2d: 1;
 	border: 2px solid text_color;
 }
@@ -130,19 +142,24 @@
 	margin: 2px;
 }
 
+.ConfigPanelButton:selected {
+	border: 4px solid text_color;
+	margin: 2px;
+}
+
 .ConfigPanelButton.Selected {
-	background-color: #60e0e080;
+	background-color: #60e0e0a0;
 
 }
 
 .ConfigPanelButton:active {
-	background-color: #60e0e080;	
+	background-color: #60e0e0a0;	
 
 }
 
 .ConfigPanelButtonLabel {
 	/*width: 100%;*/
-	font-size: 20px;
+	font-size: 25px;
 	text-align: center;
 	color: text_color;
 }
@@ -160,4 +177,77 @@
 	color: text_color;
 	vertical-align: center;
 	padding-left: 40px;
+}
+
+
+.ConfigPanelSlider {
+
+	width: 350px;
+	height: 80px;
+	/*color: text_color;*/
+	padding: 5px;
+	vertical-align: center;
+	horizontal-align: left;
+	/*background-color: #00a0a060;*/
+}
+
+.ConfigPanelSlider #SliderThumb {
+
+	border: 2px solid #ffffff10;
+	width: 30px;
+	height: 60px;
+	
+	background-color: #00a0a080;
+
+}
+
+.ConfigPanelSlider #SliderTrackProgress {
+
+	background-color: #60e0e0a0;
+
+}
+
+.ConfigPanelSliderPane {
+	width: fit-children;
+	height: 80px;
+	border: 2px solid #ffffff10;
+	border-radius: 10px;
+	padding: 20px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+
+	margin: 2px;
+
+	vertical-align: top;
+	horizontal-align: center;
+	flow-children: right-wrap;
+	
+}
+
+.ConfigPanelSliderPane:hover,
+.ConfigPanelSliderPane:focus {
+	border: 2px solid text_color;
+}
+
+.ConfigPanelSliderPane.Cursor {
+	border: 4px solid text_color;
+	margin: 2px;
+}
+
+.ConfigPanelSliderPane.Selected {
+	background-color: #60e0e080;
+}
+
+.ConfigPanelSliderPane:active {
+	background-color: #60e0e080;	
+}
+
+
+.ConfigPanelSliderValue {
+	font-size: 27px;
+	padding: 10px;
+	text-align: center;
+	vertical-align: center;
+	horizontal-align: right;
+	color: text_color;
 }

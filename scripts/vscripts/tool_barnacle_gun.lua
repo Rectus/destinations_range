@@ -103,7 +103,7 @@ end
 
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
@@ -657,15 +657,8 @@ function PullPlayer()
 		then 
 			pullVector = pullVector * (distance / TONGUE_PULL_PLAYER_EASE_DISTANCE)			
 		end
-				
-		-- Prevent player from going through floors
-		if pullVector.z < 0 and g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) <= 0
-		then
-			pullVector = pullVector - Vector(0, 0, pullVector.z)
-		end
 	
 		g_VRScript.playerPhysController:AddVelocity(playerEnt, pullVector)
-		--playerEnt:GetHMDAnchor():SetOrigin(GetMuzzlePos() - gunRelativePos + pullVector)
 	
 	else
 		g_VRScript.playerPhysController:StickFrame(playerEnt)
@@ -673,13 +666,8 @@ function PullPlayer()
 		then 
 			pullVector = pullVector * distance / TONGUE_PULL_PLAYER_EASE_DISTANCE
 		end
-		-- Prevent player from going through floors
-		if pullVector.z < 0 and g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) <= 0
-		then
-			pullVector = pullVector - Vector(0, 0, pullVector.z)
-		end
+
 		g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector)
-		--playerEnt:GetHMDAnchor():SetOrigin(GetMuzzlePos() - gunRelativePos + pullVector)
 	end
 	
 	--DebugDrawLine(GetMuzzlePos(), pullEndpoint, 0, 0, 255, false, TONGUE_PULL_INTERVAL)

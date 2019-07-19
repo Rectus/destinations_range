@@ -23,13 +23,15 @@
 	THE SOFTWARE.
 ]]--
 
-local PICKUP_FIRE_DELAY = 0.5
+local PICKUP_FIRE_DELAY = 0.1
 
 local SHOT_TRACE_DISTANCE = 16384
 local DAMAGE_TICK = 10
 local DAMAGE_TICK_INTERVAL = 0.055
 local THINK_INTERVAL = 0.011
 local DAMAGE_TICK_MAX_DIST = 1
+
+local FIRE_RUMBLE_INTERVAL = 0.07
 
 local STATE_READY = 1
 local STATE_FIRING = 2
@@ -38,6 +40,7 @@ local STATE_OVERHEAT = 3
 local state = STATE_READY
 local lastTickTime = 0
 local lastTickPos = Vector(0,0,0)
+local lastTickNormal = Vector(1,0,0)
 
 local isCarried = false
 local pickupTime = 0
@@ -55,18 +58,21 @@ local tracerParticle = nil
 local tracerEnd = nil
 local beam = nil
 local impactParticle = nil
+local meltParticle = nil
 
 
 
 function Precache(context)
-
+	PrecacheParticle("particles/weapons/laser_pistol_impact_melt.vpcf", context)
+	PrecacheParticle("particles/weapons/laser_pistol_beam.vpcf", context)
+	PrecacheParticle("particles/weapons/laser_pistol_impact.vpcf", context)
 end
 
 function Activate()
 	
 end
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	controller = pHand
 	currentPlayer = pPlayer
@@ -81,7 +87,7 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 	local paintColor = thisEntity:GetRenderColor()
 	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
-
+	StartSoundEvent("toy_gun_equip", handAttachment) 
 	return true
 end
 
@@ -94,7 +100,6 @@ function SetUnequipped()
 	if state == STATE_FIRING then
 		EndFiring()
 	end
-	
 	
 	return true
 end
@@ -115,8 +120,7 @@ function OnHandleInput( input )
 		if state == STATE_READY and Time() > pickupTime + PICKUP_FIRE_DELAY
 		then
 			StartFiring()	
-		end
-		
+		end	
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
@@ -127,24 +131,15 @@ function OnHandleInput( input )
 			EndFiring()
 		end
 	end
-	
-	if input.buttonsReleased:IsBitSet(IN_GRIP)
-	then
-		input.buttonsReleased:ClearBit(IN_GRIP)
-		thisEntity:ForceDropTool();
-	end
-	
-	
 
 	return input
 end
 
 
-
 function StartFiring()
 	state = STATE_FIRING
-	--StartSoundEvent("Maresleg.Fire", handAttachment)
-	
+	StartSoundEvent("Laser_Pistol_Fire", handAttachment) 
+	StartSoundEvent("Laser_Pistol_Loop", handAttachment)
 	
 	beam = ParticleManager:CreateParticle("particles/weapons/laser_pistol_beam.vpcf", 
 		PATTACH_POINT_FOLLOW, handAttachment)
@@ -156,10 +151,10 @@ function StartFiring()
 		
 	ParticleManager:SetParticleControl(beam, 1, attach.origin)
 	
-	--[[if controller
+	if controller
 	then
-		thisEntity:SetThink(FireRumble, "fire_rumble", 0.1)
-	end]]
+		thisEntity:SetThink(FireRumble, "fire_rumble")
+	end
 	
 	thisEntity:SetThink(FireTick, "fire_tick", 0)
 
@@ -168,6 +163,7 @@ end
 
 function EndFiring()
 	state = STATE_READY
+	StopSoundEvent("Laser_Pistol_Loop", handAttachment)
 	
 	if beam then
 		ParticleManager:DestroyParticle(beam, false)
@@ -176,6 +172,10 @@ function EndFiring()
 	if impactParticle then
 		ParticleManager:DestroyParticle(impactParticle, false)
 		impactParticle = nil
+	end
+	if meltParticle then
+		ParticleManager:DestroyParticle(meltParticle, false)
+		meltParticle = nil
 	end
 end
 
@@ -224,10 +224,15 @@ function FireTick()
 		
 			end
 		else
-			local impactParticle = ParticleManager:CreateParticle("particles/weapons/laser_pistol_impact_melt.vpcf", 
-				PATTACH_CUSTOMORIGIN, thisEntity)
-			ParticleManager:SetParticleControl(impactParticle, 0, traceTable.pos)
-			ParticleManager:SetParticleControlForward(impactParticle, 0, traceTable.normal)
+			if meltParticle == nil 
+			then
+				meltParticle = ParticleManager:CreateParticle("particles/weapons/laser_pistol_impact_melt.vpcf", 
+					PATTACH_CUSTOMORIGIN, thisEntity)
+			end
+			ParticleManager:SetParticleControl(meltParticle, 0, traceTable.pos)
+			ParticleManager:SetParticleControl(meltParticle, 2, lastTickPos)
+			ParticleManager:SetParticleControlForward(meltParticle, 0, traceTable.normal)
+			ParticleManager:SetParticleControlForward(meltParticle, 2, lastTickNormal)
 		end
 		
 		
@@ -241,8 +246,14 @@ function FireTick()
 		ParticleManager:SetParticleControlForward(impactParticle, 0, traceTable.normal)
 		
 		lastTickPos = traceTable.pos
+		lastTickNormal = traceTable.normal
 		beamEndPos = traceTable.pos
 	else
+		if meltParticle then
+			ParticleManager:DestroyParticle(meltParticle, false)
+			meltParticle = nil
+		end
+	
 		if impactParticle then
 			ParticleManager:DestroyParticle(impactParticle, false)
 			impactParticle = nil
@@ -258,18 +269,14 @@ end
 
 
 
-function FireRumble(self)
-	if controller
-	then
-		controller:FireHapticPulse(2)
-	end
+function FireRumble()
 	
-	fireRumbleElapsed = fireRumbleElapsed + FIRE_RUMBLE_INTERVAL
-	if fireRumbleElapsed >= FIRE_RUMBLE_TIME
+	if not controller or state ~= STATE_FIRING 
 	then
-		fireRumbleElapsed = 0
 		return nil
 	end
+
+	controller:FireHapticPulse(1)
 	
 	return FIRE_RUMBLE_INTERVAL
 end

@@ -22,6 +22,8 @@
 	THE SOFTWARE.
 ]]--
 
+local MathUtils = require "libraries.mathutils"
+
 local GRAB_MAX_DISTANCE = 38
 local POLE_FORCE_MOVE_MAX_SPEED = 50
 local POLE_FORCE_MOVE_MIN_DISTANCE = 1
@@ -35,9 +37,9 @@ local MUZZLE_OFFSET = Vector(0, 0, -18)
 local MUZZLE_ANGLES_OFFSET = QAngle(0, 0, 0)
 
 local GRAB_PULL_PLAYER_SPEED = 16
-local PUSH_TRACE_INTERVAL = 0.04
+local PUSH_TRACE_INTERVAL = 2
+local ALIGN_INTERVAL = 2
 
-local ALIGN_INTERVAL = 0.022
 local debugDraw = false
 
 local GROUND_DRAG_CONSTANT = 50
@@ -46,11 +48,13 @@ local SKI_DRAG_CONSTANT = 1e-1
 local SKI_DRAG_LINEAR = 2e-4 -- 1e-3
 local PLAYER_FULL_HEIGHT = 72
 local PLAYER_HEIGHT_DRAG_FACTOR = 1.0
+local SKI_TURN_MAX_SPEED = 180
+local SKI_TURN_VEL_FACTOR = 0.01
 
 
-local POLE_MAX_LENGTH = 140
-local POLE_MIN_LENGTH = 30
-local poleLength = POLE_MAX_LENGTH
+local POLE_MAX_LENGTH = 110 -- 140 cm
+local POLE_MIN_LENGTH = 0 -- 30 cm
+local poleLength = 110
 
 
 local isCarried = false
@@ -62,8 +66,7 @@ local poleAnim = nil
 local compass = nil
 local triggerHeld = false
 local extended = false
-local gripLocked = false
-local lockedPanel = nil
+local playerMoving = false
 
 local playerPhys = nil
 local grabEndpoint = nil
@@ -75,13 +78,10 @@ local rumbleFreq = 0
 local rumbleInt = 0
 local rumbleCount = 0
 
-local pauseButtonIn = false
-
-local gripHintPanel = nil
 local triggerHintPanel = nil
 local pauseHintPanel = nil
-local teleportHintPanel = nil
-local lockHintPanel = nil
+local lengthUpHintPanel = nil	
+local lengthDownHintPanel = nil	
 
 local ski0 = nil
 local ski1 = nil
@@ -93,14 +93,11 @@ local moveSoundCounter = 0
 local lastCarveLevel = 0
 local carveSoundLevel = 0
 local carveSoundCounter = 0
-local previousSkiDir = nil
+local skiDir = nil
 
 local sprayParticle = nil
 local skiParticleL = nil
 local skiParticleR = nil
-
-local pickupTime = 0
-local PICKUP_TRIGGER_DELAY = 0.5
 
 local animKeyvals = 
 {
@@ -119,26 +116,25 @@ local compassKeyvals =
 	solid = 0
 }
 
+
 function Precache(context)
 	PrecacheModel(animKeyvals.model, context)
 	PrecacheModel(compassKeyvals.model, context)
 	PrecacheModel("models/props_slope/ski.vmdl", context)
 	PrecacheParticle("particles/tools/ski_pole_snow_spray.vpcf", context)
 	PrecacheParticle("particles/tools/ski_carve_snow_spray.vpcf", context)
-	
 end
+
 
 function Activate(activateType)
 
 	if activateType == ACTIVATE_TYPE_ONRESTORE -- on game load
 	then
-			
 		-- Hack to properly handle restoration from saves, 
 		-- since variables written by Activate() on restore don't end up in the script scope.
 		DoEntFireByInstanceHandle(thisEntity, "CallScriptFunction", "RestoreState", 0, thisEntity, thisEntity)
 		
 	else
-
 		animKeyvals.origin = thisEntity:GetOrigin()
 		animKeyvals.angles = thisEntity:GetAngles()
 		poleAnim = SpawnEntityFromTableSynchronous("prop_dynamic", animKeyvals)
@@ -146,8 +142,8 @@ function Activate(activateType)
 		poleAnim:SetOrigin(thisEntity:GetOrigin())
 		poleAnim:SetLocalAngles(0,0,0)
 		
-		DoEntFireByInstanceHandle(poleAnim, "SetAnimationNoReset", "retracted", 0 , nil, nil)
-		DoEntFireByInstanceHandle(poleAnim, "SetDefaultAnimation", "retracted", 0 , nil, nil)
+		poleLength = thisEntity:Attribute_GetFloatValue("poleLength", POLE_MAX_LENGTH)
+		poleAnim:SetSequence("retracted")
 		
 		compassKeyvals.origin = thisEntity:GetOrigin()
 		compassKeyvals.angles = thisEntity:GetAngles()	
@@ -157,7 +153,9 @@ function Activate(activateType)
 		
 		CustomGameEventManager:RegisterListener("pause_panel_toggle_skis", ToggleSkis)
 	end
+	g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(Think)
 end
+
 
 function RestoreState()
 
@@ -175,66 +173,50 @@ function RestoreState()
 			compass = child
 		end
 	end
-
-	DoEntFireByInstanceHandle(poleAnim, "SetAnimationNoReset", "retracted", 0 , nil, nil)
-	DoEntFireByInstanceHandle(poleAnim, "SetDefaultAnimation", "retracted", 0 , nil, nil)
+	poleLength = thisEntity:Attribute_GetFloatValue("poleLength", POLE_MAX_LENGTH)
+	poleAnim:SetSequence("retracted")
 	CustomGameEventManager:RegisterListener("pause_panel_toggle_skis", ToggleSkis)
 	
 end
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped(this, pHand, nHandID, pHandAttachment, pPlayer)
+
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
-	gripLocked = false
-	pickupTime = Time()
+	
+	playerPhys = g_VRScript.playerPhysController
+	
+	playerEnt:AllowTeleportFromHand(handID, false)
 	
 	poleAnim:SetParent(handAttachment, "")
 	poleAnim:SetOrigin(handAttachment:GetOrigin())
 	poleAnim:SetLocalAngles(0,0,0)
 	compass:SetParent(handAttachment, "compass")
 	compass:SetOrigin(handAttachment:GetOrigin())
-	--compass:SetAngles(0,0,0)
 	
+	skiDir = playerEnt:GetHMDAvatar():GetAngles():Left():Cross(Vector(0,0,-1))
 	
-	if extended
-	then
-		Enable()
-	else
-		Disable()
-	end
-	poleAnim:SetPoseParameter("pole_length", poleLength)
-
-	playerPhys = g_VRScript.playerPhysController
-	thisEntity:SetThink(TracePush, "trace", PUSH_TRACE_INTERVAL)
-	thisEntity:SetThink(UpdateSkis, "update_ski", 0)
-	
-	if not GameRules.skiPoleHintsSpawned
+	if not playerEnt.skiPoleHintsShown
 	then
 		SpawnHintPanels()
-		GameRules.skiPoleHintsSpawned = true	
 	end
 	return true
 end
 
 
-
 function SetUnequipped()
 
-	Disable()
 	playerEnt:StopSound("Ski.Noise" .. moveSoundLevel)
 	playerEnt:StopSound("Ski.Carve" .. carveSoundLevel)
 	
-	if extended
-	then
-		extended = false
-		Disable()
-		DoEntFireByInstanceHandle(poleAnim, "SetAnimationNoReset", "retracted", 0 , nil, nil)
-		DoEntFireByInstanceHandle(poleAnim, "SetDefaultAnimation", "retracted", 0 , nil, nil)
-	end
+	playerEnt:AllowTeleportFromHand(handID, true)
+	
+	poleAnim:SetSequence("retracted")
+	extended = false
 	
 	if skiParticleL then
 		ParticleManager:DestroyParticle(skiParticleL, false)
@@ -251,27 +233,27 @@ function SetUnequipped()
 		sprayParticle = nil
 	end
 	
-	
 	playerPhys:RemoveDragConstraint(playerEnt, thisEntity)
+	playerPhys:RemoveConstraint(playerEnt, thisEntity)
 	
-	local playerScope = playerEnt:GetOrCreatePrivateScriptScope()
-	if playerScope.ActiveSkiContoller and playerScope.ActiveSkiContoller == thisEntity
+	if playerEnt.ActiveSkiContoller and playerEnt.ActiveSkiContoller == thisEntity
 	then
-		playerScope.ActiveSkiContoller = nil
+		playerEnt.ActiveSkiContoller = nil
 	end
+	
+	KillSkis()
+	
+	poleAnim:SetParent(thisEntity, "")
+	poleAnim:SetLocalAngles(0,0,0)
+	poleAnim:SetAbsOrigin(thisEntity:GetAbsOrigin())
+	compass:SetParent(thisEntity, "compass")
+	compass:SetAbsOrigin(thisEntity:GetAbsOrigin())
 	
 	playerEnt = nil
 	handEnt = nil
 	isCarried = false
-	
-	--local angles = thisEntity:GetAngles()
-	poleAnim:SetParent(thisEntity, "")
-	--poleAnim:SetAngles(angles.x, angles.y, angles.z)
-	poleAnim:SetLocalAngles(0,0,0)
-	poleAnim:SetOrigin(thisEntity:GetOrigin())
-	compass:SetParent(thisEntity, "compass")
-	compass:SetOrigin(thisEntity:GetOrigin())
-	
+	handAttachment = nil
+
 	return true
 end
 
@@ -279,199 +261,55 @@ end
 function OnHandleInput(input)
 	if not playerEnt
 	then 
-		return
+		return input
 	end
 
 	local IN_TRIGGER = (handID == 0 and IN_USE_HAND0 or IN_USE_HAND1)
 	local IN_GRIP = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
 	local IN_PAD = (handID == 0 and IN_PAD_HAND0 or IN_PAD_HAND1)
-	
-
-	--[[
-	if playerEnt:GetVRControllerType() == VR_CONTROLLER_TYPE_TOUCH then
-		
-		local IN_GRIP_HOLD = (handID == 0 and IN_PAD_HAND0 or IN_PAD_HAND1)
-		local IN_GRIP_TOUCH = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
-		local IN_JOY_PUSH = (handID == 0 and IN_PAD_TOUCH_HAND0 or IN_PAD_TOUCH_HAND1)
-		local IN_JOY_TOUCH = (handID == 0 and 42 or 43)
-		
-		if input.buttonsPressed:IsBitSet(IN_JOY_PUSH)
-		then
-			ToggleGripLock()
-		end
-		
-	else
-		if input.buttonsPressed:IsBitSet(IN_PAD) and input.trackpadY > 0
-		then	
-			ToggleGripLock()
-			input.buttonsPressed:ClearBit(IN_PAD)
-		end
-		
-		if input.buttonsDown:IsBitSet(IN_PAD) and input.trackpadY > 0
-		then	
-			input.buttonsDown:ClearBit(IN_PAD)
-		end
-		
-		if input.buttonsReleased:IsBitSet(IN_PAD) and input.trackpadY > 0
-		then
-			input.buttonsReleased:ClearBit(IN_PAD)
-		end
-	end
-	]]
-	
-
+	local IN_PAD_UP = (handID == 0 and IN_PAD_UP_HAND0 or IN_PAD_UP_HAND1)
+	local IN_PAD_DOWN = (handID == 0 and IN_PAD_DOWN_HAND0 or IN_PAD_DOWN_HAND1)
 	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
-		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
-		then
-			triggerHeld = true
-			thisEntity:SetThink(TriggerThink, "trigger", 0.5)
-			RumbleController(1, 0.4, 20)
-		end
-		
-		input.buttonsPressed:ClearBit(IN_TRIGGER)
+		triggerHeld = true
+		thisEntity:SetThink(TriggerThink, "trigger", 0.5)
+		RumbleController(1, 0.4, 20)
 	end		
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
-	then
-		
+	then		
 		triggerHeld = false
-		input.buttonsReleased:ClearBit(IN_TRIGGER)
 	end
 	
-	
-	--[[if input.buttonsPressed:IsBitSet(IN_PAD)
+	if playerEnt:GetVRControllerType() ~= VR_CONTROLLER_TYPE_VIVE or input.buttonsDown:IsBitSet(IN_PAD) 
 	then
-		if input.trackpadY > 0
+		if input.buttonsPressed:IsBitSet(IN_PAD_UP) 
 		then
-			pauseButtonIn = true
-			input.buttonsPressed:ClearBit(IN_PAD)
-		end
-	end
-	
-	if input.buttonsDown:IsBitSet(IN_PAD) and pauseButtonIn
-	then	
-		input.buttonsDown:ClearBit(IN_PAD)
-	end
-	
-	if input.buttonsReleased:IsBitSet(IN_PAD) and pauseButtonIn
-	then
-		--GameRules:GetGameModeEntity().SkiMode:TogglePause(playerEnt)
-	
-		pauseButtonIn = false
-		input.buttonsReleased:ClearBit(IN_PAD)
-	end]]
-	
-	
-	--[[
-	if input.buttonsPressed:IsBitSet(IN_GRIP)
-	then
-		input.buttonsPressed:ClearBit(IN_GRIP)
-		
-
-	end
-	
-	if input.buttonsReleased:IsBitSet(IN_GRIP)
-	then
-		input.buttonsReleased:ClearBit(IN_GRIP)
-		
-		if not gripLocked then
-		
-			thisEntity:ForceDropTool()
+			handAttachment:EmitSound("Pole.Click")
+			SetPoleLength(poleLength - 5)
 			
-		else
-			if IsValidEntity(lockedPanel) then
-				lockedPanel:Kill()
-			end
-		
-			local panelTable = 
-			{
-				origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("lock_message")),
-				dialog_layout_name = "file://{resources}/layout/custom_destination/pole_locked.xml",
-				width = "4",
-				height = "0.6",
-				panel_dpi = "96",
-				interact_distance = "0",
-				horizontal_align = "1",
-				vertical_align = "1",
-				orientation = "0",
-				angles = "0 0 0"
-			}
-			lockedPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
-			lockedPanel:SetParent(handAttachment, "lock_message")
-			lockedPanel:SetLocalAngles(0,0,0)
-			DoEntFireByInstanceHandle(lockedPanel, "Kill", "", 2, thisEntity, thisEntity)
-			EmitSoundOn("Pole.Fail", handAttachment)
+		elseif input.buttonsPressed:IsBitSet(IN_PAD_DOWN) 
+		then 
+			handAttachment:EmitSound("Pole.Click")
+			SetPoleLength(poleLength + 5)		
 		end
 	end
-	]]
+
 	return input
-end
-
-
-function ToggleGripLock()
-
-	local panelTable = 
-	{
-		origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("lock_message")),
-		dialog_layout_name = "file://{resources}/layout/custom_destination/pole_locked.xml",
-		width = "4",
-		height = "0.6",
-		panel_dpi = "96",
-		interact_distance = "0",
-		horizontal_align = "1",
-		vertical_align = "1",
-		orientation = "0",
-		angles = "0 0 0"
-	}
-	
-	if IsValidEntity(lockedPanel) then
-		lockedPanel:Kill()
-	end
-	
-
-	if gripLocked then
-		gripLocked = false
-		
-		panelTable.dialog_layout_name = "file://{resources}/layout/custom_destination/pole_unlocked.xml"
-		lockedPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
-		lockedPanel:SetParent(handAttachment, "lock_message")
-		lockedPanel:SetLocalAngles(0,0,0)
-		DoEntFireByInstanceHandle(lockedPanel, "Kill", "", 2, thisEntity, thisEntity)
-		
-		EmitSoundOn("Pole.Click", handAttachment)
-	else
-		gripLocked = true
-		
-		
-		lockedPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
-		lockedPanel:SetParent(handAttachment, "lock_message")
-		lockedPanel:SetLocalAngles(0,0,0)
-		DoEntFireByInstanceHandle(lockedPanel, "Kill", "", 2, thisEntity, thisEntity)
-		
-		EmitSoundOn("Pole.Click", handAttachment)
-	end
 end
 
 
 function SetPoleLength(length)
 	
-	if length > POLE_MAX_LENGTH
-	then
-		poleLength = POLE_MAX_LENGTH
-		
-	elseif length < POLE_MIN_LENGTH
-	then
-		poleLength = POLE_MIN_LENGTH
-	else
-		poleLength = length
-	end
+	poleLength = Clamp(length, POLE_MIN_LENGTH, POLE_MAX_LENGTH)
 
 	if poleAnim
 	then
 		poleAnim:SetPoseParameter("pole_length", poleLength)
 	end
+	
+	thisEntity:Attribute_SetFloatValue("poleLength", poleLength - 0.1)
 
 	return poleLength
 end
@@ -480,25 +318,29 @@ function SpawnHintPanels()
 
 	local panelTable = 
 	{
-		origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("grip_hint")),
-		dialog_layout_name = "file://{resources}/layout/custom_destination/pole_grip_hint.xml",
-		width = "4",
+		origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("length_up_hint")),
+		dialog_layout_name = "file://{resources}/layout/custom_destination/pole_length_up_hint.xml",
+		width = "3",
 		height = "0.6",
 		panel_dpi = "96",
 		interact_distance = "0",
-		horizontal_align = "2",
+		--horizontal_align = "2",
 		vertical_align = "1",
 		orientation = "1",
 		angles = "0 90 0"
 	}
+
+	lengthUpHintPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
+	lengthUpHintPanel:SetParent(handAttachment, "length_up_hint")
 	
-	if playerEnt:GetVRControllerType() == VR_CONTROLLER_TYPE_TOUCH then
-		panelTable.dialog_layout_name = "file://{resources}/layout/custom_destination/pole_grip_hint_oculus.xml"
-	end
+	panelTable.origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("length_down_hint"))
+	panelTable.dialog_layout_name = "file://{resources}/layout/custom_destination/pole_length_down_hint.xml"
 	
-	gripHintPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
-	gripHintPanel:SetParent(handAttachment, "grip_hint")
-	
+	lengthDownHintPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
+	lengthDownHintPanel:SetParent(handAttachment, "length_down_hint")
+
+	panelTable.width = "4.2"
+	panelTable.horizontal_align = "2"
 	panelTable.origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("trigger_hint"))
 	panelTable.dialog_layout_name = "file://{resources}/layout/custom_destination/pole_trigger_hint.xml"
 	
@@ -506,71 +348,45 @@ function SpawnHintPanels()
 	triggerHintPanel:SetParent(handAttachment, "trigger_hint")
 	
 	panelTable.horizontal_align = nil
-	
+	panelTable.width = "6"
 	panelTable.origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("pause_hint"))
 	panelTable.dialog_layout_name = "file://{resources}/layout/custom_destination/pole_pause_hint.xml"
 	
 	pauseHintPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
 	pauseHintPanel:SetParent(handAttachment, "pause_hint")
-	
-	panelTable.origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("teleport_hint"))
-	panelTable.dialog_layout_name = "file://{resources}/layout/custom_destination/pole_teleport_hint.xml"
-	
-	teleportHintPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
-	teleportHintPanel:SetParent(handAttachment, "teleport_hint")
-	
-	panelTable.origin = handAttachment:GetAttachmentOrigin(handAttachment:ScriptLookupAttachment("lock_hint"))
-	panelTable.dialog_layout_name = "file://{resources}/layout/custom_destination/pole_lock_hint.xml"
-	
-	lockHintPanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", panelTable)
-	lockHintPanel:SetParent(handAttachment, "lock_hint")
-	
 end
 
 
 function KillHintPanels()
 
-	if gripHintPanel and IsValidEntity(gripHintPanel) then gripHintPanel:Kill() end
 	if triggerHintPanel and IsValidEntity(triggerHintPanel) then triggerHintPanel:Kill() end
 	if pauseHintPanel and IsValidEntity(pauseHintPanel) then pauseHintPanel:Kill() end
-	if teleportHintPanel and IsValidEntity(teleportHintPanel) then teleportHintPanel:Kill() end
-	if lockHintPanel and IsValidEntity(lockHintPanel) then lockHintPanel:Kill() end
+	if lengthUpHintPanel and IsValidEntity(lengthUpHintPanel) then lengthUpHintPanel:Kill() end
+	if lengthDownHintPanel and IsValidEntity(lengthDownHintPanel) then lengthDownHintPanel:Kill() end
 	
-	gripHintPanel = nil
 	triggerHintPanel = nil
 	pauseHintPanel = nil
-	teleportHintPanel = nil
-	lockHintPanel = nil
-	
+	lengthUpHintPanel = nil	
+	lengthDownHintPanel = nil	
 end
 
-function UpdateOnRemove()
 
-	
+function UpdateOnRemove()
 
 	if isCarried
 	then
 		playerPhys:RemoveDragConstraint(playerEnt, thisEntity)
 	end
 	
-	if gripHintPanel
-	then
-		KillHintPanels()
-	end
+	KillHintPanels()
 end
 
 
-
 function TriggerThink()
+
 	if not triggerHeld
 	then
-		return
-	end
-	
-	if gripHintPanel
-	then
-		KillHintPanels()
-		--GameRules:GetGameModeEntity().SkiMode.players[playerEnt].hintsSpawned = true
+		return nil
 	end
 
 	RumbleController(2, 0.3, 60)
@@ -578,53 +394,62 @@ function TriggerThink()
 	if extended
 	then
 		extended = false
-		Disable()
-		DoEntFireByInstanceHandle(poleAnim, "SetAnimationNoReset", "retracted", 0 , nil, nil)
-		DoEntFireByInstanceHandle(poleAnim, "SetDefaultAnimation", "retracted", 0 , nil, nil)
+
+		poleAnim:SetSequence("retracted") 
 	else
 		extended = true
-		Enable()
-		DoEntFireByInstanceHandle(poleAnim, "SetAnimationNoReset", "extended", 0 , nil, nil)
-		DoEntFireByInstanceHandle(poleAnim, "SetDefaultAnimation", "extended", 0 , nil, nil)
-		poleAnim:SetPoseParameter("pole_length", poleLength)
+		poleAnim:SetSequence("extended_pose")
+		-- TODO Hack for the pose paramter not setting right
+		thisEntity:SetThink(function() SetPoleLength(poleLength -0.1) end, "fix_pose", 0.2) 
+		
+		if triggerHintPanel
+		then
+			KillHintPanels()
+			playerEnt.skiPoleHintsShown = true
+		end
 	end
-end
-
-
-
-function Enable()
-	enabled = true
-end
-
-
-function Disable()
-	enabled = false
+	
+	return nil
 end
 
 
 function GetAttachment()
+
+	if not isCarried then return nil end
+
 	return handAttachment
 end
 
 
-function ToggleSkis(self, eventData)
+function GetUsingPlayer()
+
+	if not isCarried then return nil end
+
+	return playerEnt
+end
+
+
+function ToggleSkis(this, eventData)
+
 	local player = GetPlayerFromUserID(eventData.id)
 
-	if  playerEnt and player == playerEnt
+	if playerEnt and player == playerEnt
 	then
-		skisEnabled = not skisEnabled
-		
+		skisEnabled = not skisEnabled		
 	end
+	
+	if not skisEnabled then KillSkis() end
 end
 
 
 function KillSkis()
-	if IsValidEntity(ski0)
+
+	if ski0 and IsValidEntity(ski0)
 	then
 		ski0:Kill()
 	end
 	
-	if IsValidEntity(ski1)
+	if ski1 and IsValidEntity(ski1)
 	then
 		ski1:Kill()
 	end
@@ -633,26 +458,47 @@ function KillSkis()
 	ski1 = nil
 end
 
-function UpdateSkis()
-	if not isCarried
+
+function Think()
+
+	if isCarried
 	then
+	
+		local playerVel = playerPhys:GetVelocity(playerEnt)
+		local playerSpeed = playerVel:Length()
+		playerMoving = playerSpeed > 0
+
+		if extended and (GetFrameCount() + 1) % PUSH_TRACE_INTERVAL == 0
+		then
+			TracePush(playerVel, playerSpeed)
+		end
+	
+		if (GetFrameCount() + 1) % ALIGN_INTERVAL == 0
+		then 
+			UpdateSkis(playerVel, playerSpeed)
+		end
+	end
+end
+
+
+function UpdateSkis(playerVel, playerSpeed)
+	
+	if not playerEnt.ActiveSkiContoller or not IsValidEntity(playerEnt.ActiveSkiContoller)
+	then
+		playerEnt.ActiveSkiContoller = thisEntity
+	
+	elseif playerEnt.ActiveSkiContoller:GetOrCreatePrivateScriptScope().GetUsingPlayer
+		and playerEnt.ActiveSkiContoller:GetPrivateScriptScope().GetUsingPlayer() ~= playerEnt
+	then
+		playerEnt.ActiveSkiContoller = thisEntity
+	
+	elseif playerEnt.ActiveSkiContoller ~= thisEntity
+	then		
 		KillSkis()
-		
-		return nil
+		return
 	end
 	
-	local playerScope = playerEnt:GetOrCreatePrivateScriptScope()
-	if not playerScope.ActiveSkiContoller or not IsValidEntity(playerScope.ActiveSkiContoller)
-	then
-		playerScope.ActiveSkiContoller = thisEntity
-		
-	elseif playerScope.ActiveSkiContoller ~= thisEntity
-	then
-		
-		KillSkis()
-	
-		return ALIGN_INTERVAL
-	end
+	playerPhys:AddConstraint(playerEnt, thisEntity, false)
 	
 	local hand0Pos = nil
 	local hand1Pos = nil
@@ -663,26 +509,35 @@ function UpdateSkis()
 	local hand1 = hmd:GetVRHand(1)
 	
 	hand0Pos = hand0:GetOrigin()
-	if hand0Pos:Length() == 0
+	if VectorIsZero(hand0Pos)
 	then
 		hand0Pos = hmd:GetOrigin()
 	end
 	
 	hand1Pos = hand1:GetOrigin()
-	if hand1Pos:Length() == 0
+	if VectorIsZero(hand1Pos)
 	then
 		hand1Pos = hmd:GetOrigin()
 	end
 
-	-- The ski direction is orthogonal to the line between the hands on the xy plane.
-	local skiDir = (hand0Pos - hand1Pos):Cross(Vector(0, 0, 1)):Normalized()
+	if not skiDir
+	then
+		-- The ski direction is orthogonal to the line between the hands on the xy plane.
+		skiDir = (hand0Pos - hand1Pos):Cross(Vector(0, 0, 1)):Normalized()
+	elseif playerMoving
+	then
+		local wantedSkiDir = (hand0Pos - hand1Pos):Cross(Vector(0, 0, 1)):Normalized()
 
-	if not skisEnabled then
-	
-		KillSkis()
-	
-	else
+		local diff = MathUtils.NormalizeAngle(AngleDiff(VectorToAngles(wantedSkiDir).y, VectorToAngles(skiDir).y))
+		local turnDir = MathUtils.Sign(diff)
+		local turnSpeed = Clamp(playerSpeed * SKI_TURN_VEL_FACTOR, 0, SKI_TURN_MAX_SPEED)
+		local dotFactor = RemapValClamped(skiDir:Dot(wantedSkiDir), 0.8, 0.95, 1, 0)
+		local turnYaw = min(turnDir * turnSpeed * ALIGN_INTERVAL, diff) * dotFactor
+		skiDir = RotatePosition(Vector(0,0,0), QAngle(0, turnYaw, 0), skiDir)
+	end
 
+	if skisEnabled then
+	
 		if not ski0 or not IsValidEntity(ski0)
 		then
 			ski0 = SpawnSki()
@@ -721,12 +576,10 @@ function UpdateSkis()
 	end
 
 	local skiDragFactor = 0
-	local velocity = playerPhys:GetVelocity(playerEnt)
-	local speed = velocity:Length()
 	
-	if velocity and speed > 10
+	if playerVel and playerSpeed > 10
 	then
-		local velXY = Vector(velocity.x, velocity.y, 0):Normalized()
+		local velXY = Vector(playerVel.x, playerVel.y, 0):Normalized()
 		skiDragFactor = velXY:Dot(skiDirOrth) * 8
 	end
 	
@@ -740,10 +593,10 @@ function UpdateSkis()
 		local playerHeightFac = ((playerEnt:GetCenter().z - playerEnt:GetHMDAnchor():GetOrigin().z) * 2) 
 			/ PLAYER_FULL_HEIGHT * PLAYER_HEIGHT_DRAG_FACTOR
 
-		local velNorm = velocity:Normalized()
+		local velNorm = playerVel:Normalized()
 			
-		local skiCoVelocity = velocity:Dot(skiMoveDir)
-		local groundCoVelocity = velocity:Dot(groundMoveDir)
+		local skiCoVelocity = playerVel:Dot(skiMoveDir)
+		local groundCoVelocity = playerVel:Dot(groundMoveDir)
 		local dragVector = (skiMoveDir * (SKI_DRAG_CONSTANT * velNorm:Dot(skiMoveDir) + SKI_DRAG_LINEAR * skiCoVelocity
 			* abs(skiCoVelocity)) * playerHeightFac
 			+ groundMoveDir * (GROUND_DRAG_CONSTANT * velNorm:Dot(groundMoveDir) + GROUND_DRAG_LINEAR * groundCoVelocity
@@ -759,10 +612,10 @@ function UpdateSkis()
 		local alignTop = Vector(playerAVOrigin.x, playerAVOrigin.y, playerEnt:GetHMDAnchor():GetOrigin().z + 48)
 		
 		AlignSki(ski0, alignTop + skiDirOrth * SKI_SEPARATION - skiDir * skiDragFactor, 
-			skiDir, heightFac, traceTable.normal)
+			skiDir, heightFac, traceTable.normal, playerVel)
 			
 		AlignSki(ski1, alignTop - skiDirOrth * SKI_SEPARATION + skiDir * skiDragFactor, 
-			skiDir, heightFac, traceTable.normal)
+			skiDir, heightFac, traceTable.normal, playerVel)
 		
 		if dragMagnitude > 20 and playerPhys:IsPlayerOnGround(playerEnt)
 			and not g_VRScript.pauseManager:IsPaused(playerEnt) then
@@ -777,9 +630,9 @@ function UpdateSkis()
 					PATTACH_ABSORIGIN_FOLLOW, ski1)			
 			end
 			
-			local particleVel = traceTable.normal * min(speed * 0.2, 40)	
+			local particleVel = traceTable.normal * min(playerSpeed * 0.2, 40)	
 			-- Match the particles to the player speed at high velocieties
-			particleVel = particleVel + velocity * speed / (speed + 100)
+			particleVel = particleVel + playerVel * playerSpeed / (playerSpeed + 100)
 			
 			ParticleManager:SetParticleControl(skiParticleL, 1, particleVel)
 			ParticleManager:SetParticleControl(skiParticleR, 1, particleVel)
@@ -797,23 +650,17 @@ function UpdateSkis()
 		end
 	end
 	
-	UpdateSkiSound(velocity, skiDir, dragMagnitude)
+	UpdateSkiSound(playerVel, skiDir, dragMagnitude)
 	
-	return ALIGN_INTERVAL
+	return
 end
-
-
-function sign(x)
-	return x > 0 and 1 or x < 0 and -1 or 1
-end
-
 
 
 function UpdateSkiSound(velocity, skiDir, dragMagnitude)
 
 	local onGround = playerPhys:IsPlayerOnGround(playerEnt)
 	local isPaused = g_VRScript.pauseManager:IsPaused(playerEnt)
-	turnSoundCounter = turnSoundCounter - ALIGN_INTERVAL
+	turnSoundCounter = turnSoundCounter - FrameTime() * ALIGN_INTERVAL
 
 	if isPaused
 	then
@@ -826,22 +673,6 @@ function UpdateSkiSound(velocity, skiDir, dragMagnitude)
 		velocity = Vector(0,0,0)
 		dragMagnitude = 0
 	end
-		
-	--[[if not idle and not isPaused
-	then
-		local velXY = Vector(velocity.x, velocity.y, 0):Normalized()
-		local skiDirXY = Vector(skiDir.x, skiDir.y, 0):Normalized()
-	
-		if turnSoundCounter <= 0 and onGround and velocity:Length() > 150
-			and abs(skiDirXY:Dot(velXY)) < 0.98 
-			and (previousSkiDir == nil or previousSkiDir:Dot(skiDirXY) < 0.5) 
-		then
-			turnSoundCounter = 1.0
-			playerEnt:EmitSound("Ski.Turn")
-			previousSkiDir = skiDirXY
-
-		end
-	end]]
 	
 	local oldLevel = moveSoundLevel		
 	moveSoundLevel = PlayerMoveSoundLevel(playerEnt, velocity:Length())
@@ -851,7 +682,7 @@ function UpdateSkiSound(velocity, skiDir, dragMagnitude)
 		--moveSoundLevel = 0
 		moveSoundCounter = 0
 	else
-		moveSoundCounter = moveSoundCounter - ALIGN_INTERVAL
+		moveSoundCounter = moveSoundCounter - FrameTime() *ALIGN_INTERVAL
 		if moveSoundLevel ~= oldLevel or moveSoundCounter <= 0
 		then
 			
@@ -871,7 +702,7 @@ function UpdateSkiSound(velocity, skiDir, dragMagnitude)
 		playerEnt:StopSound("Ski.Carve" .. oldLevel)
 		carveSoundCounter = 0
 	else
-		carveSoundCounter = carveSoundCounter - ALIGN_INTERVAL
+		carveSoundCounter = carveSoundCounter - FrameTime() *ALIGN_INTERVAL
 		if carveSoundLevel ~= oldLevel or carveSoundCounter <= 0
 		then
 			lastCarveLevel = dragMagnitude
@@ -908,10 +739,11 @@ function PlayerCarveSoundLevel(playerEnt, factor)
 end
 
 
-function AlignSki(ski, origin, skiDir, heightFac, groundNormal)
+function AlignSki(ski, origin, skiDir, heightFac, groundNormal, playerVel)
 	local baseTraceEnd = playerEnt:GetHMDAnchor():GetOrigin().z
 	local skiDirOrth = skiDir:Cross(Vector(0,0,1))
 	local skiNormal = nil
+	local newOrigin = ski:GetAbsOrigin()
 	
 	if heightFac <= 0
 	then
@@ -924,24 +756,27 @@ function AlignSki(ski, origin, skiDir, heightFac, groundNormal)
 
 		if skiCenterCalc.z > skiCenter.z
 		then
-			ski:SetOrigin(skiCenterCalc)
+			newOrigin = skiCenterCalc
 			skiNormal = (skiCenterCalc - skiBack):Cross(skiDirOrth)
 		else
-			ski:SetOrigin(skiCenter)
+			newOrigin = skiCenter
 			skiNormal = (skiCenter - skiBack):Cross(skiDirOrth)
 		end
 		
 		if debugDraw
 		then
-			DebugDrawLine(skiFront, skiBack, 255, 0, 255, true, ALIGN_INTERVAL)
+			DebugDrawLine(skiFront, skiBack, 255, 0, 255, true, FrameTime() *ALIGN_INTERVAL)
 		end
 	else
-		ski:SetOrigin(Vector(origin.x, origin.y, baseTraceEnd))
+		newOrigin = Vector(origin.x, origin.y, baseTraceEnd)
 		skiNormal = -SplineVectors(groundNormal, Vector(0, 0, 1), heightFac)
 	end
-
+	
 	local ang = VectorToAngles(skiNormal:Cross(skiDirOrth))
 	ski:SetAngles(ang.x, ang.y, ang.z)
+	local t = RemapValClamped((newOrigin - ski:GetAbsOrigin()):Length(), 0, 4, 1, 0.5)
+	ski:SetAbsOrigin(VectorLerp(t, ski:GetAbsOrigin(), newOrigin))
+	--ski:SetVelocity(playerVel)
 end 
 
 
@@ -969,7 +804,8 @@ function SpawnSki()
 	{
 		targetname = "ski";
 		model = "models/props_slope/ski.vmdl";
-		solid = 0
+		solid = 0;
+		ScriptedMovement = 1;
 	}
 	
 	local ski = SpawnEntityFromTableSynchronous("prop_dynamic", keyvals)
@@ -984,19 +820,8 @@ function IsTouchingGround()
 end
 
 
+function TracePush(playerVel, playerSpeed)
 
-function TracePush()
-
-	if not isCarried
-	then
-		return nil
-	end
-
-	if not extended
-	then
-		return PUSH_TRACE_INTERVAL
-	end
-	
 	local poleStart = poleAnim:ScriptLookupAttachment("pole_start")
 	local poleEnd = poleAnim:ScriptLookupAttachment("pole_end")	
 
@@ -1007,33 +832,32 @@ function TracePush()
 		ignore = playerEnt
 
 	}
-	--DebugDrawLine(traceTable.startpos, traceTable.endpos, 255, 0, 0, false, 0.5)
+	if debugDraw then DebugDrawLine(traceTable.startpos, traceTable.endpos, 255, 0, 0, false, FrameTime() * PUSH_TRACE_INTERVAL) end
 	TraceLine(traceTable)
 	
 	if traceTable.hit 
 	then
-		--DebugDrawLine(traceTable.startpos, traceTable.pos, 0, 255, 0, false, 0.5)
-		
+		if debugDraw then DebugDrawLine(traceTable.startpos, traceTable.pos, 0, 255, 0, false, FrameTime() * PUSH_TRACE_INTERVAL) end
 		
 		if traceTable.enthit 
 		then
 			if traceTable.enthit == handEnt
 			then
-				return PUSH_TRACE_INTERVAL
+				return
 			end
 
 		end 
-	
+
 		if not playerMoved
 		then
-			--StartSoundEvent("SkiPole.Hit", self.handEnt)
+			--StartSoundEvent("SkiPole.Hit", thisEntity.handEnt)
 			RumbleController(2, 0.2, 1)
 			grabEndpoint = traceTable.pos
 			playerMoved = true
 			sprayParticle = ParticleManager:CreateParticle("particles/tools/ski_pole_snow_spray.vpcf", 
 				PATTACH_CUSTOMORIGIN, thisEntity)
 			ParticleManager:SetParticleControl(sprayParticle, 0, traceTable.pos)
-			return PUSH_TRACE_INTERVAL
+			return
 		end
 	
 		local distanceVector = (grabEndpoint - traceTable.pos)
@@ -1044,27 +868,13 @@ function TracePush()
 		local depth = (traceTable.pos - traceTable.endpos):Length()
 		
 		local distance = distanceVector:Length()
-		--DebugDrawLine(traceTable.pos, self.grabEndpoint, 0, 255, 0, false, 0.5)
+		--DebugDrawLine(traceTable.pos, thisEntity.grabEndpoint, 0, 255, 0, false, 0.5)
 		
 		local normal = (traceTable.startpos - traceTable.pos):Normalized()
 		local coDirection = pullVector:Dot(normal)
 		
 		local dragFactor = (coDirection + 1) / 2
-		
-		-- At low speeds, directly move the player to keep the pole in the same position. 
-		--[[if playerPhys:GetVelocity(playerEnt):Length() < POLE_FORCE_MOVE_MAX_SPEED and
-			distance < POLE_FORCE_MOVE_MAX_DISTANCE and distance > POLE_FORCE_MOVE_MIN_DISTANCE and
-			coDirection > POLE_DRAG_DOT
-		then
-			local controller = playerEnt:GetOrCreatePrivateScriptScope().ActiveSkiContoller
-			if not controller or not IsValidEntity(controller) or
-				controller == thisEntity or not controller:GetPrivateScriptScope():IsTouchingGround()
-			then
-				playerPhys:AddVelocity(playerEnt, distanceVector * 1)
-				--playerPhys:MovePlayer(playerEnt, distanceVector, false)
-				--playerPhys:StickFrame(playerEnt)
-			end
-		end]]
+
 	
 		-- If the pole is dragging along the ground in the opposite direction of the staking.
 		if coDirection < 0 or distance > POLE_DRAG_DIST
@@ -1075,8 +885,7 @@ function TracePush()
 			then
 				dragFactor = dragFactor *  POLE_DRAG_PULL_FACTOR  * depth / GRAB_MAX_DISTANCE
 				RumbleController(1, 0.4, 40)
-			end
-			
+			end	
 		end
 		
 		-- Allows the player to push away from walls
@@ -1097,10 +906,7 @@ function TracePush()
 			pushVector = pushVector + pullVector * dragFactor
 		end	
 		
-		local playerVel = playerPhys:GetVelocity(playerEnt)
-		local playerSpeed = playerVel:Length()
-		
-		if playerSpeed > 0 then
+		if playerMoving then
 		
 			--DebugDrawLine(traceTable.pos, traceTable.pos + pullVector, 255, 0, 0, true, 0.5)
 			playerPhys:AddVelocity(playerEnt, pushVector)
@@ -1120,9 +926,7 @@ function TracePush()
 			end
 		end
 		
-		ParticleManager:SetParticleControl(sprayParticle, 0, traceTable.pos)
-		--ParticleManager:SetParticleControlForward(sprayParticle, 0, traceTable.normal)
-		
+		ParticleManager:SetParticleControl(sprayParticle, 0, traceTable.pos)		
 		
 		local particleVel = traceTable.normal * min(playerSpeed * 0.5, 60)
 		
@@ -1144,13 +948,6 @@ function TracePush()
 			playerMoved = false
 		end	
 	end
-	
-	return PUSH_TRACE_INTERVAL
-end
-
-
-function sign(x)
-	return x > 0 and 1 or x < 0 and -1 or 1
 end
 
 
@@ -1164,7 +961,8 @@ function RumbleController(intensity, length, frequency)
 		rumbleInt = intensity
 	end		
 end
-		
+
+
 function RumbleThink()
 	if not handEnt
 	then

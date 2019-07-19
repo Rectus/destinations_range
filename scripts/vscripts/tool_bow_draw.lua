@@ -8,7 +8,7 @@ local isPulling = false
 
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
@@ -33,25 +33,29 @@ function OnHandleInput(input)
 
 	local nIN_TRIGGER = IN_USE_HAND1; if (handID == 0) then nIN_TRIGGER = IN_USE_HAND0 end;
 	local nIN_GRIP = IN_GRIP_HAND1; if (handID == 0) then nIN_GRIP = IN_GRIP_HAND0 end;
+	local nIN_PAD_TOUCH = IN_PAD_TOUCH_HAND1; if (handID == 0) then nIN_GRIP = IN_PAD_TOUCH_HAND0 end;
 	
-	if input.buttonsPressed:IsBitSet(nIN_TRIGGER)
-	then
-		input.buttonsPressed:ClearBit(nIN_TRIGGER)
-
-	end
 	
 	if input.buttonsReleased:IsBitSet(nIN_TRIGGER) 
 	then
-		input.buttonsReleased:ClearBit(nIN_TRIGGER)
 		thisEntity:ForceDropTool();
 		
 	end
 	
-	--[[if input.buttonsReleased:IsBitSet(nIN_GRIP)
+	if input.buttonsReleased:IsBitSet(nIN_GRIP)
 	then
-		input.buttonsReleased:ClearBit(nIN_GRIP)
 		thisEntity:ForceDropTool();
-	end]]
+	end
+
+	if playerEnt:GetVRControllerType() == VR_CONTROLLER_TYPE_KNUCKLES
+	then
+	
+		if input.buttonsReleased:IsBitSet(nIN_PAD_TOUCH)
+		then
+			thisEntity:ForceDropTool();
+		end
+	
+	end
 
 	return input;
 end

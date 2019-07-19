@@ -7,6 +7,23 @@ function OnScoreboardChanged(table_name, key, data)
 
 }
 
+function SetPlayerName(namePanel, playerID)
+{
+	if(typeof playerID === 'number') // Player server ID
+	{
+		namePanel.text = "Player " + playerID;
+	}
+	else if(typeof playerID === 'string') // Steam ID
+	{
+		var func = function(panel) { return function(data) {panel.text = data.persona_name;};} (namePanel);
+		namePanel.text = SteamFriends.RequestPersonaName(playerID,  func);
+	}
+	else
+	{
+		namePanel.text = "Unknown";
+	}
+}
+
 function UpdateScoreboard(data)
 {
 	var leaderTime = CustomNetTables.GetTableValue("slalom_scoreboard", "1").time;
@@ -21,9 +38,7 @@ function UpdateScoreboard(data)
 		}
 		
 		var timediff = leaderTime - score.time;
-		
-		$("#ScoreName" + idx).text = "Player " + score.id; // Needs player name
-		
+		SetPlayerName($("#ScoreName" + idx), score.id);
 		$("#ScoreTime" + idx).text = TimeString(score.time);
 		if(idx == 1)
 		{
@@ -36,10 +51,10 @@ function UpdateScoreboard(data)
 	}
 }
 
-
 function UpdateTime(data)
 {
-	$("#TimeName").text = "Player " + data.id; // Needs player name
+	SetPlayerName($("#TimeName"), data.id);
+	
 	if(data.finished)
 	{
 		$("#CurrentTime").text = TimeString(data.time);

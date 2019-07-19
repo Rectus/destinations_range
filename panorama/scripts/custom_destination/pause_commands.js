@@ -17,12 +17,12 @@ function RegisterPanel(data)
 
 function SetVisible(data)
 {
-	if(data.id != panelID)
+	if(data.panel != panelID)
 	{
 		return;
 	}
 	
-	if(data.visible)
+	if(data.visible == 1)
 	{
 		$("#PausePanel").AddClass("Visible");
 	}
@@ -84,4 +84,5 @@ function ToggleSkis()
 {
 	registerEventID = GameEvents.Subscribe("pause_panel_register", RegisterPanel);
 	GameEvents.Subscribe("pause_panel_add_item", AddItem);
+	GameEvents.Subscribe("pause_panel_set_visible", SetVisible);
 })();

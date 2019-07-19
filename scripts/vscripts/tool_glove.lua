@@ -67,7 +67,7 @@ function Activate()
 end
 
 
-function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
+function SetEquipped(this, pHand, nHandID, pHandAttachment, pPlayer)
 
 	handID = nHandID
 	handEnt = pHand
@@ -150,7 +150,7 @@ function OnHandleInput( input )
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
 		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
 		then
-			OnTriggerPressed(self)
+			OnTriggerPressed()
 		end
 	end
 	

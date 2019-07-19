@@ -980,4 +980,22 @@
 			"sounds/props/cloth_impact_04.vsnd",
 		]
 	}
+	
+	Laser_Pistol_Fire = 
+	{
+		type = "destinations.simple_vr"
+		volume = 0.2
+		distance_max = "10000"
+		vsnd_files = "sounds/weapons/laser_pistol_fire.vsnd"
+	}
+	
+	Laser_Pistol_Loop = 
+	{
+		type = "destinations.simple_vr"
+		volume = 0.15
+		distance_max = 1000
+		fade_out = 0.1
+		pitch = 0.95
+		vsnd_files = "sounds/weapons/laser_pistol_loop.vsnd"
+	}
 }

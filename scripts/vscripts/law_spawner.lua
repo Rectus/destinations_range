@@ -22,7 +22,7 @@
 	THE SOFTWARE.
 ]]--
 
-function PostSpawn(self, entities)
+function PostSpawn(this, entities)
 	-- The spawn callback returns all entities it has ever spawned.
 	for i, entity in pairs(entities)
 	do

@@ -39,7 +39,6 @@ end
 
 function Activate()
 	thisEntity:SetThink(Think, "think", INTERVAL)
-
 end
 
 function OnTakeDamage()
@@ -93,7 +92,7 @@ function Think()
 	return INTERVAL
 end
 
-function OnDropped(self, hand)
+function OnDropped(this, hand)
 	handVel = hand:GetVelocity()  
 	thisEntity:SetThink(Boost, "boost", 0.05)
 	

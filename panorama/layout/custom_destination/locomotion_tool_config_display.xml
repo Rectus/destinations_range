@@ -13,35 +13,37 @@
 			<!--<Panel class="ConfigPanelTitlebar">
 				<Label class="ConfigPanelTitleLabel"  text="Locomotion Setup"/>
 			</Panel>-->
-
+			<Panel class="ConfigPanelDescriptionBox">
+				<Label class="ConfigPanelDescriptionText" id="Description" text="" />
+			</Panel>
 			
 			<Panel class="ConfigPanelButtonPane">
 				<Panel class="ConfigPanelButtonHeading">
 					<Label class="ConfigPanelButtonHeadingText" text="Trigger" />
 				</Panel>
 				
-				<Button id="TriggerSurfaceGrab" class="ConfigPanelButton" text="" onactivate="SetTrigger(1)"> 
-					<Label class="ConfigPanelButtonLabel" text="Surface Grab" />
+				<Button id="TriggerSurfaceGrab" class="ConfigPanelButton" text="" onactivate="SetTrigger(1)" tabindex="auto" selectionpos="auto" defaultfocus="true"> 
+					<Label class="ConfigPanelButtonLabel" text="Climb" />
 				</Button>
 			
-				<Button id="TriggerAirGrab" class="ConfigPanelButton" text="" onactivate="SetTrigger(2)"> 
+				<Button id="TriggerAirGrab" class="ConfigPanelButton" text="" onactivate="SetTrigger(2)" tabindex="auto" selectionpos="auto"> 
 					<Label class="ConfigPanelButtonLabel" text="Air Grab" />
 				</Button>
 			
-				<Button id="TriggerAirGrabGround" class="ConfigPanelButton" text="" onactivate="SetTrigger(3)"> 
-					<Label class="ConfigPanelButtonLabel" text="Air Grab (Grounded)" />
+				<Button id="TriggerAirGrabGround" class="ConfigPanelButton" text="" onactivate="SetTrigger(3)" tabindex="auto" selectionpos="auto"> 
+					<Label class="ConfigPanelButtonLabel" text="Grounded Grab" />
 				</Button>
 				
-				<Button id="TriggerGrapple" class="ConfigPanelButton" text="" onactivate="SetTrigger(4)"> 
-					<Label class="ConfigPanelButtonLabel" text="Grappling Hook" />
+				<Button id="TriggerGrapple" class="ConfigPanelButton" text="" onactivate="SetTrigger(4)" tabindex="auto" selectionpos="auto"> 
+					<Label class="ConfigPanelButtonLabel" text="Grapple" />
 				</Button>
 				
-				<Button id="TriggerJetpack" class="ConfigPanelButton" text="" onactivate="SetTrigger(5)"> 
+				<Button id="TriggerJetpack" class="ConfigPanelButton" text="" onactivate="SetTrigger(5)" tabindex="auto" selectionpos="auto"> 
 					<Label class="ConfigPanelButtonLabel" text="Jetpack" />
 				</Button>
 				
-				<Button id="TriggerFly" class="ConfigPanelButton" text="" onactivate="SetTrigger(6)"> 
-					<Label class="ConfigPanelButtonLabel" text="Flying" />
+				<Button id="TriggerFly" class="ConfigPanelButton" text="" onactivate="SetTrigger(6)" tabindex="auto" selectionpos="auto"> 
+					<Label class="ConfigPanelButtonLabel" text="Flight" />
 				</Button>
 			</Panel>
 			
@@ -64,13 +66,14 @@
 				</Button>
 			
 				<Button id="PadPush" class="ConfigPanelButton" text="" onactivate="SetPad(3)"> 
-					<Label class="ConfigPanelButtonLabel" text="Hold" />
+					<Label class="ConfigPanelButtonLabel" text="Press" />
 				</Button>
 				
 				<Button id="PadDual" class="ConfigPanelButton" text="" onactivate="SetPad(4)"> 
-					<Label class="ConfigPanelButtonLabel" text="Touch/Hold" />
+					<Label class="ConfigPanelButtonLabel" text="Touch/Press" />
 				</Button>
 			</Panel>
+
 
 			<Panel class="ConfigPanelButtonPane">
 				<Panel class="ConfigPanelButtonHeading">
@@ -82,7 +85,7 @@
 				</Button>
 			
 				<Button id="RotateOneYaw" class="ConfigPanelButton" text="" onactivate="SetRotation(1)"> 
-					<Label class="ConfigPanelButtonLabel" text="One Handed (Yaw)" />
+					<Label class="ConfigPanelButtonLabel" text="One Handed" />
 				</Button>
 				
 				<Button id="RotateTwo" class="ConfigPanelButton" text="" onactivate="SetRotation(2)"> 
@@ -100,19 +103,41 @@
 				</Button>
 				
 				<Button id="TargetingHandNormal" class="ConfigPanelButton" text="" onactivate="SetTargeting(2)"> 
-					<Label class="ConfigPanelButtonLabel" text="Hand(Constant)" />
+					<Label class="ConfigPanelButtonLabel" text="Hand (Constant)" />
 				</Button>
 			
 				<Button id="TargetingHead" class="ConfigPanelButton" text="" onactivate="SetTargeting(3)"> 
 					<Label class="ConfigPanelButtonLabel" text="Head" />
 				</Button>
+			</Panel>
 
+			
+
+			
+			<Panel class="ConfigPanelButtonPane" >
+				<Panel class="ConfigPanelButtonHeading">
+					<Label class="ConfigPanelButtonHeadingText" text="Pad Sensitivity" />
+				</Panel>
+			
+				<Panel class="ConfigPanelSliderPane" id="PadFactor">
+					<Slider id="PadFactorSlider" class="ConfigPanelSlider" direction="horizontal" onvaluechanged="SetPadFactor()" /> 
+					<Label class="ConfigPanelSliderValue" id="PadFactorValue" text="1.0" />		
+				</Panel>
 			</Panel>
 			
-			<Panel class="ConfigPanelDescriptionBox">
-				<Label class="ConfigPanelDescriptionText" id="Description" text="" />
+			<Panel class="ConfigPanelButtonPane" >
+				<Panel class="ConfigPanelButtonHeading">
+					<Label class="ConfigPanelButtonHeadingText" text="Grab Move Factor" />
+				</Panel>
+			
+				<Panel class="ConfigPanelSliderPane" id="GrabFactor">
+					<Slider id="GrabFactorSlider" class="ConfigPanelSlider" direction="horizontal" onvaluechanged="SetGrabFactor()" /> 
+					<Label class="ConfigPanelSliderValue" id="GrabFactorValue" text="1.0" />
+				</Panel>
 			</Panel>
 
+		
+			
 			
 		</ClientUIDialogPanel>
 	</ClientUIDialogPanel>

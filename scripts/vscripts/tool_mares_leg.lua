@@ -93,7 +93,7 @@ function Activate()
 	end
 end
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	controller = pHand
 	currentPlayer = pPlayer
@@ -297,7 +297,7 @@ end
 	
 
 
-function FireRumble(self)
+function FireRumble()
 	if controller
 	then
 		controller:FireHapticPulse(2)
@@ -315,7 +315,7 @@ end
 
 
 
-function CheckSpin(self)
+function CheckSpin()
 	if not isCarried
 	then
 		return nil

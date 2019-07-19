@@ -88,7 +88,7 @@ function Precache(context)
 end
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
@@ -107,11 +107,11 @@ function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
 		
 		if not screenText
 		then
-			SetPanelText(self, "bootMessage[1]")
+			SetPanelText("bootMessage[1]")
 			thisEntity:SetThink(BootMessage, "boot_panel", 0.3)
 			thisEntity:EmitSound("Scanner.Track")
 		else
-			SetPanelText(self, screenText)
+			SetPanelText(screenText)
 		end
 	end
 	
@@ -163,14 +163,14 @@ function OnHandleInput( input )
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
 		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
 		then
-			TriggerPressed(self)
+			TriggerPressed()
 		end
 	end
 		
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
 	then
 		input.buttonsReleased:ClearBit(IN_TRIGGER)
-		TriggerUnpressed(self)
+		TriggerUnpressed()
 	end
 	
 	
@@ -206,7 +206,7 @@ function OnHandleInput( input )
 end
 
 
-function BootMessage(self)
+function BootMessage()
 
 	if isTargeting or isScanning
 	then
@@ -218,7 +218,7 @@ function BootMessage(self)
 	for i = 1, bootCounter, 1
 	do
 		text = text .. bootMessage[i] .."\n"
-		SetPanelText(self, text)
+		SetPanelText(text)
 	end
 	
 	if bootCounter < #bootMessage 
@@ -232,7 +232,7 @@ function BootMessage(self)
 end
 
 
-function SetPanelText(self, text)
+function SetPanelText(text)
 	screenText = text
 	CustomGameEventManager:Send_ServerToAllClients("scanner_update_display", 
 		{id = screen:GetEntityIndex(); displayText = screenText})
@@ -240,8 +240,8 @@ end
 
 
 
-function TriggerPressed(self)
-	SetPanelText(self, "Scanning...")
+function TriggerPressed()
+	SetPanelText("Scanning...")
 
 	thisEntity:EmitSound("Scanner.Start")
 	thisEntity:EmitSound("Scanner.Track")
@@ -265,10 +265,10 @@ function TriggerPressed(self)
 end
 
 
-function TriggerUnpressed(self)
+function TriggerUnpressed()
 	if isTargeting or isScanning
 	then
-		SetPanelText(self, "Ready to scan...")
+		SetPanelText("Ready to scan...")
 		thisEntity:StopSound("Scanner.Scan")
 		thisEntity:StopSound("Scanner.Track")
 		--thisEntity:EmitSound("Scanner.Stop")
@@ -285,7 +285,7 @@ function TriggerUnpressed(self)
 end
 
 
-function TraceBeam(self)
+function TraceBeam()
 	if not isTargeting
 	then 
 		return nil
@@ -303,7 +303,7 @@ function TraceBeam(self)
 
 			thisEntity:StopSound("Scanner.Track")
 			thisEntity:EmitSound("Scanner.Beep")
-			ScanEntity(self, scannedEntity)
+			ScanEntity(scannedEntity)
 			scannedEntity = nil
 			return nil
 		end
@@ -365,7 +365,7 @@ function TraceBeam(self)
 	return BEAM_TRACE_INTERVAL
 end
 
-function ScanEntity(self, entity)
+function ScanEntity(entity)
 	local text = "Class: " .. entity:GetClassname()
 		.. "\nName: " .. entity:GetName()
 		.. "\nModel: " .. entity:GetModelName()
@@ -394,7 +394,7 @@ function ScanEntity(self, entity)
 		text = text .. "\n" .. scope.GetScannerText()
 	end
 		
-	SetPanelText(self, text)
+	SetPanelText(text)
 end
 
 

@@ -30,7 +30,7 @@ function Precache(context)
 	PrecacheSoundFile("soundevents/soundevents_addon.vsndevts", context)
 end
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	controller = pHand
 	currentPlayer = pPlayer
@@ -82,7 +82,7 @@ function OnHandleInput(input)
 		input.buttonsPressed:ClearBit(nIN_TRIGGER)
 		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
 		then
-			OnTriggerPressed(self)
+			OnTriggerPressed()
 		end
 	end
 	
@@ -104,7 +104,7 @@ end
 
 
 
-function OnTriggerPressed(self)
+function OnTriggerPressed()
 	StartSoundEvent("Flashlight.Button", thisEntity)
 	if turnedOn
 	then

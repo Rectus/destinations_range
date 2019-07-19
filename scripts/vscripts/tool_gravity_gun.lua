@@ -60,7 +60,7 @@ function Precache(context)
 end
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
@@ -137,7 +137,7 @@ function OnHandleInput( input )
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
 		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
 		then
-			Punt(self)
+			Punt()
 		end
 	end
 		
@@ -150,13 +150,13 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_PAD)
 	then
 		input.buttonsPressed:ClearBit(IN_PAD)
-		StartPull(self)
+		StartPull()
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_PAD) 
 	then
 		input.buttonsReleased:ClearBit(IN_PAD)
-		EndPull(self)
+		EndPull()
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_GRIP)
@@ -179,7 +179,7 @@ end
 
 
 
-function StartPull(self)
+function StartPull()
 	if isCarrying
 	then
 		pulledObject = nil
@@ -192,7 +192,7 @@ function StartPull(self)
 		return
 	end
 
-	local hitEnt = TraceEntity(self)
+	local hitEnt = TraceEntity()
 	
 	if hitEnt
 	then
@@ -208,7 +208,7 @@ function StartPull(self)
 end
 
 
-function EndPull(self)
+function EndPull()
 	if not isCarrying and pulledObject
 	then
 		pulledObject = nil
@@ -219,7 +219,7 @@ function EndPull(self)
 end
 
 
-function Punt(self)
+function Punt()
 	if isCarrying
 	then
 		pulledObject:ApplyAbsVelocityImpulse(handAttachment:GetAngles():Forward() * PUNT_IMPULSE)
@@ -230,7 +230,7 @@ function Punt(self)
 		thisEntity:SetThink(TraceBeam, "trace_beam", BEAM_TRACE_INTERVAL)
 		beamParticle:Start()
 	else
-		local ent = TracePunt(self)
+		local ent = TracePunt()
 		
 		if ent
 		then
@@ -243,7 +243,7 @@ function Punt(self)
 end
 
 
-function TraceEntity(self)
+function TraceEntity()
 	local traceTable =
 	{
 		startpos = GetMuzzlePos();
@@ -269,7 +269,7 @@ function TraceEntity(self)
 end
 
 
-function TraceBeam(self)
+function TraceBeam()
 	if (not isTargeting) or isCarrying
 	then 
 		return nil
@@ -323,7 +323,7 @@ function TraceBeam(self)
 end
 
 
-function TracePunt(self)
+function TracePunt()
 
 	local traceTable =
 	{
@@ -358,7 +358,7 @@ function TracePunt(self)
 end
 
 
-function PullObjectFrame(self)
+function PullObjectFrame()
 	
 	if not pulledObject
 	then
@@ -371,7 +371,7 @@ function PullObjectFrame(self)
 		if not isCarrying
 		then
 			isCarrying = true
-			StartedCarrying(self)
+			StartedCarrying()
 		end
 	end
 	
@@ -388,12 +388,12 @@ function PullObjectFrame(self)
 	pulledObject:ApplyAbsVelocityImpulse(GetPhysVelocity(pulledObject) * -COUNTER_IMPULSE_FACTOR)				
 	SetPhysAngularVelocity(pulledObject, (1 - ROTATION_DAMPING_FACTOR) * GetPhysAngularVelocity(pulledObject))
 	
-	ClampObjectVelocity(self, pulledObject, distance)
+	ClampObjectVelocity(pulledObject, distance)
 	
 	return OBJECT_PULL_INTERVAL
 end
 
-function ClampObjectVelocity(self, entity, distance)
+function ClampObjectVelocity(entity, distance)
 	local velocity = GetPhysVelocity(entity)
 	
 	if distance < CARRY_GLUE_DISTANCE
@@ -407,7 +407,7 @@ function ClampObjectVelocity(self, entity, distance)
 	end
 end
 
-function StartedCarrying(self)
+function StartedCarrying()
 	StopSoundEvent("Physcannon.Charge", thisEntity)
 	StartSoundEvent("Physcannon.Pickup", thisEntity)
 	StartSoundEvent("Physcannon.HoldLoop", thisEntity)

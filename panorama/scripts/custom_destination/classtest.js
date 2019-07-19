@@ -35,6 +35,7 @@ function DumpScope(scope)
 
 (function()
 {
+	DumpScope(this)
 	//$.GetContextPanel();
 	for(var i = 1; i < 25; i++) 
 	{

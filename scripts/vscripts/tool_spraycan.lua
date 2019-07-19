@@ -143,7 +143,7 @@ end
 
 -- SetEquipped and SetUnequipped are expected by code and rely on these arguments matching
 -- if you update arguments passed from code, you need to update it here as well
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	--print( "================  SetEquipped() ");
 	if ( pPlayer == nil ) then return; end
 

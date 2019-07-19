@@ -73,7 +73,7 @@ end
 
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
@@ -97,7 +97,7 @@ end
 function SetUnequipped()
 	if isGrabbing
 	then
-		ReleaseHold(self)
+		ReleaseHold()
 	end
 	--thisEntity:SetProceduralIKTargetWeight("arm_ik", "arm_target", 0)
 	playerEnt = nil
@@ -126,13 +126,13 @@ function OnHandleInput( input )
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		OnTriggerPressed(self)
+		OnTriggerPressed()
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
 	then
 		input.buttonsReleased:ClearBit(IN_TRIGGER)
-		OnTriggerUnpressed(self)
+		OnTriggerUnpressed()
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_GRIP)
@@ -146,11 +146,11 @@ function OnHandleInput( input )
 end
 
 
-function OnTriggerPressed(self)
+function OnTriggerPressed()
 	
 	if isGrabbing
 	then
-		ReleaseHold(self)
+		ReleaseHold()
 			
 	end
 	isTargeting = false
@@ -159,7 +159,7 @@ function OnTriggerPressed(self)
 end
 
 
-function OnTriggerUnpressed(self)
+function OnTriggerUnpressed()
 	if not isGrabbing
 	then
 		thisEntity:SetThink(TraceGrab, "trace_grab", 0.5)
@@ -171,7 +171,7 @@ end
 
 
 
-function ReleaseHold(self)
+function ReleaseHold()
 	isGrabbing = false
 	
 	StartSoundEvent("Suctioncup.Release", thisEntity)
@@ -192,7 +192,7 @@ function ReleaseHold(self)
 end
 
 
-function TraceGrab(self)
+function TraceGrab()
 	if not isTargeting
 	then 
 		return nil
@@ -250,7 +250,7 @@ end
 
 
 
-function GrabMoveFrame(self)
+function GrabMoveFrame()
 	if not isGrabbing or not grabbedEnt or not IsValidEntity(grabbedEnt)
 	then
 		return nil
@@ -263,7 +263,7 @@ function GrabMoveFrame(self)
 end
 
 
-function IdleFrame(self)
+function IdleFrame()
 	if isGrabbing
 	then
 		return nil

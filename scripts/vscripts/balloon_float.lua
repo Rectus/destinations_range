@@ -44,16 +44,16 @@ function Think()
 	return 0.02
 end
 
-function EnableThink(self)
+function EnableThink()
 	thisEntity:SetThink(Think, "think", 0.02)
 end
 
 
-function OnBreak(self)
+function OnBreak()
 	Explode()
 end
 
-function Explode(self)
+function Explode()
 	if exploded
 	then
 		return

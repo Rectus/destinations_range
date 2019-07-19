@@ -8,7 +8,7 @@
 	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
 		<Panel class="Page">
 			<Panel class="TextArea">
-				<Label class="Text" text="Toggle Pause" />
+				<Label class="Text" text="Press menu button to pause movement" />
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

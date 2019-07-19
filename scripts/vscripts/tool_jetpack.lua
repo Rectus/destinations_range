@@ -78,7 +78,7 @@ function Precache(context)
 end
 
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
@@ -358,7 +358,7 @@ function UpdatePackPos()
 end
 
 
-function JetpackThrust(self)
+function JetpackThrust()
 
 	if not handAttachment
 	then 
@@ -417,7 +417,7 @@ function JetpackThrust(self)
 		
 		ParticleManager:SetParticleControl(sphere, 2, sphereOrigin + verticalVector * 4)
 		
-		local playerHeight = g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) 
+		local playerHeight = g_VRScript.playerPhysController:GetPlayerHeight(playerEnt) 
 		
 		if playerHeight < GROUND_EFFECT_HEIGHT
 		then
@@ -461,7 +461,7 @@ function NormalizeAngle(angle)
 end
 
 
-function RumbleController(self, intensity, length, frequency)
+function RumbleController(intensity, length, frequency)
 	if handEnt
 	then
 		if rumbleTime == 0

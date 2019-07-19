@@ -1,0 +1,148 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:vpcf19:version{aafc65d8-7a5a-4e01-bd8d-3ac118422503} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_controlPointConfigurations = 
+	[
+		{
+			m_name = "preview"
+			m_drivers = 
+			[
+				{
+					m_iAttachType = "PATTACH_WORLDORIGIN"
+					m_vecOffset = [ 0.0, 0.0, 0.0 ]
+					m_angOffset = [ null, null, null ]
+					m_entityName = "self"
+				},
+			]
+		},
+	]
+	m_ConstantNormal = [ 1.0, 0.0, 0.0 ]
+	m_Operators = 
+	[
+		{
+			_class = "C_OP_ColorInterpolateRandom"
+			m_ColorFadeMin = [ 4, 4, 4, 255 ]
+			m_ColorFadeMax = [ 6, 2, 2, 255 ]
+			m_flFadeEndTime = 0.3
+		},
+		{
+			_class = "C_OP_RemapDotProductToScalar"
+			m_nInputCP2 = 2
+			m_nFieldOutput = "7"
+			m_flInputMin = 0.5
+			m_bScaleInitialRange = true
+		},
+		{
+			_class = "C_OP_FadeAndKill"
+			m_flStartFadeOutTime = 0.8
+		},
+	]
+	m_Renderers = 
+	[
+		{
+			_class = "C_OP_RenderRopes"
+			m_flRadiusTaper = 0.0
+			m_nMaxTesselation = 1
+			m_nOrientationType = 3
+			m_flSelfIllumAmount = 1.0
+			m_flOverbrightFactor = 7.0
+			m_hTexture = resource:"materials/particle/beam_smoke_01.vtex"
+			m_flTessScale = 0.0
+			m_bUseScalarForTextureCoordinate = true
+			m_flScalarAttributeTextureCoordScale = 100.0
+			m_flDepthBias = 0.2
+			m_flAnimationRate = 0.0
+			m_bPerVertexLighting = true
+		},
+	]
+	m_Initializers = 
+	[
+		{
+			_class = "C_INIT_NormalAlignToCP"
+		},
+		{
+			_class = "C_INIT_CreateWithinSphere"
+		},
+		{
+			_class = "C_INIT_RandomRadius"
+			m_flRadiusMin = 0.5
+			m_flRadiusMax = 1.2
+		},
+		{
+			_class = "C_INIT_DistanceToCPInit"
+			m_nFieldOutput = "7"
+			m_flInputMax = 5.0
+			m_nStartCP = 2
+			m_bScaleInitialRange = true
+			m_bActiveRange = true
+		},
+		{
+			_class = "C_INIT_DistanceToCPInit"
+			m_nFieldOutput = "7"
+			m_flInputMin = 5.0
+			m_flInputMax = 30.0
+			m_flOutputMin = 1.0
+			m_flOutputMax = 0.0
+			m_nStartCP = 2
+			m_bScaleInitialRange = true
+		},
+		{
+			_class = "C_INIT_DistanceToCPInit"
+			m_flInputMax = 50.0
+			m_flOutputMin = 1.0
+			m_flOutputMax = 0.5
+			m_nStartCP = 2
+			m_bScaleInitialRange = true
+		},
+	]
+	m_Emitters = 
+	[
+		{
+			_class = "C_OP_ContinuousEmitter"
+			m_flEmitRate = 
+			{
+				m_nType = "PF_TYPE_CONTROL_POINT_COMPONENT"
+				m_nMapType = "PF_MAP_TYPE_DIRECT"
+				m_flLiteralValue = 100.0
+				m_nControlPoint = 1
+				m_nScalarAttribute = 3
+				m_nVectorAttribute = 6
+				m_nVectorComponent = 0
+				m_flRandomMin = 0.0
+				m_flRandomMax = 1.0
+				m_nRandomMode = "PF_RANDOM_MODE_CONSTANT"
+				m_flMultFactor = 1.0
+				m_flInput0 = 0.0
+				m_flInput1 = 1.0
+				m_flOutput0 = 0.0
+				m_flOutput1 = 1.0
+				m_nBiasType = "PF_BIAS_TYPE_STANDARD"
+				m_flBiasParameter = 0.0
+				m_Curve = 
+				{
+					m_spline = [  ]
+					m_tangents = [  ]
+					m_vDomainMins = [ 0.0, 0.0 ]
+					m_vDomainMaxs = [ 0.0, 0.0 ]
+				}
+			}
+		},
+	]
+	m_ConstantColor = [ 231, 58, 35, 138 ]
+	m_flConstantLifespan = 20.0
+	m_flConstantRadius = 1.0
+	m_nMaxParticles = 1700
+	m_nBehaviorVersion = 9
+	m_PreEmissionOperators = 
+	[
+		{
+			_class = "C_OP_DistanceBetweenCPsToCP"
+			m_nEndCP = 2
+			m_nOutputCP = 1
+			m_flInputMax = 1.0
+			m_flOutputMax = 90.0
+		},
+	]
+	m_flMaxDrawDistance = 5000.0
+	m_flStartFadeDistance = 4500.0
+}

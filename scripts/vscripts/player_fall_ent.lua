@@ -1,7 +1,7 @@
 --[[
 	Player physics contoller
 	
-	Copyright (c) 2017 Rectus
+	Copyright (c) 2017-2019 Rectus
 	
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,7 @@
 ]]--
 
 local controller = nil
-local thinkInterval = 1
-local frameCount = 0
+
 
 function EnableThink(cont, interval)
 	thinkInterval = interval
@@ -32,34 +31,26 @@ function EnableThink(cont, interval)
 	
 	g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(FrameThink)
 	
-	ListenToGameEvent("player_spawn", EventPlayerSpawn, self)
+	ListenToGameEvent("player_spawn", EventPlayerSpawn, thisEntity)
+	-- Give players time to spawn HMD and hands
+	thisEntity:SetThink(AddPlayers, "add_player", 0.5)
 end
 
 
 function FrameThink()
 
-	-- Moving the player every frame breaks hand positions.
-	frameCount = frameCount + 1
-	
-	if frameCount >= 2 then
-		frameCount = 0
-
-		if controller
-		then
-			controller:PlayerMoveThink()
-			controller:FrameThink()
-		end
+	if controller
+	then
+		controller:PlayerMoveThink()
+		controller:FrameThink()
 	end
-	
 end
 
 
-function EventPlayerSpawn(params)
+function EventPlayerSpawn(thisEntity, params)
 
 	local player = PlayerInstanceFromIndex(params.userid)
-
-	-- Give players time to spawn HMD and hands
-	thisEntity:SetThink(AddPlayers, "add_player", 5)
+	controller:AddPlayer(player)
 end
 
 

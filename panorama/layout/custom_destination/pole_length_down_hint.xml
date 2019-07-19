@@ -6,9 +6,9 @@
 	</styles>
 
 	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
-		<Panel class="ImportantPage">
+		<Panel class="Page">
 			<Panel class="TextArea">
-				<Label class="Text" text="Drop pole" />
+				<Label class="Text" text="Increase length" />
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

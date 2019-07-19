@@ -4,10 +4,11 @@ CPauseManager = class(
 	{
 		players = nil;
 		thinkEnt = nil;
-		spawnItems = nil
+		spawnItems = nil;
+		playerConnectData = {}
 	}, 	
 	{
-		THINK_INTERVAL = 0.02	
+		THINK_INTERVAL = 0.022
 	},
 	nil
 )
@@ -26,13 +27,21 @@ function CPauseManager:Init()
 	
 	CustomGameEventManager:RegisterListener("pause_panel_teleport", self.TeleportPlayerStart)
 	CustomGameEventManager:RegisterListener("pause_panel_spawn_item", self.SpawnItem)
-
+	ListenToGameEvent("player_disconnect", self.OnPlayerDisconnect, self)
 end
 
 
 function CPauseManager:DoPrecache(context)
 	for i, item in ipairs(self.spawnItems) do
 	
+		if item.keyvals.vscripts 
+		then
+			local scope = {} 
+			setmetatable(scope, {__index = getfenv(0)})
+			DoIncludeScript(item.keyvals.vscripts, scope)
+			if scope.Precache then scope.Precache(context) end
+		end
+		
 		PrecacheModel(item.keyvals.model, context)
 		
 		if item.modelPrecache then
@@ -52,17 +61,95 @@ function CPauseManager:DoPrecache(context)
 end
 
 
+function CPauseManager:ListenPlayerConnect()
+	ListenToGameEvent("player_connect", self.OnPlayerConnect, self)
+	ListenToGameEvent("player_info", self.OnPlayerConnect, self)
+end
+
+
+function CPauseManager:OnPlayerConnect(data)
+
+	--[[ Data format
+	{
+		"name"		"string"	// player name		
+		"index"		"byte"		// player slot (entity index-1)
+		"userid"	"short"		// user ID on server (unique on server)
+		"networkid" "string" // player network (i.e steam) id
+		"address"	"string"	// ip:port
+		"bot"		"bool"		// is a bot or not
+		"xuid"		"uint64"	// steamid
+	}]]
+
+	if not self.playerConnectData[data.userid] then self.playerConnectData[data.userid] = {} end
+
+	self.playerConnectData[data.userid] = vlua.tableadd(self.playerConnectData[data.userid], data)
+	local player = GetPlayerFromUserID(data.userid)
+	if player and self.players[player]
+	then
+		self.players[player].playerdata = self.playerConnectData[data.userid]
+	end
+end
+
+
+-- Clean up player data on disconnect
+function CPauseManager:OnPlayerDisconnect(data)
+
+	--[[ Data format
+	{
+		"userid"	"short"		// user ID on server
+		"reason"	"short"	// see networkdisconnect enum protobuf
+		"name"		"string"	// player name
+		"networkid"	"string"	// player network (i.e steam) id
+		"PlayerID"	"short"
+		"xuid"		"uint64"	// steamid
+	}]]
+
+	local player = GetPlayerFromUserID(data.userid)
+	if player and self.players[player]
+	then
+	
+		if self.players[player].pausePanel and IsValidEntity(self.players[player].pausePanel)
+		then
+			self.players[player].pausePanel:Kill()
+		end
+		
+		if self.players[player].pausePanelTarget and IsValidEntity(self.players[player].pausePanelTarget)
+		then
+			self.players[player].pausePanelTarget:Kill()
+		end
+	
+		self.players[player].playerdata = nil
+		self.players[player] = nil
+	end
+	self.playerConnectData[data.userid] = nil
+end
+
+
+function CPauseManager:AddPlayer(player)
+
+	local data = {}
+	
+	if self.playerConnectData[player:GetUserID()]
+	then
+		data = self.playerConnectData[player:GetUserID()]
+	end
+
+	self.players[player] =
+	{
+		paused = false;
+		pausePanel = nil;
+		playerdata = data
+	}
+end
+
+
 function CPauseManager:Think()
 	local playerList = Entities:FindAllByClassname("player")
 
 	for _, player in pairs(playerList)
 	do
 		if not self.players[player] then
-			self.players[player] =
-			{
-				paused = false;
-				pausePanel = nil
-			}
+			self:AddPlayer(player)
 		end
 		
 		if self.players[player].paused then
@@ -82,120 +169,39 @@ function CPauseManager:Think()
 	end
 end
 
-function CPauseManager:Pause(playerEnt)
 
-	if not self.players[playerEnt] then
-		self.players[playerEnt] =
-		{
-			paused = false;
-			pausePanel = nil
-		}
+function CPauseManager:Pause(player)
+
+	if not self.players[player] then
+		self:AddPlayer(player)
 	end
-		
-	local angles = QAngle(0, playerEnt:GetHMDAvatar():GetAngles().y, 0)
 	
+	local baseAngles = QAngle(0, player:GetHMDAvatar():GetAngles().y, 0)
+	local origin = player:GetHMDAvatar():GetCenter() + 
+			RotatePosition(Vector(0,0,0), baseAngles, Vector(40, 0, 12))
+	local angles = RotateOrientation(baseAngles, QAngle(0, -90, 105))
+	
+	if self.players[player].pausePanel and IsValidEntity(self.players[player].pausePanel)
+		and IsValidEntity(self.players[player].pausePanelTarget)
+	then
+		self.players[player].pausePanelTarget:SetAbsOrigin(origin)
+		self.players[player].pausePanelTarget:SetAngles(angles.x, angles.y, angles.z)
+		CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_set_visible", 
+			{panel = self.players[player].pausePanel:GetEntityIndex(), visible = 1})
+	else
+		self:SpawnPausePanel(player, origin, angles)
+	end
+end
+
+
+function CPauseManager:SpawnPausePanel(player, origin, angles)
+
+	self.players[player].pausePanelTarget = SpawnEntityFromTableSynchronous("info_target_instructor_hint", 
+		{origin = origin, angles = angles})
+
 	local keyvals =
 	{
-		origin = playerEnt:GetHMDAvatar():GetCenter() + 
-			RotatePosition(Vector(0,0,0), angles, Vector(40, 0, 12)),
-		targetname = "pause_panel",
-		dialog_layout_name = "file://{resources}/layout/custom_destination/pause_panel.xml",
-		width = "44",
-		height = "24",
-		panel_dpi = "32",
-		interact_distance = "128",
-		horizontal_align = "1",
-		vertical_align = "1",
-		orientation = "0",
-		angles = RotateOrientation(angles, QAngle(0, -90, 105))
-	}
-	self.players[playerEnt].pausePanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", keyvals)
-	
-	CustomGameEventManager:Send_ServerToPlayer(playerEnt, "pause_panel_register", 
-		{id = playerEnt:GetUserID(), panel = self.players[playerEnt].pausePanel:GetEntityIndex()})
-		
-	self:PopulateItems(playerEnt, self.players[playerEnt].pausePanel)
-end
-
-
-function CPauseManager:PopulateItems(playerEnt, panel)
-	for i, item in ipairs(self.spawnItems) do
-	
-		local data =
-		{
-			item = i,
-			img = item.img,
-			name = item.name,
-			panel = panel:GetEntityIndex()
-		}
-	
-		CustomGameEventManager:Send_ServerToPlayer(playerEnt, "pause_panel_add_item", data)
-	end
-end
-
-
-function CPauseManager:Unpause(playerEnt)
-
-	if not self.players[playerEnt] then
-		self.players[playerEnt] =
-		{
-			paused = false;
-			pausePanel = nil
-		}
-	end
-	
-	self.players[playerEnt].pausePanel:Kill()
-	self.players[playerEnt].pausePanel = nil
-
-end
-
-
-function CPauseManager:IsPaused(playerEnt)
-
-	if self.players[playerEnt] then
-		return self.players[playerEnt].paused
-	end
-	return false
-end
-
-
-function CPauseManager:TeleportPlayerStart(data)
-	local player = GetPlayerFromUserID(data.id)
-	local destination = Entities:FindByName(nil, "teleport_dest")
-	if destination then
-		CPauseManager:TeleportPlayer(player, destination)
-	end	
-end
-
-
-function CPauseManager:TeleportPlayer(player, destination)	
-	local manager = g_VRScript.pauseManager --Hack for not having self here
-	
-	local localPausePanelOrigin = nil
-	
-	if manager.players[player] and manager.players[player].pausePanel then
-		localPausePanelOrigin = manager.players[player].pausePanel:GetOrigin() - player:GetHMDAnchor():GetOrigin()
-	end
-	
-	local localPlayerOrigin = player:GetHMDAnchor():GetOrigin() - player:GetOrigin()
-
-	player:GetHMDAnchor():SetOrigin(destination:GetOrigin() + Vector(0, 0, -32) 
-		+ Vector(localPlayerOrigin.x, localPlayerOrigin.y, 0))
-		
-	if g_VRScript.playerPhysController then
-		g_VRScript.playerPhysController:SetVelocity(player, Vector(0,0,0))
-	end
-	
-	EmitSoundOnClient("Slope.UITeleport", player)
-
-	if manager.players[player] and manager.players[player].pausePanel then
-		local origin = player:GetHMDAnchor():GetOrigin() + localPausePanelOrigin
-		local angles = manager.players[player].pausePanel:GetAngles()
-		manager.players[player].pausePanel:Kill()
-		
-		local keyvals =
-	{
-		origin = player:GetHMDAnchor():GetOrigin() + localPausePanelOrigin,
+		origin = origin,
 		targetname = "pause_panel",
 		dialog_layout_name = "file://{resources}/layout/custom_destination/pause_panel.xml",
 		width = "44",
@@ -207,12 +213,108 @@ function CPauseManager:TeleportPlayer(player, destination)
 		orientation = "0",
 		angles = angles
 	}
-	manager.players[player].pausePanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", keyvals)
+	self.players[player].pausePanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", keyvals)
+	self.players[player].pausePanel:SetParent(self.players[player].pausePanelTarget, "")
 	
 	CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_register", 
-		{id = player:GetUserID(), panel = manager.players[player].pausePanel:GetEntityIndex()})
+		{id = player:GetUserID(), panel = self.players[player].pausePanel:GetEntityIndex()})
+		
+	self:PopulateItems(player, self.players[player].pausePanel)
+
+end
+
+
+function CPauseManager:PopulateItems(player, panel)
+	for i, item in ipairs(self.spawnItems) do
 	
-	manager:PopulateItems(player, manager.players[player].pausePanel)
+		local data =
+		{
+			item = i,
+			img = item.img,
+			name = item.name,
+			panel = panel:GetEntityIndex()
+		}
+	
+		CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_add_item", data)
+	end
+end
+
+
+function CPauseManager:Unpause(player)
+
+	if not self.players[player] then
+		self:AddPlayer(player)
+	end
+	
+	CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_set_visible", 
+		{panel = self.players[player].pausePanel:GetEntityIndex(), visible = 0})
+
+end
+
+
+function CPauseManager:IsPaused(player)
+
+	if self.players[player] then
+		return self.players[player].paused
+	end
+	return false
+end
+
+
+function CPauseManager:GetPlayerData(player)
+
+	if self.players[player] then
+		return self.players[player].playerdata
+	end
+	return nil
+end
+
+
+function CPauseManager:TeleportPlayerStart(data)
+	local player = GetPlayerFromUserID(data.id)
+	local destination = Entities:FindByName(nil, "teleport_dest")
+	if destination then
+		CPauseManager:TeleportPlayer(player, destination, true)
+	end	
+end
+
+
+function CPauseManager:TeleportPlayer(player, destination, onGround)	
+	local manager = g_VRScript.pauseManager --Hack for not having self here
+	
+	local localPausePanelOrigin = nil
+	
+	if manager.players[player] and manager.players[player].pausePanel then
+		localPausePanelOrigin = manager.players[player].pausePanel:GetAbsOrigin() - player:GetHMDAnchor():GetAbsOrigin()
+	end
+		
+	if g_VRScript.playerPhysController then
+		g_VRScript.playerPhysController:SetVelocity(player, Vector(0,0,0))
+		g_VRScript.playerPhysController:SetPlayerPosition(player, destination:GetAbsOrigin(), onGround, true)
+	else
+		local localPlayerOrigin = player:GetHMDAnchor():GetAbsOrigin() - player:GetAbsOrigin()
+		player:GetHMDAnchor():SetAbsOrigin(destination:GetAbsOrigin()
+			+ Vector(localPlayerOrigin.x, localPlayerOrigin.y, 0))
+	end
+	
+	EmitSoundOnClient("Slope.UITeleport", player)
+	
+	manager:OnTeleported(player)	
+end
+
+
+function CPauseManager:OnTeleported(player)
+
+	local baseAngles = QAngle(0, player:GetHMDAvatar():GetAngles().y, 0)
+	local origin = player:GetHMDAvatar():GetCenter() + 
+			RotatePosition(Vector(0,0,0), baseAngles, Vector(40, 0, 12))
+	local angles = RotateOrientation(baseAngles, QAngle(0, -90, 105))
+	
+	if self.players[player].pausePanel and IsValidEntity(self.players[player].pausePanel)
+		and IsValidEntity(self.players[player].pausePanelTarget)
+	then
+		self.players[player].pausePanelTarget:SetAbsOrigin(origin)
+		self.players[player].pausePanelTarget:SetAngles(angles.x, angles.y, angles.z)
 	end
 end
 

@@ -22,19 +22,15 @@
 	THE SOFTWARE.
 ]]--
 
-DoIncludeScript("component_grapple", thisEntity:GetPrivateScriptScope())
+DoIncludeScript("component_grapple", getfenv(1))
 
-local MOVE_THINK_INTERVAL = 0.022
+local MOVE_THINK_INTERVAL = 2
 local GRAB_MAX_DISTANCE = 2
-local GRAB_MOVE_INTERVAL = 0.022
-local PAD_MOVE_INTERVAL = 0.022
 local MOVE_CAP_FACTOR = 0.7
-local MOVE_SPEED = 150
+local MOVE_SPEED = 100
 local MOVE_SPEED_RUN_FACTOR = 2
 local AIR_CONTROL_FACTOR = 0.5
 
-
-local GRAB_TRACE_INTERVAL = 0.02
 local ROTATION_ANGLE_MAX_RATE = 10
 local MIN_ROTATE_DISTANCE = 4
 
@@ -57,6 +53,8 @@ local CONFIG_TYPE_PAD = 1
 local CONFIG_TYPE_TRIGGER = 2
 local CONFIG_TYPE_ROTATE = 3
 local CONFIG_TYPE_TARGET = 4
+local CONFIG_TYPE_PAD_FACTOR = 5
+local CONFIG_TYPE_GRAB_FACTOR = 6
 
 local PAD_MODE_DISABLED = 0
 local PAD_MODE_TELEPORT = 1
@@ -80,10 +78,21 @@ local TARGET_MODE_HAND = 1
 local TARGET_MODE_HAND_NORMAL = 2
 local TARGET_MODE_HEAD = 3
 
-local padMode = PAD_MODE_DUAL_SPEED
-local triggerMode = TRIGGER_MODE_GRAPPLE
-local rotateMode = ROTATE_MODE_TWO_HAND_YAW
-local targetMode = TARGET_MODE_HAND
+local CONTROL_MODE_TOUCHPAD = 1
+local CONTROL_MODE_JOYSTICK = 2
+
+-- Persistant variables
+local saved = 
+{
+	padMode = 0,
+	triggerMode = TRIGGER_MODE_GRAPPLE,
+	rotateMode = ROTATE_MODE_TWO_HAND_YAW,
+	targetMode = TARGET_MODE_HAND,
+	controlMode = 0,
+	padMoveFactor = 1.0,
+	grabMoveFactor = 1.0,
+	configured = 0
+}
 
 
 local isCarried = false
@@ -92,6 +101,7 @@ local handEnt = nil
 local otherHandObj = nil
 local handID = 0
 local handAttachment = nil
+local controllerType = 0
 local isPaused = false
 
 local grabEndpoint = nil
@@ -102,15 +112,15 @@ local rumbleTime = 0
 local rumbleFreq = 0
 local rumbleInt = 0
 
-local isGrabbing = false
+local isGrabbingSolid = false
 local grabIn = false
 local grabAngles = nil
 local lastGrabAngles = {}
 local grabAnchorAngles = nil
 local grabEnt = nil
+local grabEntLastPos = nil
 local entGrabbed = false
 local startRotateVec = nil
-local startAngles = nil
 local padTouch = false
 local padIn = false
 local padVector = Vector(0,0,0)
@@ -163,9 +173,10 @@ local handleScreenKeyvals = {
 	
 local configScreenKeyvals = {
 	classname = "point_clientui_world_panel";
+	targetname = "locomotion_configscreen";
 	dialog_layout_name = "file://{resources}/layout/custom_destination/locomotion_tool_config_display.xml";
-	panel_dpi = 75;
-	width = 9;
+	panel_dpi = 90;
+	width = 12;
 	height = 12;
 	ignore_input = 0;
 	interact_distance = 32;
@@ -184,6 +195,19 @@ function Precache(context)
 end
 
 
+function Spawn(keys)
+	-- Load variables from keyvalues
+	for name, var in pairs(saved)
+	do
+		local value = keys:GetValue(name)
+		if value
+		then
+			saved[name] = value
+		end
+	end
+end
+
+
 function Activate(activateType)
 
 	thisEntity:SetSequence("idle")
@@ -193,7 +217,7 @@ function Activate(activateType)
 		-- Hack to properly handle restoration from saves, 
 		-- since variables written by Activate() on restore don't end up in the script scope.
 		EntFireByHandle(thisEntity, thisEntity, "CallScriptFunction", "RestoreState")
-		
+
 	else
 		grapple = SpawnEntityFromTableSynchronous(grappleKeyvals.classname, grappleKeyvals)
 		grapple:SetParent(thisEntity, "")
@@ -204,10 +228,11 @@ function Activate(activateType)
 		strap:SetParent(thisEntity, "")
 		strap:SetLocalOrigin(Vector(0,0,0))
 		strap:SetLocalAngles(0,0,0)
-		
+
 		CustomGameEventManager:RegisterListener("locomotion_tool_config", ApplyConfig)
 	end
 	
+	g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(MoveThink)
 end
 
 
@@ -224,9 +249,21 @@ function RestoreState()
 		elseif child:GetName() == strapKeyvals.targetname
 		then
 			strap = child
-		elseif child:GetName() == handleScreen.targetname
+		elseif child:GetName() == handleScreenKeyvals.targetname
 		then
 			handleScreen = child
+		elseif child:GetName() == configScreenKeyvals.targetname
+		then
+			configScreen = child
+		end
+	end
+	
+	-- Restore persistent variables
+	for name, var in pairs(saved)
+	do
+		if thisEntity:HasAttribute(name)
+		then
+			saved[name] = thisEntity:Attribute_GetFloatValue(name, var)
 		end
 	end
 
@@ -235,18 +272,41 @@ end
 
 
 
-function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
+function SetEquipped(this, pHand, nHandID, pHandAttachment, pPlayer)
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
 	handAttachment = pHandAttachment
 	isCarried = true
 	otherHandObj = nil
-	pickupTime = Time()
+	pickupTime = Time()	
+	controllerType = playerEnt:GetVRControllerType()
+
+	if saved.configured == 0
+	then
+		if controllerType ~= VR_CONTROLLER_TYPE_VIVE
+		then
+			saved.padMode = PAD_MODE_TOUCH		
+		else
+			saved.padMode = PAD_MODE_DUAL_SPEED		
+		end
+		
+		saved.configured = 1
+		thisEntity:Attribute_SetFloatValue("configured", saved.configured)
+		thisEntity:Attribute_SetFloatValue("padMode", saved.padMode)
+	end
+	
+	if controllerType ~= VR_CONTROLLER_TYPE_VIVE
+	then
+		saved.controlMode = CONTROL_MODE_JOYSTICK
+	else
+		saved.controlMode = CONTROL_MODE_TOUCHPAD
+	end
+	thisEntity:Attribute_SetFloatValue("controlMode", saved.controlMode)
+	
 	
 	if not originEnt
-	then
-		
+	then	
 		-- Parenting an entity to the hand gives a less janky position than using the tool or attachment. 
 		originEnt = SpawnEntityFromTableSynchronous("info_target", {origin = thisEntity:GetOrigin()})
 		originEnt:SetParent(handEnt, "")
@@ -266,33 +326,44 @@ function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
 	strap:SetLocalOrigin(Vector(0,0,0))
 	strap:SetLocalAngles(0,0,0)
 	
+	 -- Needed for the screens to align on reparenting
+	thisEntity:SetAbsOrigin(handAttachment:GetAbsOrigin())
+	local ang = handAttachment:GetAngles()
+	thisEntity:SetAngles(ang.x, ang.y, ang.z)
+	
 	if not handleScreen or not IsValidEntity(handleScreen)
 	then
 		handleScreen = SpawnEntityFromTableSynchronous(handleScreenKeyvals.classname, handleScreenKeyvals)
 		handleScreen:SetParent(handAttachment, "handle_screen")
 		handleScreen:SetLocalOrigin(Vector(0,0,0))
 		handleScreen:SetLocalAngles(0, 0, 0)
+	else
+		handleScreen:SetParent(handAttachment, "handle_screen")
 	end
 	
-	if triggerMode == TRIGGER_MODE_GRAPPLE then
+	if configScreen and IsValidEntity(configScreen) 
+	then
+		configScreen:SetParent(handAttachment, "holo_screen")
+	end
+	
+	if saved.triggerMode == TRIGGER_MODE_GRAPPLE then
 		EnableGrapple(grapple, playerEnt, thisEntity, handAttachment, g_VRScript.playerPhysController)
 	end
 	
-	playerEnt:AllowTeleportFromHand(handID, teleportPassthrough)
+	teleportPassthrough = (saved.padMode == PAD_MODE_TELEPORT)
 	
 	local paintColor = thisEntity:GetRenderColor()
 	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
 	handAttachment:SetSequence("idle")
 	
-	if (triggerMode == TRIGGER_MODE_FLY or triggerMode == TRIGGER_MODE_JETPACK) then
+	if (saved.triggerMode == TRIGGER_MODE_FLY or saved.triggerMode == TRIGGER_MODE_JETPACK) then
 		EnableGravEffects()
 	end
 	
 	EmitSoundOn("cache_finder_equip", handAttachment)
 	
 	thisEntity:SetThink(UpdateScreen, "handle_screen")
-	thisEntity:SetThink(MoveThink, "move_think")
 	
 	return true
 end
@@ -307,19 +378,24 @@ function SetUnequipped()
 	
 	playerEnt:AllowTeleportFromHand(handID, true)
 	
-	if triggerMode == TRIGGER_MODE_GRAPPLE then
+	if saved.triggerMode == TRIGGER_MODE_GRAPPLE then
 		DisableGrapple()
 	end
 	
 	if handleScreen and IsValidEntity(handleScreen) then	
-		handleScreen:Kill()
+
+		handleScreen:SetParent(thisEntity, "handle_screen")
+		CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_set_visible", 
+				{id = handleScreen:GetEntityIndex(); visible = 0})
+
 	end
-	handleScreen = nil
 	
-	if configScreen and IsValidEntity(configScreen) then
-		configScreen:Kill()		
+	if configScreen and IsValidEntity(configScreen) then	
+		configScreen:SetParent(thisEntity, "holo_screen")
+		CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_set_visible", 
+				{id = configScreen:GetEntityIndex(); visible = 0})
+
 	end
-	configScreen = nil
 	
 	if IsValidEntity(strap) then
 		strap:SetParent(thisEntity, "")
@@ -371,10 +447,12 @@ function UpdateScreen()
 			CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_sync_selection", 
 				{
 					id = configScreen:GetEntityIndex(), 
-					trigger = triggerMode, 
-					pad = padMode, 
-					rotate = rotateMode, 
-					target = targetMode
+					trigger = math.floor(saved.triggerMode), 
+					pad = math.floor(saved.padMode), 
+					rotate = math.floor(saved.rotateMode), 
+					target = math.floor(saved.targetMode),
+					pad_factor = saved.padMoveFactor,
+					grab_factor = saved.grabMoveFactor
 				})
 		end
 		
@@ -437,131 +515,140 @@ function OnHandleInput(input)
 	then 
 		return
 	end
-
-	-- Even uglier ternary operator
+	
 	local IN_TRIGGER = (handID == 0 and IN_USE_HAND0 or IN_USE_HAND1)
 	local IN_GRIP = (handID == 0 and IN_GRIP_HAND0 or IN_GRIP_HAND1)
 	local IN_PAD = (handID == 0 and IN_PAD_HAND0 or IN_PAD_HAND1)
 	local IN_PAD_TOUCH = (handID == 0 and IN_PAD_TOUCH_HAND0 or IN_PAD_TOUCH_HAND1)
+	local IN_PAD_UP = (handID == 0 and IN_PAD_UP_HAND0 or IN_PAD_UP_HAND1)
+	local IN_PAD_DOWN = (handID == 0 and IN_PAD_DOWN_HAND0 or IN_PAD_DOWN_HAND1)
+	local IN_PAD_LEFT = (handID == 0 and IN_PAD_LEFT_HAND0 or IN_PAD_LEFT_HAND1)
+	local IN_PAD_RIGHT = (handID == 0 and IN_PAD_RIGHT_HAND0 or IN_PAD_RIGHT_HAND1)
+	
+	
+	playerEnt:AllowTeleportFromHand(handID, teleportPassthrough and not playerEnt:IsContentBrowserShowing())
 	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
-		input.buttonsPressed:ClearBit(IN_TRIGGER)
-		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+		if playerEnt:IsContentBrowserShowing()
 		then
-			OnTriggerPressed()
-			triggerIn = true
+			StartSoundEvent("LocomotionTool_UI_Select", handAttachment)
+			CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_ui_command", 
+				{id = configScreen:GetEntityIndex(); command = UI_ENTER})
+		else
+			if Time() > pickupTime + PICKUP_TRIGGER_DELAY
+			then
+				OnTriggerPressed()
+				triggerIn = true
+			end
 		end
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_TRIGGER) 
 	then
-		input.buttonsReleased:ClearBit(IN_TRIGGER)
 		OnTriggerUnpressed()
 		triggerIn = false
 	end
-	
-	
-	if input.buttonsPressed:IsBitSet(IN_GRIP)
-	then
-		--input.buttonsPressed:ClearBit(IN_GRIP)
-	end
-	
-	if input.buttonsDown:IsBitSet(IN_GRIP)
-	then
-		--input.buttonsDown:ClearBit(IN_GRIP)
-	end
-	
-	
-	if input.buttonsReleased:IsBitSet(IN_GRIP)
-	then
-		--input.buttonsReleased:ClearBit(IN_GRIP)
-		thisEntity:ForceDropTool()
-	end
+
 	
 	if input.buttonsPressed:IsBitSet(IN_PAD)
-	then
-		playerEnt:AllowTeleportFromHand(handID, teleportPassthrough and not playerEnt:IsContentBrowserShowing())
-	
-		if not teleportPassthrough and not playerEnt:IsContentBrowserShowing() then
-			input.buttonsPressed:ClearBit(IN_PAD)
-		end
-		padIn = true
-		SetGrappleRappel(true)
-		
-		if playerEnt:IsContentBrowserShowing() then
-			local uiMask = 0
-			local uiDir = false
+	then	
+		if saved.controlMode == CONTROL_MODE_TOUCHPAD
+		then
+			padIn = true
+			SetGrappleRappel(true)
+			if playerEnt:IsContentBrowserShowing()
+			then
 			
-			if input.trackpadX > 0.4 then
-				uiMask = uiMask + UI_RIGHT
-				uiDir = true
-			elseif input.trackpadX < -0.4 then
-				uiMask = uiMask + UI_LEFT
-				uiDir = true
+				local minDist = 0.4	
+				local uiMask = 0
+				local uiDir = false
+				
+				if input.trackpadX > minDist then
+					uiMask = uiMask + UI_RIGHT
+					uiDir = true
+				elseif input.trackpadX < -minDist then
+					uiMask = uiMask + UI_LEFT
+					uiDir = true
+				end
+				
+				if input.trackpadY > minDist then
+					uiMask = uiMask + UI_UP
+					uiDir = true
+				elseif input.trackpadY < -minDist then
+					uiMask = uiMask + UI_DOWN
+					uiDir = true
+				end
+				
+				if uiDir then
+					StartSoundEvent("LocomotionTool_UI_Cursor", handAttachment)
+				else
+					StartSoundEvent("LocomotionTool_UI_Select", handAttachment)
+					uiMask = UI_ENTER
+				end
+				
+				if uiMask > 0 then
+					CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_ui_command", 
+						{id = configScreen:GetEntityIndex(); command = uiMask})
+				end
 			end
-			
-			if input.trackpadY > 0.4 then
-				uiMask = uiMask + UI_UP
-				uiDir = true
-			elseif input.trackpadY < -0.4 then
-				uiMask = uiMask + UI_DOWN
-				uiDir = true
-			end
-			
-			if uiDir then
-				StartSoundEvent("LocomotionTool_UI_Cursor", handAttachment)
-			else
-				StartSoundEvent("LocomotionTool_UI_Select", handAttachment)
-				uiMask = UI_ENTER
-			end
-			
-			if uiMask > 0 then
-				CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_ui_command", 
-					{id = configScreen:GetEntityIndex(); command = uiMask})
-			end
-		end
+		elseif playerEnt:IsContentBrowserShowing()
+		then
+			StartSoundEvent("LocomotionTool_UI_Select", handAttachment)
+			CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_ui_command", 
+				{id = configScreen:GetEntityIndex(); command = UI_ENTER})
+		end		
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_PAD) 
 	then
-		if not teleportPassthrough and not playerEnt:IsContentBrowserShowing() then
-			input.buttonsReleased:ClearBit(IN_PAD)
+
+		if saved.controlMode == CONTROL_MODE_TOUCHPAD
+		then
+			padIn = false
+			SetGrappleRappel(false)
 		end
-		padIn = false
-		SetGrappleRappel(false)
 	end
 	
 	if input.buttonsPressed:IsBitSet(IN_PAD_TOUCH)
 	then
-		if not teleportPassthrough and not playerEnt:IsContentBrowserShowing() then
-			input.buttonsPressed:ClearBit(IN_PAD_TOUCH)
-		end
+		if saved.controlMode == CONTROL_MODE_JOYSTICK
+		then
+			padIn = true
+			SetGrappleRappel(true)
+		end	
 		padTouch = true
 		
 	end
 	
 	if input.buttonsReleased:IsBitSet(IN_PAD_TOUCH) 
 	then
-		if not teleportPassthrough and not playerEnt:IsContentBrowserShowing() then
-			input.buttonsReleased:ClearBit(IN_PAD_TOUCH)
+		if saved.controlMode == CONTROL_MODE_JOYSTICK
+		then
+			padIn = false
+			SetGrappleRappel(false)
 		end
 		padTouch = false
 	end
-
-	-- Needed to disable teleports
-	if input.buttonsDown:IsBitSet(IN_PAD) 
+	
+	
+	if saved.controlMode == CONTROL_MODE_JOYSTICK and playerEnt:IsContentBrowserShowing()
 	then
-		if not teleportPassthrough then
-			input.buttonsDown:ClearBit(IN_PAD)
-		end
-	end	
-	if input.buttonsDown:IsBitSet(IN_PAD_TOUCH) 
-	then
-		if not teleportPassthrough then
-			input.buttonsDown:ClearBit(IN_PAD_TOUCH)
-		end
+		local uiMask = 0
+	
+		if input.buttonsPressed:IsBitSet(IN_PAD_UP) then uiMask = uiMask + UI_UP end	
+		if input.buttonsPressed:IsBitSet(IN_PAD_DOWN) then uiMask = uiMask + UI_DOWN end
+		if input.buttonsPressed:IsBitSet(IN_PAD_LEFT) then uiMask = uiMask + UI_LEFT end
+		if input.buttonsPressed:IsBitSet(IN_PAD_RIGHT) then uiMask = uiMask + UI_RIGHT end
+		
+		if uiMask > 0 then
+			StartSoundEvent("LocomotionTool_UI_Cursor", handAttachment)
+			CustomGameEventManager:Send_ServerToAllClients("locomotion_tool_ui_command", 
+				{id = configScreen:GetEntityIndex(); command = uiMask})
+		end	
 	end
+	
+	
 	
 	if padTouch
 	then	
@@ -578,40 +665,35 @@ function OnTriggerPressed()
 
 	grabAngles = nil
 
-	if triggerMode == TRIGGER_MODE_SURFACE_GRAB then
-	
-		grabIn = true
-		
+	if saved.triggerMode == TRIGGER_MODE_SURFACE_GRAB then	
 		if TraceGrab()
 		then
-			isGrabbing = true
+			grabIn = true
+			isGrabbingSolid = true
 			g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity, true)
-			thisEntity:SetThink(GrabMoveFrame, "grab_move")
 		end
 		
-	elseif triggerMode == TRIGGER_MODE_AIR_GRAB or triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND then
+	elseif saved.triggerMode == TRIGGER_MODE_AIR_GRAB or saved.triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND then
 		
-		
-		thisEntity:SetThink(GrabMoveFrame, "grab_move")
 		grabIn = true
-		isGrabbing = TraceGrab()
+		isGrabbingSolid = TraceGrab()
 		
-		g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity, isGrabbing)
+		local isRigid = saved.triggerMode == TRIGGER_MODE_AIR_GRAB or isGrabbingSolid
+		g_VRScript.playerPhysController:AddConstraint(playerEnt, thisEntity, isRigid)
 
-	elseif triggerMode == TRIGGER_MODE_GRAPPLE then
+	elseif saved.triggerMode == TRIGGER_MODE_GRAPPLE then
 		LaunchGrapple()
-		
-	elseif triggerMode == TRIGGER_MODE_FLY or triggerMode == TRIGGER_MODE_JETPACK then
-		thisEntity:SetThink(FlyThrust, "jetpack")
-		
+	
+	elseif saved.triggerMode == TRIGGER_MODE_FLY or saved.triggerMode == TRIGGER_MODE_JETPACK then
+		jetpackThrusting = false
 	end
 end
 
 
 function OnTriggerUnpressed()
 
-	if triggerMode == TRIGGER_MODE_SURFACE_GRAB 
-		or triggerMode == TRIGGER_MODE_AIR_GRAB or triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND then
+	if saved.triggerMode == TRIGGER_MODE_SURFACE_GRAB 
+		or saved.triggerMode == TRIGGER_MODE_AIR_GRAB or saved.triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND then
 		
 		grapple:SetPoseParameter("claw_open", 1)
 		
@@ -621,7 +703,7 @@ function OnTriggerUnpressed()
 			grabIn = false
 		end
 		
-	elseif triggerMode == TRIGGER_MODE_GRAPPLE then
+	elseif saved.triggerMode == TRIGGER_MODE_GRAPPLE then
 		ReleaseGrappleButton()
 	end
 end
@@ -629,7 +711,7 @@ end
 
 function ReleaseHold()
 	startRotateVec = nil
-	startAngles = nil
+
 	RumbleController(2, 0.1, 100)
 	grapple:SetSequence("idle")
 	g_VRScript.playerPhysController:RemoveConstraint(playerEnt, thisEntity)
@@ -646,37 +728,52 @@ function ApplyConfig(eventSourceIndex, data)
 	if data.panel and EntIndexToHScript(data.panel) == configScreen then
 		
 		if data.conf == CONFIG_TYPE_PAD then
-			padMode = data.val	
-			teleportPassthrough = (padMode == PAD_MODE_TELEPORT)
+			saved.padMode = data.val	
+			teleportPassthrough = (saved.padMode == PAD_MODE_TELEPORT)
+			thisEntity:Attribute_SetFloatValue("padMode", saved.padMode)
 		end
 		
 		if data.conf == CONFIG_TYPE_TRIGGER then
 		
-			if triggerMode == TRIGGER_MODE_GRAPPLE and data.val ~= TRIGGER_MODE_GRAPPLE then
+			if saved.triggerMode == TRIGGER_MODE_GRAPPLE and data.val ~= TRIGGER_MODE_GRAPPLE then
 				DisableGrapple()
 			end
 			
-			if triggerMode ~= TRIGGER_MODE_GRAPPLE and data.val == TRIGGER_MODE_GRAPPLE then
+			if saved.triggerMode ~= TRIGGER_MODE_GRAPPLE and data.val == TRIGGER_MODE_GRAPPLE then
 				EnableGrapple(grapple, playerEnt, thisEntity, handAttachment, g_VRScript.playerPhysController)
 			end
 			
-			if (triggerMode ~= TRIGGER_MODE_FLY and triggerMode ~= TRIGGER_MODE_JETPACK) and
+			if (saved.triggerMode ~= TRIGGER_MODE_FLY and saved.triggerMode ~= TRIGGER_MODE_JETPACK) and
 				(data.val == TRIGGER_MODE_FLY or data.val == TRIGGER_MODE_JETPACK) then
 				EnableGravEffects()
 				
 			elseif (data.val~= TRIGGER_MODE_FLY and data.val ~= TRIGGER_MODE_JETPACK) then
+				g_VRScript.playerPhysController:RemoveDragConstraint(playerEnt, thisEntity)
 				DisableGravEffects()
 			end
 		
-			triggerMode = data.val
+			saved.triggerMode = data.val
+			thisEntity:Attribute_SetFloatValue("triggerMode", saved.triggerMode)
 		end
 		
 		if data.conf == CONFIG_TYPE_ROTATE then
-			rotateMode = data.val
+			saved.rotateMode = data.val
+			thisEntity:Attribute_SetFloatValue("rotateMode", saved.rotateMode)
 		end
 		
 		if data.conf == CONFIG_TYPE_TARGET then
-			targetMode = data.val
+			saved.targetMode = data.val
+			thisEntity:Attribute_SetFloatValue("targetMode", saved.targetMode)
+		end
+		
+		if data.conf == CONFIG_TYPE_PAD_FACTOR then
+			saved.padMoveFactor = data.val
+			thisEntity:Attribute_SetFloatValue("padMoveFactor", saved.padMoveFactor)
+		end
+		
+		if data.conf == CONFIG_TYPE_GRAB_FACTOR then
+			saved.grabMoveFactor = data.val
+			thisEntity:Attribute_SetFloatValue("grabMoveFactor", saved.grabMoveFactor)
 		end
 	end
 end
@@ -684,28 +781,38 @@ end
 
 function MoveThink()
 	if not isCarried then
-		return nil
+		return
 	end
 	
-	if padMode == PAD_MODE_DUAL_SPEED or padMode == PAD_MODE_TOUCH or padMode == PAD_MODE_PUSH then
+	if (GetFrameCount() + 1) % MOVE_THINK_INTERVAL ~= 0 then return end
+	
+	if saved.padMode == PAD_MODE_DUAL_SPEED or saved.padMode == PAD_MODE_TOUCH or saved.padMode == PAD_MODE_PUSH 
+	then
 		PadMove()
 	end
-
-
-	return MOVE_THINK_INTERVAL
+	
+	if saved.triggerMode == TRIGGER_MODE_AIR_GRAB or saved.triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND 
+		or saved.triggerMode == TRIGGER_MODE_SURFACE_GRAB
+	then
+		GrabMoveFrame()
+		
+	elseif saved.triggerMode == TRIGGER_MODE_FLY or saved.triggerMode == TRIGGER_MODE_JETPACK then
+	
+		FlyThrust()
+	end
 end
 
 
 function PadMove()
 
 	if not padTouch or grabIn or not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
-		or (padMode == PAD_MODE_PUSH and not padIn) then
+		or (saved.padMode == PAD_MODE_PUSH and not padIn) then
 
 		return
 	end
 	local forwardAng = nil
 	
-	if targetMode == TARGET_MODE_HAND or targetMode == TARGET_MODE_HAND_NORMAL then
+	if saved.targetMode == TARGET_MODE_HAND or saved.targetMode == TARGET_MODE_HAND_NORMAL then
 		local idx = handAttachment:ScriptLookupAttachment("pad_move")
 		local moveAngVec = handAttachment:GetAttachmentAngles(idx)
 		forwardAng = QAngle(moveAngVec.x, moveAngVec.y, moveAngVec.z)
@@ -714,7 +821,7 @@ function PadMove()
 	end
 	local moveVector = nil
 	
-	if targetMode == TARGET_MODE_HAND_NORMAL then
+	if saved.targetMode == TARGET_MODE_HAND_NORMAL then
 		local forwardVec = forwardAng:Forward()
 		local normVec = Vector(forwardVec.x, forwardVec.y, 0):Normalized()
 		moveVector = RotatePosition(Vector(0,0,0), VectorToAngles(normVec), padVector)
@@ -727,31 +834,33 @@ function PadMove()
 	
 	moveVector = Vector(moveVector.x, moveVector.y, 0)
 	
-	
-	
 	-- Cap the movement speed along the outer ring
-	if moveVector:Length() > MOVE_CAP_FACTOR
+	if saved.controlMode == CONTROL_MODE_TOUCHPAD and moveVector:Length() > MOVE_CAP_FACTOR
 	then
 		moveVector = moveVector:Normalized() * MOVE_CAP_FACTOR
 	end
 	
-	local speed = MOVE_SPEED * PAD_MOVE_INTERVAL
+	local speed = MOVE_SPEED
 	
-	if padMode ~= PAD_MODE_DUAL_SPEED or padIn then
+	if saved.padMode ~= PAD_MODE_DUAL_SPEED or padIn then
 		speed = speed * MOVE_SPEED_RUN_FACTOR
 	end
 	
-	if g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
+	if  g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
 	then
-		g_VRScript.playerPhysController:MovePlayer(playerEnt, moveVector * speed, true, true)
+		g_VRScript.playerPhysController:SetVelocity(playerEnt, moveVector 
+			* speed * saved.padMoveFactor)
+		--g_VRScript.playerPhysController:MovePlayer(playerEnt, moveVector * speed 
+			--* saved.padMoveFactor * FrameTime() * MOVE_THINK_INTERVAL, true, true, thisEntity)
 	else
 		local multiplier = 1
 		
-		if triggerMode == TRIGGER_MODE_JETPACK then 
+		if saved.triggerMode == TRIGGER_MODE_JETPACK then 
 			multiplier = JETPACK_PAD_FACTOR
 		end
 	
-		g_VRScript.playerPhysController:AddVelocity(playerEnt, moveVector * speed * multiplier * AIR_CONTROL_FACTOR, false)
+		g_VRScript.playerPhysController:AddVelocity(playerEnt, moveVector 
+			* speed * saved.padMoveFactor * multiplier * AIR_CONTROL_FACTOR * FrameTime() * MOVE_THINK_INTERVAL)
 	end
 end
 
@@ -760,14 +869,16 @@ function GetPlayerEnt()
 	return playerEnt
 end
 
+
 function GetOriginEnt()
 	return originEnt
 end
 
 
-function GetGrabStatus(self)
+function GetGrabStatus()
 	return grabIn
 end
+
 
 function FindTool(handID)
 	local tool = Entities:FindByClassname(nil, "prop_destinations_tool")
@@ -825,6 +936,7 @@ function TraceGrab()
 			end
 			grabEnt:SetParent(traceTable.enthit, "")
 			grabEnt:SetAbsOrigin(traceTable.pos)
+			grabEntLastPos = traceTable.pos
 		else
 			entGrabbed = false
 		end
@@ -858,18 +970,16 @@ end
 
 function GrabMoveFrame()
 
-	if not grabIn
-	then
-		return nil
-	end
+	if not grabIn then return end
 	
 	if not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity)
 	then
-		return GRAB_MOVE_INTERVAL
+		return
 	end
 	
 	local idx = handAttachment:ScriptLookupAttachment("grapple_spot")
 	local pullPos = handAttachment:GetAttachmentOrigin(idx)
+	local pullVector 
 	
 	if entGrabbed
 	then
@@ -879,47 +989,63 @@ function GrabMoveFrame()
 			grabIn = false
 			return
 		end
-	
-		grabEndpoint = grabEnt:GetAbsOrigin()
+		grabEndpoint = grabEndpoint + grabEnt:GetAbsOrigin() - grabEntLastPos
+		grabEntLastPos = grabEnt:GetAbsOrigin()
 	end
 
-	local pullVector = (grabEndpoint - pullPos)
-	
-	local rotMoveVec = GrabRotateFrame()
-	
-
-	if triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND and not g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
-	then
-		local vec = rotMoveVec + pullVector 
-		g_VRScript.playerPhysController:AddVelocity(playerEnt, Vector(vec.x, vec.y, 0))
-	else
-		local grounded = (triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND and not isGrabbing)
-		g_VRScript.playerPhysController:MovePlayer(playerEnt, rotMoveVec + pullVector, false, grounded)
-	end
-	
 		
-	return GRAB_MOVE_INTERVAL
+	if saved.grabMoveFactor == 1.0
+	then
+		pullVector = grabEndpoint - pullPos
+	else
+		pullVector = (grabEndpoint - pullPos) * saved.grabMoveFactor
+		grabEndpoint = pullPos + pullVector
+		
+		
+		-- Hack to minimize invalid input
+		local length = pullVector:Length()
+		if length > 10 * saved.grabMoveFactor or length ~= length
+		then
+			grabEndpoint = pullPos
+			pullVector = Vector(0,0,0)
+		end 
+	end
+	
+	GrabRotateFrame()	
+
+	if not isGrabbingSolid and saved.triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND 
+		and not g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
+	then
+		g_VRScript.playerPhysController:AddVelocity(playerEnt, Vector(pullVector.x, pullVector.y, 0))
+	else
+		local grounded = (saved.triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND and not isGrabbingSolid)
+		local hitVector = g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector, false, grounded, thisEntity)
+		
+		if hitVector and saved.grabMoveFactor ~= 1.0
+		then
+			grabEndpoint = grabEndpoint - hitVector * 1.02			
+		end
+	end
+		
+	return
 end
 
 
 function GrabRotateFrame()
-	if not grabIn or rotateMode == ROTATE_MODE_DISABLED
-	then
-		
-		return Vector(0,0,0)
+	if not grabIn or saved.rotateMode == ROTATE_MODE_DISABLED
+	then		
+		return
 	end
 	
 	if not g_VRScript.playerPhysController:IsActive(playerEnt, thisEntity) or playerEnt:IsContentBrowserShowing()
 	then
-		return Vector(0,0,0)
+		return
 	end
 	
-	if rotateMode == ROTATE_MODE_ONE_HAND_YAW then
+	if saved.rotateMode == ROTATE_MODE_ONE_HAND_YAW then
 		
-		if not isGrabbing and triggerMode == TRIGGER_MODE_SURFACE_GRAB then return Vector(0,0,0) end
+		if not isGrabbingSolid and saved.triggerMode == TRIGGER_MODE_SURFACE_GRAB then return Vector(0,0,0) end
 	
-		local anchorAng = QAngle(0, playerEnt:GetHMDAnchor():GetAngles().y, 0)
-		
 		local idx = handAttachment:ScriptLookupAttachment("grapple_spot")
 		local handAngVec = handAttachment:GetAttachmentAngles(idx)
 		local handAngFwd = QAngle(handAngVec.x, handAngVec.y, handAngVec.z):Forward()
@@ -933,8 +1059,7 @@ function GrabRotateFrame()
 			if abs(rotDelta.y) > 0.5
 			then
 				handEnt:FireHapticPulse(0)
-			end
-			
+			end		
 
 			if abs(rotDelta.y) < 0.2 then 
 				rotDelta = QAngle(0,0,0)
@@ -942,14 +1067,10 @@ function GrabRotateFrame()
 				rotDelta = QAngle(0, rotDelta.y  * 0.5, 0)
 			end
 			
-			local endRot = RotateOrientation(anchorAng, rotDelta)
-			playerEnt:GetHMDAnchor():SetAngles(endRot.x, endRot.y, endRot.z)
-			
-			local idx = handAttachment:ScriptLookupAttachment("grapple_spot")
-			
-			local moveVector = RotatePosition(handAttachment:GetAttachmentOrigin(idx), 
-				QAngle(0, rotDelta.y, 0), playerEnt:GetHMDAnchor():GetOrigin())
-			return moveVector - playerEnt:GetHMDAnchor():GetOrigin()
+			local rotOrigin = handAttachment:GetAttachmentOrigin(idx)
+			g_VRScript.playerPhysController:RotatePlayer(playerEnt, rotDelta, rotOrigin, thisEntity)
+	
+			return
 		end
 	
 	
@@ -973,13 +1094,14 @@ function GrabRotateFrame()
 				
 				local rotateVector = otherOrigin2D - origin2D 
 				
+				if not startRotateVec
+				then
+					startRotateVec = rotateVector
+				end
+				
 				if rotateVector:Length() > MIN_ROTATE_DISTANCE
 				then
-					if not startRotateVec
-					then
-						startRotateVec = rotateVector
-						startAngles = playerEnt:GetHMDAnchor():GetAngles()
-					end
+					
 						
 					local rotateOrigin = origin2D + rotateVector * 0.5
 		
@@ -1003,14 +1125,7 @@ function GrabRotateFrame()
 					end
 					
 					local rotation = QAngle(0, rotAng, 0)
-		
-					local playerAng = playerEnt:GetHMDAnchor():GetAngles()
-					local endRot = RotateOrientation(playerAng, rotation)
-					playerEnt:GetHMDAnchor():SetAngles(endRot.x, endRot.y, endRot.z)
-					local moveVector = RotatePosition(rotateOrigin, rotation, playerEnt:GetHMDAnchor():GetOrigin())
-					--playerEnt:GetHMDAnchor():SetOrigin(moveVector)
-					--g_VRScript.playerPhysController:MovePlayer(playerEnt, moveVector - playerEnt:GetHMDAnchor():GetOrigin())
-					return moveVector - playerEnt:GetHMDAnchor():GetOrigin()
+					g_VRScript.playerPhysController:RotatePlayer(playerEnt, rotation, rotateOrigin, thisEntity)
 				end
 				
 			else
@@ -1019,7 +1134,6 @@ function GrabRotateFrame()
 		end
 	end
 	
-	return Vector(0,0,0)
 end
 
 
@@ -1061,24 +1175,16 @@ function FlyThrust()
 
 	if not isCarried
 	then 
-		jetpackThrusting = false
-		return
-	end
-	
-	if triggerMode ~= TRIGGER_MODE_FLY and triggerMode ~= TRIGGER_MODE_JETPACK 
-	then 
-		g_VRScript.playerPhysController:RemoveDragConstraint(playerEnt, thisEntity)
-		jetpackThrusting = false
 		return
 	end
 	
 		
-	if not jetpackThrusting and triggerValue > 0.2
+	if not isPaused and not jetpackThrusting and triggerValue > 0.2
 	then
 		StopSoundOn("drone_speed_dec", grapple)
 		EmitSoundOn("drone_speed_acc", grapple)
 		jetpackThrusting = true
-	elseif jetpackThrusting and triggerValue <= 0.2
+	elseif not isPaused and jetpackThrusting and triggerValue <= 0.2
 	then
 		StopSoundOn("drone_speed_acc", grapple)
 		EmitSoundOn("drone_speed_dec", grapple)
@@ -1096,7 +1202,7 @@ function FlyThrust()
 	
 	if triggerValue > 0.05 then
 	
-		if triggerMode == TRIGGER_MODE_JETPACK then
+		if saved.triggerMode == TRIGGER_MODE_JETPACK then
 	
 			local verticalVector = Vector(0, 0, triggerValue)
 			
@@ -1105,20 +1211,20 @@ function FlyThrust()
 				verticalVector = verticalVector * TRIGGER_IN_BOOST
 			end
 			
-			local playerHeight = g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) 
+			local playerHeight = g_VRScript.playerPhysController:GetPlayerHeight(playerEnt) 
 			
 			if playerHeight < GROUND_EFFECT_HEIGHT
 			then
 				verticalVector = verticalVector * (1 + GROUND_EFFECT_FACTOR * (1 - playerHeight / GROUND_EFFECT_HEIGHT))
 			end
 			
-			g_VRScript.playerPhysController:AddVelocity(playerEnt, verticalVector * THRUST_VERTICAL_SPEED * MOVE_THINK_INTERVAL)
+			g_VRScript.playerPhysController:AddVelocity(playerEnt, verticalVector * THRUST_VERTICAL_SPEED * FrameTime() * MOVE_THINK_INTERVAL)
 			
-		elseif triggerMode == TRIGGER_MODE_FLY then
+		elseif saved.triggerMode == TRIGGER_MODE_FLY then
 		
 			local forwardAng = nil
 		
-			if targetMode == TARGET_MODE_HAND then
+			if saved.targetMode == TARGET_MODE_HAND then
 				local idx = handAttachment:ScriptLookupAttachment("pad_move")
 				local moveAngVec = handAttachment:GetAttachmentAngles(idx)
 				forwardAng = QAngle(moveAngVec.x, moveAngVec.y, moveAngVec.z)
@@ -1133,7 +1239,7 @@ function FlyThrust()
 				thrustVector = thrustVector * TRIGGER_IN_BOOST
 			end
 			
-			local playerHeight = g_VRScript.playerPhysController:TracePlayerHeight(playerEnt) 
+			local playerHeight = g_VRScript.playerPhysController:GetPlayerHeight(playerEnt) 
 			
 			if playerHeight < GROUND_EFFECT_HEIGHT
 			then
@@ -1143,15 +1249,13 @@ function FlyThrust()
 			local hoverThrust = Vector(0, 0, FLY_HOVER_THRUST)
 			
 			g_VRScript.playerPhysController:AddVelocity(playerEnt, 
-				(thrustVector * THRUST_VERTICAL_SPEED + hoverThrust) * MOVE_THINK_INTERVAL)
+				(thrustVector * THRUST_VERTICAL_SPEED + hoverThrust) * FrameTime() * MOVE_THINK_INTERVAL)
 
 		end
 	end
 	
-	return MOVE_THINK_INTERVAL
+	return
 end
-
-
 
 
 function NormalizeAngle(angle)

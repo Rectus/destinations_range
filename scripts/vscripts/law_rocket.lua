@@ -70,7 +70,7 @@ function Fire(player)
 	thisEntity:SetThink(Think, "ent_think", THINK_INTERVAL)
 end
 
-function Think(self)	
+function Think()	
 	if exploded 
 	then 
 		return false
@@ -82,7 +82,7 @@ function Think(self)
 		return THINK_INTERVAL
 	end
 	
-	if TraceDirectHit(self)
+	if TraceDirectHit()
 	then
 		
 		return false
@@ -91,7 +91,7 @@ function Think(self)
 	return THINK_INTERVAL
 end
 
-function TraceDirectHit(self)
+function TraceDirectHit()
 	local traceTable =
 	{
 		startpos = thisEntity:GetOrigin();

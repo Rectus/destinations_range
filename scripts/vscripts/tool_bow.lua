@@ -79,7 +79,7 @@ function Precache(context)
 	PrecacheModel(BOW_VIEW_KEYVALS.model, context)
 end
 
-function SetEquipped( self, pHand, nHandID, pHandAttachment, pPlayer )
+function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand
 	playerEnt = pPlayer
@@ -412,7 +412,7 @@ function FireArrow()
 end
 
 
-function FireRumble(self)
+function FireRumble(this)
 	if handEnt
 	then
 		handEnt:FireHapticPulse(2)

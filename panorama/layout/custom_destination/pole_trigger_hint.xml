@@ -6,7 +6,7 @@
 	</styles>
 
 	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
-		<Panel class="Page">
+		<Panel class="ImportantPage">
 			<Panel class="TextArea">
 				<Label class="Text" text="Hold trigger to extend pole" />
 			</Panel>

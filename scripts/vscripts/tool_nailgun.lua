@@ -1,7 +1,7 @@
 --[[
 	Nailgun script.
 	
-	Copyright (c) 2016 Rectus
+	Copyright (c) 2016-2019 Rectus
 	
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -123,7 +123,7 @@ function Precache(context)
 end
 
 
-function SetEquipped(self, pHand, nHandID, pHandAttachment, pPlayer)
+function SetEquipped(this, pHand, nHandID, pHandAttachment, pPlayer)
 
 	handID = nHandID
 	handEnt = pHand
@@ -206,7 +206,7 @@ function OnHandleInput( input )
 		input.buttonsPressed:ClearBit(IN_TRIGGER)
 		if Time() > pickupTime + PICKUP_TRIGGER_DELAY
 		then
-			OnTriggerPressed(self)
+			OnTriggerPressed()
 		end
 	end
 	
@@ -288,7 +288,7 @@ function SetPanelText(mode)
 end
 
 
-function OnTriggerPressed(self)
+function OnTriggerPressed()
 
 	if not fired
 	then
@@ -300,7 +300,7 @@ end
 function Fire()
 	fired = true
 	
-	TraceShot(self)
+	TraceShot()
 	
 	if handAttachment
 	then
@@ -311,12 +311,12 @@ function Fire()
 end
 
 
-function EnableFire(self)
+function EnableFire()
 	fired = false
 end
 
 
-function TraceBeam(self)
+function TraceBeam()
 	if not isCarried
 	then 
 		return nil
@@ -364,7 +364,7 @@ function TraceBeam(self)
 end
 
 
-function TraceShot(self)
+function TraceShot()
 	local muzzle = GetAttachment("muzzle")
 	local hitPhysEnt = false
 	local traceTable =
@@ -567,29 +567,54 @@ function SetupConstraint(hitEntity, hitPosition)
 		local constraint = SpawnEntityFromTableSynchronous(constraintKeyvals.classname, constraintKeyvals)
 		
 		local ropeParticle = ParticleManager:CreateParticle("particles/nailgun_rope.vpcf", 
-			PATTACH_ABSORIGIN, attachEntTarget)
+			PATTACH_ABSORIGIN, baseEntTarget)
 		
 		if baseEnt
 		then
 			ParticleManager:SetParticleControlEnt(ropeParticle, 1, baseEntTarget,
-				PATTACH_CUSTOMORIGIN_FOLLOW, nil, Vector(0,0,0), true)
+				PATTACH_CUSTOMORIGIN_FOLLOW, nil, Vector(0,0,0), false)
 		else
 			ParticleManager:SetParticleControl(ropeParticle, 1, baseEntPos)		
 		end
 		
+		local ropeLength = (baseEntPos - attachEntPos):Length()
+		
 
 		ParticleManager:SetParticleControlEnt(ropeParticle, 0, attachEntTarget,
-			PATTACH_CUSTOMORIGIN_FOLLOW, nil, Vector(0,0,0), true)
+			PATTACH_CUSTOMORIGIN_FOLLOW, nil, Vector(0,0,0), false)
 
+		if mode == MODE_ROPE
+		then
+			ParticleManager:SetParticleControl(ropeParticle, 2, Vector(ropeLength, 0, 0))
+			ParticleManager:SetParticleControl(ropeParticle, 3, Vector(60, 50, 45))	
+		elseif mode == MODE_BALLJOINT
+		then
+			ParticleManager:SetParticleControl(ropeParticle, 2, Vector(0, 0, 0))
+			ParticleManager:SetParticleControl(ropeParticle, 3, Vector(40, 40, 40))	
+		elseif mode == MODE_RIGID
+		then
+			ParticleManager:SetParticleControl(ropeParticle, 2, Vector(0, 0, 0))
+			ParticleManager:SetParticleControl(ropeParticle, 3, Vector(20, 20, 20))	
+		end
 
-		--[[local scope = firstEntTarget:GetOrCreatePrivateScriptScope()		
-		scope["UpdateOnRemove"] = function() return ParticleManager:DestroyParticle(self.ropeParticleID, true) end
-		scope["ropeParticleID"] = ropeParticle
+		
+			local scope = baseEntTarget:GetOrCreatePrivateScriptScope()
+			if not scope["UpdateOnRemove"]
+			then		
+				scope["UpdateOnRemove"] = function() return ParticleManager:DestroyParticle(thisEntity:Attribute_GetIntValue("ropeParticle", -1), true) end
+				baseEntTarget:Attribute_SetIntValue("ropeParticle", ropeParticle)
+			end
 
-		scope = attachEntTarget:GetOrCreatePrivateScriptScope()
-		scope["UpdateOnRemove"] = function() return ParticleManager:DestroyParticle(self.ropeParticleID, true) end
-		scope["ropeParticleID"] = ropeParticle]]
-
+		if attachEntTarget then
+			
+			scope = attachEntTarget:GetOrCreatePrivateScriptScope()
+			if not scope["UpdateOnRemove"]
+			then	
+				scope["UpdateOnRemove"] = function() return ParticleManager:DestroyParticle(thisEntity:Attribute_GetIntValue("ropeParticle", -1), true) end
+				attachEntTarget:Attribute_SetIntValue("ropeParticle", ropeParticle)
+			end
+		end
+		
 		table.insert(jointArray, {firstEnt = baseEnt, secondEnt = attachEnt, firstTarget = attachEntTarget, secondTarget = baseEntTarget, jointEnt = constraint})
 		
 		gotFirstEndpoint = false
@@ -599,7 +624,7 @@ function SetupConstraint(hitEntity, hitPosition)
 end
 
 
-function FireRumble(self)
+function FireRumble()
 	if controller
 	then
 		controller:FireHapticPulse(2)

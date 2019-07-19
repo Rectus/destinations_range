@@ -32,19 +32,30 @@ function PassStart(params)
 	if not player then
 		return
 	end
-	print(player:GetName())
 	players[player] = {
 		startTime = Time(),
 		lastGate = 0,	
 	}
-	print("Start, player: " .. player:GetUserID())
+	local playerID
+	
+	if g_VRScript.pauseManager:GetPlayerData(player).xuid
+	then
+		-- Get player Steam ID in order to be able to display their name
+		playerID = tostring(g_VRScript.pauseManager:GetPlayerData(player).xuid)
+	end
+	
+	if not playerID
+	then
+		playerID = player:GetUserID() 
+	end
+	
+	print("Start, player: " .. playerID)
 	EmitSoundOnClient("Slalom.Start", player)
 end
 
 
 
 function PassGate(params)
-	
 	
 	local player = params.activator
 	local gateNum = gates[params.caller] 
@@ -74,6 +85,19 @@ function PassFinish(params)
 	if not player or not players[player] then
 		return
 	end
+	
+	local playerID
+	
+	if g_VRScript.pauseManager:GetPlayerData(player).xuid
+	then
+		-- Get player Steam ID in order to be able to display their name
+		playerID = tostring(g_VRScript.pauseManager:GetPlayerData(player).xuid)
+	end
+	
+	if not playerID
+	then
+		playerID = player:GetUserID() 
+	end
 
 	if players[player].lastGate == numGates then
 		local finishTime = Time() - players[player].startTime
@@ -82,17 +106,17 @@ function PassFinish(params)
 		
 		if scoreBoard[1] ~= nil then
 			CustomGameEventManager:Send_ServerToAllClients( "slalom_time"
-				, {id = player:GetUserID(), time = finishTime, finished = true, prevBest = scoreBoard[1].time})
+				, {id = playerID, time = finishTime, finished = true, prevBest = scoreBoard[1].time})
 		else
 			CustomGameEventManager:Send_ServerToAllClients( "slalom_time"
-				, {id = player:GetUserID(), time = finishTime, finished = true})
+				, {id = playerID, time = finishTime, finished = true})
 		end
 		
-		UpdateScoreBoard(player:GetUserID(), finishTime)
+		UpdateScoreBoard(playerID, finishTime)
 	else	
 		EmitSoundOnClient("Slalom.WrongGate", player)
 		CustomGameEventManager:Send_ServerToAllClients( "slalom_time"
-			, {id = player:GetUserID(), time = 0, finished = false})
+			, {id = playerID, time = 0, finished = false})
 			
 	end
 	
