@@ -41,6 +41,7 @@
 			m_hTexture = resource:"materials/particle/particle_flares/particle_flare_001.vtex"
 			m_flDepthBias = 20.0
 			m_flDiffuseAmount = 0.0
+			m_flSourceAlphaValueToMapToOne = 0.32
 		},
 	]
 	m_Initializers = 
@@ -86,4 +87,5 @@
 	m_nMaxParticles = 2
 	m_flMaxDrawDistance = 2000.0
 	m_flStartFadeDistance = 1500.0
+	m_flDepthSortBias = -1000.0
 }

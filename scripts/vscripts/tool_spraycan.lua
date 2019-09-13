@@ -161,7 +161,12 @@ function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	m_vPaintColor = thisEntity:GetRenderColor()
 	m_hHandAttachment:SetRenderColor(m_vPaintColor.x, m_vPaintColor.y, m_vPaintColor.z)
 
-	m_hPlayer:AllowTeleportFromHand( m_nHandID, false )
+	if g_VRScript.pauseManager
+	then
+		g_VRScript.pauseManager:SetTeleportControlsAllowed(playerEnt, m_nHandID, false)
+	else
+		playerEnt:AllowTeleportFromHand(m_nHandID, false)
+	end
 	m_nControllerType = m_hPlayer:GetVRControllerType()
 
 	SpawnPanel();
@@ -174,7 +179,12 @@ function SetUnequipped()
 
 	ReleaseFireButton();
 
-	m_hPlayer:AllowTeleportFromHand( m_nHandID, true )
+	if g_VRScript.pauseManager
+	then
+		g_VRScript.pauseManager:SetTeleportControlsAllowed(playerEnt, handID, true)
+	else
+		playerEnt:AllowTeleportFromHand(handID, true)
+	end
 
 	m_hHand = nil;
 	m_nHandID = -1;

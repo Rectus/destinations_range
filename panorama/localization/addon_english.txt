@@ -1,0 +1,95 @@
+"addon"
+{
+	"Language" "English" 
+	"Tokens" 
+	{
+		"Pause_TitlePaused" "Movement Paused"
+		"Pause_Header_MapFunctions" "Map Functions"
+		"Pause_Header_SpawnItems" "Spawn Items"
+		"Pause_Header_QuickLocomotion" "Quick Locomotion"
+		"Pause_Header_MapSettings" "Map Settings"
+		"Pause_Header_ToolSettings" "Tool Settings"
+		"Pause_Header_LocomotionSettings" "Locomotion Settings"
+		"Pause_Header_PhysicsSettings" "Physics Settings"
+		"Pause_Header_DebugSettings" "Debug Settings"
+		"Pause_Header_SettingDescription" "Description"
+		
+		"Pause_Button_Settings" "Settings"
+		"Pause_Button_TeleportToStart" "Teleport To Start"
+		"Pause_Button_QuickTeleport" "Teleport"
+		"Pause_Button_QuickSlide" "Slide"
+		"Pause_Button_QuickGrab" "Grab"
+		"Pause_Button_CustomQuickInventory" "Custom Quick Inventory"
+		
+		"Pause_Header_QuickLocomotion_Desc" ""
+		"Pause_Button_CustomQuickInventory_Desc" ""
+		
+		"Pause_Debug_ForceReload" "Force Panel Reload"
+		"Pause_Debug_ForceReload_Desc" "Destroys and reloads this menu panel."
+		
+		"Pause_Setting_PhysAllowDirectFrame" "Allow Direct Movement Every Frame"
+		"Pause_Setting_PhysAllowDirectFrame_Desc" "Moves the player every frame under direct mode if the player physics framerate is set to 1.\n\nSetting thins will not allow the serverside motion controller positions to update correctly when the player is moved in direct mode."
+		
+		
+		"Pause_Setting_Tool_SkiVisibility" "Ski Visibility"
+		"Pause_Setting_Tool_SkiVisibility_Desc" "Set to render a pair of skis when using the Ski Pole tool."
+		
+		"Pause_Setting_DebugVis" "Debug Visualization"
+		"Pause_Setting_DebugVis_Desc" "Enables debug drawing commands and console debug information for a variety of features.\n\nThis setting applies for all players."
+		
+		"Pause_Setting_DebugFramerate" "Show Server Framerate"
+		"Pause_Setting_DebugFramerate_Desc" "Displays the minimum server-side framerate over a number of frames."
+		
+		"Pause_Setting_Phys_DebugThink" "Player Physics Thinkrate"
+		"Pause_Setting_Phys_DebugThink_Desc" "Sets the player physics simulation interval to run every this many frames.\n\n The default is every other frame (2).\n\nChanging this may break things. The value should not be set lower than the framerate."
+		
+		"Pause_Setting_Phys_DebugMove" "Player Physics Framerate"
+		"Pause_Setting_Phys_DebugMove_Desc" "Sets the player physics movement to  be actuated every this many frames.\n\n The default is every frame (1).\n\nChanging this may break things."
+		
+		"Pause_Setting_Loco_SlideFactor" "Quick Locomotion Slide Speed"
+		"Pause_Setting_Loco_SlideFactor_Desc" "Sets the movement speed for the Quick Locomotion Slide mode."
+		
+		"Pause_Setting_Loco_ComfortGrid" "Comfort Ground Grid"
+		"Pause_Setting_Loco_ComfortGridOff" "Off"
+		"Pause_Setting_Loco_ComfortGridRotate" "Turn"
+		"Pause_Setting_Loco_ComfortGridMove" "Turn & Move"
+		"Pause_Setting_Loco_ComfortGridAlways" "Always On"
+		"Pause_Setting_Loco_ComfortGrid_Desc" "Adds a static grid on the ground when turning or artificially moving.\n\nThis may help in preventing discomfort and motion sickness."
+		
+		"Pause_Setting_Loco_ComfortVignette" "Comfort Vignetting"
+		"Pause_Setting_Loco_ComfortVignette_Desc" "Adds vignetting around the field of view when artificially moving.\n\nThis may help in preventing discomfort and motion sickness."
+		
+		"Pause_Setting_Phys_Gravity" "Player Gravity"
+		"Pause_Setting_Phys_Gravity_Desc" "Sets the gravity factor for the player.\n\n1.0 is normal earth gravity."
+		
+		"Pause_Setting_Phys_CollisionMode" "Player Collisions"
+		"Pause_Setting_Phys_CollisionModeOff" "None"
+		"Pause_Setting_Phys_CollisionModeBody" "Body"
+		"Pause_Setting_Phys_CollisionModeFull" "Head & Body"
+		"Pause_Setting_Phys_CollisionMode_Desc" "Toggles whether the player collides with geometry. Turing off head collision will also disable the player being pushed back by moving into walls."
+		
+		"Pause_Setting_Phys_PhysMode" "Player Physics Mode"
+		"Pause_Setting_Phys_PhysModeOff" "Off"
+		"Pause_Setting_Phys_PhysModeDirect" "Direct Only"
+		"Pause_Setting_Phys_PhysModeFull" "Full Physics"
+		"Pause_Setting_Phys_PhysMode_Desc" "Toggles the players physics mode.\n\nFull Physics: Normal mode where the player is always affected by physical forces unless paused.\nDirect Only: The player moves only when using a locomotion method. Gravity affects the player as long as the locomotion is active.\nOff: No forced movement. Nothing can move the player apart from the stock teleport."
+		
+		"Pause_Setting_Phys_MoveMode" "Player Movement Mode"
+		"Pause_Setting_Phys_MoveModeDynamic" "Dynamic"
+		"Pause_Setting_Phys_MoveModeForceDirect" "Force Direct"
+		"Pause_Setting_Phys_MoveModeForceEntity" "Force Entity"
+		"Pause_Setting_Phys_MoveMode_Desc" "Override the player movement mode.\n\nNormally the physics system switches between movement modes automatically depending on what best suits the situation.\nDirect mode moves the playspace anchor directly at half the framerate. This is required for the motion controller positions to be updated correctly, but can introduce movement lag on joined players.\nEntity mode parents the player to a separate entity, which is controlled by setting its velocity. This may improve lag, but introduces lag to motion controller positions."
+		
+		
+		
+		"EntTool_MenuEntInfo" "Entity Information"
+		"EntTool_MenuPropManip" "Prop Manipulation"
+		
+		"EntTool_Boot1" "EntTool BIOS 0.5.1 Initialized"
+		"EntTool_Boot2" "Mem: 16384 Bytes OK"
+		"EntTool_Boot3" "RF Scanner On-Line"
+		"EntTool_Boot4" "Antenna Calibrated"
+		"EntTool_Boot5" ""
+		"EntTool_Boot6" "Loading menu..."
+	}
+}

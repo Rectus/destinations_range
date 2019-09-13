@@ -24,6 +24,7 @@
 
 local MathUtils = require "libraries.mathutils"
 
+local POLE_VELOCITY_FACTOR = 120
 local GRAB_MAX_DISTANCE = 38
 local POLE_FORCE_MOVE_MAX_SPEED = 50
 local POLE_FORCE_MOVE_MIN_DISTANCE = 1
@@ -151,7 +152,7 @@ function Activate(activateType)
 		compass:SetParent(thisEntity, "compass")
 		compass:SetLocalOrigin(Vector(0,0,0))
 		
-		CustomGameEventManager:RegisterListener("pause_panel_toggle_skis", ToggleSkis)
+		CustomGameEventManager:RegisterListener("pause_panel_command", ToggleSkis)
 	end
 	g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(Think)
 end
@@ -175,7 +176,7 @@ function RestoreState()
 	end
 	poleLength = thisEntity:Attribute_GetFloatValue("poleLength", POLE_MAX_LENGTH)
 	poleAnim:SetSequence("retracted")
-	CustomGameEventManager:RegisterListener("pause_panel_toggle_skis", ToggleSkis)
+	CustomGameEventManager:RegisterListener("pause_panel_command", ToggleSkis)
 	
 end
 
@@ -190,7 +191,12 @@ function SetEquipped(this, pHand, nHandID, pHandAttachment, pPlayer)
 	
 	playerPhys = g_VRScript.playerPhysController
 	
-	playerEnt:AllowTeleportFromHand(handID, false)
+	if g_VRScript.pauseManager
+	then
+		g_VRScript.pauseManager:SetTeleportControlsAllowed(playerEnt, handID, false)
+	else
+		playerEnt:AllowTeleportFromHand(handID, false)
+	end
 	
 	poleAnim:SetParent(handAttachment, "")
 	poleAnim:SetOrigin(handAttachment:GetOrigin())
@@ -199,6 +205,12 @@ function SetEquipped(this, pHand, nHandID, pHandAttachment, pPlayer)
 	compass:SetOrigin(handAttachment:GetOrigin())
 	
 	skiDir = playerEnt:GetHMDAvatar():GetAngles():Left():Cross(Vector(0,0,-1))
+	
+	if g_VRScript.playerSettings then
+		skisEnabled = g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "show_skis")
+	end
+	
+	debugDraw = g_VRScript.debugEnabled
 	
 	if not playerEnt.skiPoleHintsShown
 	then
@@ -213,7 +225,12 @@ function SetUnequipped()
 	playerEnt:StopSound("Ski.Noise" .. moveSoundLevel)
 	playerEnt:StopSound("Ski.Carve" .. carveSoundLevel)
 	
-	playerEnt:AllowTeleportFromHand(handID, true)
+	if g_VRScript.pauseManager
+	then
+		g_VRScript.pauseManager:SetTeleportControlsAllowed(playerEnt, handID, true)
+	else
+		playerEnt:AllowTeleportFromHand(handID, true)
+	end
 	
 	poleAnim:SetSequence("retracted")
 	extended = false
@@ -433,10 +450,11 @@ function ToggleSkis(this, eventData)
 
 	local player = GetPlayerFromUserID(eventData.id)
 
-	if playerEnt and player == playerEnt
-	then
-		skisEnabled = not skisEnabled		
-	end
+	if not playerEnt or player == playerEnt then return end
+
+	if eventData.cmd ~= "show_skis" then return end
+
+	skisEnabled = math.floor(eventData.val) == 1
 	
 	if not skisEnabled then KillSkis() end
 end
@@ -497,8 +515,7 @@ function UpdateSkis(playerVel, playerSpeed)
 		KillSkis()
 		return
 	end
-	
-	playerPhys:AddConstraint(playerEnt, thisEntity, false)
+
 	
 	local hand0Pos = nil
 	local hand1Pos = nil
@@ -847,7 +864,9 @@ function TracePush(playerVel, playerSpeed)
 			end
 
 		end 
-
+	
+		playerPhys:AddConstraint(playerEnt, thisEntity, false)
+		
 		if not playerMoved
 		then
 			--StartSoundEvent("SkiPole.Hit", thisEntity.handEnt)
@@ -861,9 +880,9 @@ function TracePush(playerVel, playerSpeed)
 		end
 	
 		local distanceVector = (grabEndpoint - traceTable.pos)
-		--DebugDrawLine(traceTable.pos, traceTable.pos + distanceVector, 0, 0, 255, true, 0.5)
+		if debugDraw then DebugDrawLine(grabEndpoint, traceTable.pos, 0, 0, 255, true, FrameTime()) end
 		
-		local pullVector = distanceVector:Normalized()
+		local pullDir = distanceVector:Normalized()
 		
 		local depth = (traceTable.pos - traceTable.endpos):Length()
 		
@@ -871,7 +890,7 @@ function TracePush(playerVel, playerSpeed)
 		--DebugDrawLine(traceTable.pos, thisEntity.grabEndpoint, 0, 255, 0, false, 0.5)
 		
 		local normal = (traceTable.startpos - traceTable.pos):Normalized()
-		local coDirection = pullVector:Dot(normal)
+		local coDirection = pullDir:Dot(normal)
 		
 		local dragFactor = (coDirection + 1) / 2
 
@@ -885,11 +904,12 @@ function TracePush(playerVel, playerSpeed)
 			then
 				dragFactor = dragFactor *  POLE_DRAG_PULL_FACTOR  * depth / GRAB_MAX_DISTANCE
 				RumbleController(1, 0.4, 40)
-			end	
+			end
 		end
 		
+		
 		-- Allows the player to push away from walls
-		local pushVector = traceTable.normal * (depth + 16) * POLE_LIFT_FACTOR
+		local velChange = traceTable.normal * (depth + 16) * POLE_LIFT_FACTOR
 		
 	
 		if distance > GRAB_PULL_MIN_DISTANCE
@@ -898,30 +918,32 @@ function TracePush(playerVel, playerSpeed)
 		
 			if distSqr < GRAB_PULL_PLAYER_SPEED
 			then 
-				pullVector = pullVector * distSqr
+				pullDir = pullDir * distSqr
 			else
-				pullVector = pullVector * GRAB_PULL_PLAYER_SPEED
+				pullDir = pullDir * GRAB_PULL_PLAYER_SPEED
 			end
 				
-			pushVector = pushVector + pullVector * dragFactor
+			velChange = velChange + pullDir * dragFactor
 		end	
+
+		velChange = velChange * POLE_VELOCITY_FACTOR * FrameTime()
 		
 		if playerMoving then
 		
 			--DebugDrawLine(traceTable.pos, traceTable.pos + pullVector, 255, 0, 0, true, 0.5)
-			playerPhys:AddVelocity(playerEnt, pushVector)
+			playerPhys:AddVelocity(playerEnt, velChange, true)
 		
 		else -- If the player is stopped, store force until there is enough to overcome the stop speed.
 		
 			if not startVelocityAccumulate then
-				startVelocityAccumulate = pushVector
+				startVelocityAccumulate = velChange
 			else
-				startVelocityAccumulate = startVelocityAccumulate + pushVector
+				startVelocityAccumulate = startVelocityAccumulate + velChange
 			end 
 			
 			if startVelocityAccumulate:Length() > 35 then 
 				
-				playerPhys:AddVelocity(playerEnt, startVelocityAccumulate)
+				playerPhys:AddVelocity(playerEnt, startVelocityAccumulate, true)
 				startVelocityAccumulate = nil
 			end
 		end
@@ -937,6 +959,8 @@ function TracePush(playerVel, playerSpeed)
 	
 	
 	else
+		playerPhys:RemoveConstraint(playerEnt, thisEntity)
+	
 		if playerMoved
 		then
 			if sprayParticle then

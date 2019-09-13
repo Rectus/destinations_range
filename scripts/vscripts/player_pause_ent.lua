@@ -1,12 +1,9 @@
 
 local controller = nil
-local thinkInterval = 1
 
-function EnableThink(cont, interval)
-	thinkInterval = interval
+function EnableThink(cont)
 	controller = cont
-	thisEntity:SetThink(Think, "player_pause", thinkInterval)
-
+	g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(Think)
 end
 
 function Think()
@@ -14,8 +11,6 @@ function Think()
 	then
 		controller:Think()
 	end
-	
-	return thinkInterval
 end
 
 

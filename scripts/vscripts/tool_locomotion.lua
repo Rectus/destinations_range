@@ -30,6 +30,7 @@ local MOVE_CAP_FACTOR = 0.7
 local MOVE_SPEED = 100
 local MOVE_SPEED_RUN_FACTOR = 2
 local AIR_CONTROL_FACTOR = 0.5
+local GRAB_MOVE_FRAME_FACTOR = 0.1
 
 local ROTATION_ANGLE_MAX_RATE = 10
 local MIN_ROTATE_DISTANCE = 4
@@ -231,8 +232,6 @@ function Activate(activateType)
 
 		CustomGameEventManager:RegisterListener("locomotion_tool_config", ApplyConfig)
 	end
-	
-	g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(MoveThink)
 end
 
 
@@ -364,6 +363,7 @@ function SetEquipped(this, pHand, nHandID, pHandAttachment, pPlayer)
 	EmitSoundOn("cache_finder_equip", handAttachment)
 	
 	thisEntity:SetThink(UpdateScreen, "handle_screen")
+	g_VRScript.ScriptSystem_AddPerFrameUpdateFunction(MoveThink)
 	
 	return true
 end
@@ -375,9 +375,15 @@ function SetUnequipped()
 		ReleaseHold()
 		grabIn = false
 	end
+	g_VRScript.ScriptSystem_RemovePerFrameUpdateFunction(MoveThink)
 	
-	playerEnt:AllowTeleportFromHand(handID, true)
-	
+	if g_VRScript.pauseManager
+	then
+		g_VRScript.pauseManager:SetTeleportControlsAllowed(playerEnt, handID, true)
+	else
+		playerEnt:AllowTeleportFromHand(handID, true)
+	end
+		
 	if saved.triggerMode == TRIGGER_MODE_GRAPPLE then
 		DisableGrapple()
 	end
@@ -526,7 +532,14 @@ function OnHandleInput(input)
 	local IN_PAD_RIGHT = (handID == 0 and IN_PAD_RIGHT_HAND0 or IN_PAD_RIGHT_HAND1)
 	
 	
-	playerEnt:AllowTeleportFromHand(handID, teleportPassthrough and not playerEnt:IsContentBrowserShowing())
+	local allow = teleportPassthrough and not playerEnt:IsContentBrowserShowing()
+	if g_VRScript.pauseManager
+	then
+		g_VRScript.pauseManager:SetTeleportControlsAllowed(playerEnt, handID, allow)
+	else
+		playerEnt:AllowTeleportFromHand(handID, allow)
+	end
+
 	
 	if input.buttonsPressed:IsBitSet(IN_TRIGGER)
 	then
@@ -846,10 +859,10 @@ function PadMove()
 		speed = speed * MOVE_SPEED_RUN_FACTOR
 	end
 	
-	if  g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
+	if g_VRScript.playerPhysController:IsPlayerOnGround(playerEnt)
 	then
 		g_VRScript.playerPhysController:SetVelocity(playerEnt, moveVector 
-			* speed * saved.padMoveFactor)
+			* speed * saved.padMoveFactor, true)
 		--g_VRScript.playerPhysController:MovePlayer(playerEnt, moveVector * speed 
 			--* saved.padMoveFactor * FrameTime() * MOVE_THINK_INTERVAL, true, true, thisEntity)
 	else
@@ -1019,7 +1032,8 @@ function GrabMoveFrame()
 		g_VRScript.playerPhysController:AddVelocity(playerEnt, Vector(pullVector.x, pullVector.y, 0))
 	else
 		local grounded = (saved.triggerMode == TRIGGER_MODE_AIR_GRAB_GROUND and not isGrabbingSolid)
-		local hitVector = g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector, false, grounded, thisEntity)
+		local hitVector = g_VRScript.playerPhysController:MovePlayer(playerEnt, pullVector * GRAB_MOVE_FRAME_FACTOR, 
+			false, grounded, thisEntity)
 		
 		if hitVector and saved.grabMoveFactor ~= 1.0
 		then

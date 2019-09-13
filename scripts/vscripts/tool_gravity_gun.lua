@@ -89,7 +89,12 @@ function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	local paintColor = thisEntity:GetRenderColor()
 	handAttachment:SetRenderColor(paintColor.x, paintColor.y, paintColor.z)
 	
-	playerEnt:AllowTeleportFromHand(handID, false)
+	if g_VRScript.pauseManager
+	then
+		g_VRScript.pauseManager:SetTeleportControlsAllowed(playerEnt, handID, false)
+	else
+		playerEnt:AllowTeleportFromHand(handID, false)
+	end
 	
 	return true
 end
@@ -97,7 +102,12 @@ end
 
 function SetUnequipped()
 
-	playerEnt:AllowTeleportFromHand(handID, true)
+	if g_VRScript.pauseManager
+	then
+		g_VRScript.pauseManager:SetTeleportControlsAllowed(playerEnt, handID, true)
+	else
+		playerEnt:AllowTeleportFromHand(handID, true)
+	end
 		
 	playerEnt = nil
 	handEnt = nil

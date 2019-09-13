@@ -1,6 +1,4 @@
 
-print("Range map script")
-
 -- What scripts to load for the player physics and pause menu.
 require("player_physics")
 require("pause_manager")
@@ -48,7 +46,7 @@ local SPAWN_ITEMS =
 			targetname = "",
 			model = "models/weapons/laser_pistol.vmdl";
 			vscripts = "tool_laser_pistol";
-			HasCollisionInHand = 1;
+			HasCollisionInHand = 0;
 		}
 	},
 	{
@@ -376,29 +374,24 @@ local SPAWN_ITEMS =
 local MAP_PLAYER_DEFAULT_SETTINGS =
 {
 	-- What custom quick inventory items to use by default, indexed from the above array.
-	quick_inv_items = {1, 7, 8, 22, 2};
+	quick_inv_items = {1, 15, 2};
 }
 
 
 local MAP_COMMANDS =
 {
-	{cmd = "range_teleport_start", type = 0, text = "#Pause_Button_TeleportToStart"},
-	{cmd = "range_reset", type = 0, text = "Reset Range"},
-	{cmd = "range_spawn_law", type = 0, text = "Spawn LAW"},
-	{cmd = "range_spawn_melon", type = 0, text = "Spawn Melon"},
-	{cmd = "range_fire_laws", type = 0, text = "Fire ALL LAWS!"},
+	{cmd = "tank_teleport_start", type = 0, text = "#Pause_Button_TeleportToStart"},
+	{cmd = "tank_toggle_turret_top", type = 2, def = 1, text = "Show Turret Roof"},
+	{cmd = "tank_toggle_turret", type = 2, def = 1, text = "Show Turret"},
+	{cmd = "tank_toggle_top", type = 2, def = 1, text = "Show Hull Roof"},
 }
 
--- Enables player physics - required by all locomotion using tools and features.
+-- Enables player physics - required by all locomotion using tools.
 g_VRScript.playerPhysController = CPlayerPhysics()
 g_VRScript.playerPhysController:Init()
 
-
--- Enables pausing player movement and the spawn menu.
+-- Enables pauisng player movement and the spawn menu.
 g_VRScript.pauseManager = CPauseManager(SPAWN_ITEMS, MAP_PLAYER_DEFAULT_SETTINGS, MAP_COMMANDS)
-
--- If uncommented, enables the pause menu to store player data when they connect.
---g_VRScript.pauseManager:ListenPlayerConnect()
 
 -- Enables quick locomotion options.
 require("quick_locomotion")
@@ -409,7 +402,6 @@ function OnPrecache(context)
 	g_VRScript.pauseManager:DoPrecache(context)
 end
 
-
 function OnActivate()
 	g_VRScript.pauseManager:Init()
 	CustomGameEventManager:RegisterListener("pause_panel_command", OnMapCommand)
@@ -419,34 +411,33 @@ end
 
 function OnMapCommand(this, data)
 
-	if data.cmd == "range_teleport_start"
+	if data.cmd == "tank_teleport_start"
 	then
 		local player = GetPlayerFromUserID(data.id)
 		local destination = Entities:FindByName(nil, "teleport_dest")
 		if destination then
 			g_VRScript.pauseManager:TeleportPlayer(player, destination, true)
 		end	
-	elseif data.cmd == "range_reset"
+	elseif data.cmd == "tank_toggle_turret_top"
 	then
-		local player = GetPlayerFromUserID(data.id)
-		DoEntFire("range_control", "CallScriptFunction", "Reset", 0, player, player) 
+		local enabled = math.floor(data.val) == 1
+		CustomGameEventManager:Send_ServerToAllClients("tank_toggle_turret_top", {val = math.floor(data.val)})
+		--DoEntFire("range_control", "CallScriptFunction", "Reset", 0, player, player) 
 		
-	elseif data.cmd == "range_spawn_law"
+	elseif data.cmd == "tank_toggle_turret"
 	then
-		local player = GetPlayerFromUserID(data.id)
-		DoEntFire("spawn_panel", "CallScriptFunction", "SpawnLaw", 0, player, player) 
+		local enabled = math.floor(data.val) == 1
+		CustomGameEventManager:Send_ServerToAllClients("tank_toggle_turret", {val = math.floor(data.val)})
 		
-	elseif data.cmd == "range_spawn_melon"
+	elseif data.cmd == "tank_toggle_top"
 	then
+		local enabled = math.floor(data.val) == 1
 		local player = GetPlayerFromUserID(data.id)
-		DoEntFire("melon_spawner", "ForceSpawn", "", 0, player, player) 
-		
-	elseif data.cmd == "range_fire_laws"
-	then
-		local player = GetPlayerFromUserID(data.id)
-		DoEntFire("fire_laws", "CallScriptFunction", "Fire", 0, player, player) 
+		CustomGameEventManager:Send_ServerToAllClients("tank_toggle_top", {val = math.floor(data.val)})
 	end
 end
+
+
 
 
 -- Utility function for passing call through to functions if debug mode is enabled.
@@ -458,54 +449,3 @@ function _G.DebugCall(func, ...)
 	end
 	return nil
 end
-
-
--- Utility function for printing large scopes
-function _G.PrintTable(table, level, maxlevel)
-	level = level or 0
-	maxlevel = maxlevel or 8
-
-	local indent = ""
-	
-	for i = 0, level - 1, 1
-	do
-		indent = indent .. " "
-	end
-
-	for key, value in pairs(table)
-	do
-		if value == _G
-		then
-			print(indent .. type(value) .. ": " .. tostring(key))
-			print(indent .. "Global table reference!")
-			
-		elseif value == table
-		then
-			print(indent .. type(value) .. ": " .. tostring(key))
-			print(indent .. "Self reference!")
-			
-		elseif type(value) == "table"	
-		then
-			print(indent .. type(value) .. ": " .. tostring(key))
-			if level < maxlevel
-			then
-				PrintTable(value, level + 1, maxlevel)
-			else
-				print("Max recursion!")
-			end
-			
-		elseif type(value) == "function"
-		then
-			print(indent .. type(value) .. ": " .. key)
-						
-		elseif type(value) == "userdata"
-		then
-			print(indent .. type(value) .. ": " .. key)
-			
-		else
-			print(indent .. key .. " = " .. tostring(value))
-		end
-	end
-end
-
- 

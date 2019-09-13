@@ -1,4 +1,4 @@
-<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:vpcf19:version{aafc65d8-7a5a-4e01-bd8d-3ac118422503} -->
 {
 	_class = "CParticleSystemDefinition"
 	m_controlPointConfigurations = 
@@ -21,6 +21,9 @@
 	[
 		{
 			_class = "C_OP_FadeAndKill"
+		},
+		{
+			_class = "C_OP_Decay"
 		},
 	]
 	m_Renderers = 
@@ -51,11 +54,16 @@
 	[
 		{
 			_class = "C_OP_InstantaneousEmitter"
-			m_nParticlesToEmit = 1
+			m_nParticlesToEmit = 
+			{
+				m_nType = "PF_TYPE_LITERAL"
+				m_flLiteralValue = 1.0
+			}
 		},
 	]
 	m_ConstantColor = [ 11, 11, 11, 255 ]
 	m_flConstantLifespan = 20.0
 	m_flConstantRadius = 1.0
 	m_nMaxParticles = 1
+	m_nBehaviorVersion = 9
 }

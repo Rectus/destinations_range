@@ -260,7 +260,11 @@ function RetractGrappleLine()
 		end
 		grappleHook:SetParent(grappleBaseEnt, "")
 		grappleHook:RemoveEffects(32)
-		grappleHandAttachment:SetPoseParameter("spin", 0)
+		
+		if IsValidEntity(grappleHandAttachment)
+		then
+			grappleHandAttachment:SetPoseParameter("spin", 0)
+		end
 		--StartSoundEvent("Grapple_Return", grappleHandAttachment)
 		return nil
 	end
@@ -641,6 +645,8 @@ function PullPlayer()
 		* GRAPPLE_PULL_INTERVAL * 8.0
 		
 	local pullSpeed = pullVector:Length()
+	local onGround, groundNormal = playerPhys:IsPlayerOnGround(grapplePlayerEnt)
+	local grounded = onGround and groundNormal:Dot(pullVector) <= 0
 	
 	if pullSpeed > GRAPPLE_PULL_PLAYER_MAX_SPEED * GRAPPLE_PULL_INTERVAL then
 		pullVector = targetDelta:Normalized() * GRAPPLE_PULL_PLAYER_MAX_SPEED * GRAPPLE_PULL_INTERVAL
@@ -649,6 +655,12 @@ function PullPlayer()
 		and (distance > GRAPPLE_PULL_PLAYER_MIN_DISTANCE or grappleRappelling) then
 		
 		pullVector = targetDelta:Normalized() * GRAPPLE_PULL_PLAYER_MIN_SPEED * GRAPPLE_PULL_INTERVAL
+		
+	elseif grounded
+	then
+		targetDelta.z = 0
+		pullVector = targetDelta:Normalized() * GRAPPLE_PULL_PLAYER_MAX_SPEED * GRAPPLE_PULL_INTERVAL 
+			* RemapValClamped(targetDelta:Length2D(), 5, 20, 0, 1)
 	end
 
 	if distance > GRAPPLE_PULL_PLAYER_MIN_DISTANCE or #grapplePoints > 0 or grappleRappelling
@@ -656,8 +668,9 @@ function PullPlayer()
 		if grappleRappelling then
 			pullVector = Vector(pullVector.x * 0.5, pullVector.y * 0.5, pullVector.z * 0.8)
 		end
-	
-		playerPhys:AddVelocity(grapplePlayerEnt, pullVector)	
+			
+		
+		playerPhys:AddVelocity(grapplePlayerEnt, pullVector, grounded)	
 	else
 		playerPhys:StickFrame(grapplePlayerEnt)
 		playerPhys:MovePlayer(grapplePlayerEnt, targetDelta)

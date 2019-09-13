@@ -19,50 +19,134 @@
 
 .PausePanelTitlebar {
 	width: 100%;
-	height: fill-parent-flow( 0.15 );
-	flow-children: none;
+	height: 150px;
+	flow-children: right;
 	background-color: background_gradient;
 	border-radius: 5px;
 	border: 2px solid panel_stroke;
 	transition-property: border, opacity;
 	transition-duration: 0.23s;
 	transition-timing-function: bigpicture-ease-in-out;
+	padding-left: 30px;
+	padding-right: 30px;
 
 }
 
 .PausePanelTitleLabel {
-	width: 100%;
-	height: 100%;
-	margin-top: 20px;
 	font-size: 60px;
+	vertical-align: center;
 	text-align: center;
 	color: white;
+	padding-right: 60px;
 }
 
-.PausePanelButtonArea {
+.PausePanelTitleLabel.Hidden {
+	visibility: collapse;
+}
+
+.PausePanelMainPane {
 	width: 100%;
 	height: fill-parent-flow( 0.85 );
-	margin-top: 5px;
-	padding-top: 25px;
+	margin-top: 3px;
+	
+	
+	flow-children: right;
+	
+	//overflow: clip;
+	opacity: 0;
+	visibility: collapse;
+}
+
+.PausePanelMainPane.Visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+.PausePanelVerticalPane {
+	width: fill-parent-flow( 1 );
+	height: 100%;
 	background-color: background_center_gradient;
 	border-radius: 5px;
 	border: 2px solid panel_stroke;
-	flow-children: right;
-	padding: 20px 30px 0px 25px;
-	overflow: clip;
-}
-
-.PausePanelButtonPane {
-	width: fill-parent-flow( 1 );
-	height: 100%;
-	padding: 0px;
+	margin: 3px;
+	padding: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
 	vertical-align: top;
 	horizontal-align: center;
 	flow-children: down;
 }
 
-.PausePanelScollableButtonPane {
+.PausePanelVerticalPane.Scrollable {
+	overflow: squish scroll;
+}
+
+.PausePanelButtonPane {
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	vertical-align: top;
+	horizontal-align: center;
+	flow-children: down;
+}
+
+.PausePanelButtonPane.StackedH {
+	height: fit-children;
+}
+
+.PausePanelButtonPane.GridH {
+	height: 250px;
+	flow-children: down-wrap;
+	vertical-align: top;
+}
+
+.PausePanelButtonPane.StackedW {
 	width: fill-parent-flow( 1 );
+}
+
+.PausePanelButtonPane.Horizontal {
+	flow-children: right;
+}
+
+.PausePanelButtonPane.Scrollable {
+	overflow: squish scroll;
+}
+
+.PausePanelButtonPane.Bordered {
+	border: 2px solid #ffffff05;
+	border-radius: 5px;
+}
+
+.PausePanelButtonPane.Hidden {
+	visibility: collapse;
+}
+
+.PausePanelButtonPane.Debug {
+	background-color: #701010ff;
+}
+
+
+.PausePanelPaneSpacer {
+	width: 100%;
+	height: 20px;
+}
+
+
+.PausePanelPaneHeading {
+	width: 100%;
+	font-size: 30px;
+	text-align: left;
+	color: white;
+	padding: 10px;
+}
+
+.PausePanelPaneHeading.Hidden {
+	visibility: collapse;
+}
+
+
+.PausePanelScollableButtonPane {
+	width: 100%;
 	padding-bottom: 100px;
 	vertical-align: top;
 	horizontal-align: center;
@@ -72,12 +156,14 @@
 
 .PausePanelButton {
 	width: 100%;
+	height: 80px;
 	border-radius: 5px;
 	border: 2px solid #ffffff10;
-	padding-top: 30px;
-	padding-bottom: 30px;
+	padding: 5px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	margin: 7px;
-	background-color: background_center_gradient_dark;
+	background-color: button_gradient;
 	flow-children: right;
 	
 	transition-property: border;
@@ -85,10 +171,51 @@
 	transition-timing-function: bigpicture-ease-in-out;
 }
 
+.PausePanelButton.Big {
+	height: 100px;
+}
+
+.PausePanelButton.Horizontal {
+	width: fill-parent-flow( 1 );
+}
+
+.PausePanelButton.Grid {
+	width: 50%;
+}
+
+.PausePanelButton.Bottom {
+	vertical-align: bottom;
+	z-index: 999;
+}
+
+.PausePanelButton.Right {
+	vertical-align: center;
+	horizontal-align: right;
+	z-index: 999;
+}
+
 .PausePanelButton.Item {
+	width: fill-parent-flow( 1 );
+	height: 120px;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	
+	background-color: background_center_gradient_dark;
+}
+
+.PausePanelButton.Radio {
+	width: fit-children;
+	min-width: 150px;
+	background-color: background_center_gradient_dark;
+	border-radius: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+.PausePanelButton.Fit {
+	width: fit-children;
+	padding: 10px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 .PausePanelButton:hover,
@@ -103,11 +230,32 @@
 
 }
 
+.PausePanelButton:selected {
+	background-color: button_gradient_bright;	
+
+}
+
+
 .PausePanelButtonLabel {
-	width: 100%;
+	vertical-align: center;
+	horizontal-align: center;
 	font-size: 35px;
 	text-align: center;
 	color: white;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.PausePanelButtonLabel.Setting {
+	font-size: 30px;
+}
+
+.PausePanelButtonLabel.FitText {
+	text-overflow: shrink;
+}
+
+.PausePanelButtonLabel.Left {
+	horizontal-align: left;
 }
 
 .PausePanelButtonImage {
@@ -117,10 +265,155 @@
 }
 
 .PausePanelButtonImageLabel {
-	width: 100%;
 	font-size: 35px;
 	text-align: left;
 	color: white;
 	vertical-align: center;
 	padding-left: 40px;
 }
+
+
+.PausePanelToggleButton {
+	width: 100%;
+	height: 100px;
+	padding: 5px;
+
+	margin: 7px;
+	flow-children: right;
+	
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+}
+
+.PausePanelToggleButton.Grid {
+	width: 50%;
+}
+
+.PausePanelItemPane {
+	width: 100%;
+	flow-children: right;
+}
+
+.PausePanelInvToggle {
+	width: 80px;
+	height: fit-children;
+	vertical-align: center;
+	horizontal-align: right;
+	margin-left: 15px;
+	width: fill-parent-flow( 0.16 );
+	flow-children: right;
+	visibility: collapse;
+
+}
+
+.PausePanelInvToggle.ToggleEnabled {
+	visibility: visible;
+}
+
+
+
+.PausePanelGroupLabel {
+	margin: 7px;
+	padding-left: 15px;
+	font-size: 30px;
+	vertical-align: center;
+	text-align: left;
+	color: white;
+}
+
+
+.PausePanelSlider {
+
+	width: fill-parent-flow( 1.0 ); //350px;
+	height: 80px;
+	/*color: text_color;*/
+	padding: 5px;
+	vertical-align: center;
+	horizontal-align: left;
+	/*background-color: #00a0a060;*/
+}
+
+.PausePanelSlider #SliderThumb {
+
+	border: 2px solid #ffffffaa;
+	width: 30px;
+	height: 50px;
+	border-radius: 5px;
+	background-color: button_gradient_bright;
+	vertical-align: center;
+}
+
+.PausePanelSlider #SliderTrack {
+
+	background-color: #ffffff22;
+
+}
+
+.PausePanelSlider #SliderTrackProgress {
+
+	//background-color: #60e0e0a0;
+
+}
+
+.PausePanelSliderPane {
+	width: fit-children;
+	height: 80px;
+	border: 2px solid #ffffff10;
+	border-radius: 10px;
+	padding: 20px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+
+	margin: 2px;
+
+	vertical-align: top;
+	horizontal-align: center;
+	flow-children: right-wrap;
+	
+}
+
+.PausePanelSliderPane:hover,
+.PausePanelSliderPane:focus {
+	border: 2px solid white;
+}
+
+.PausePanelSliderPane.Cursor {
+	border: 4px solid white;
+	margin: 2px;
+}
+
+.PausePanelSliderPane.Selected {
+	background-color: #60e0e080;
+}
+
+.PausePanelSliderPane:active {
+	background-color: #60e0e080;	
+}
+
+
+.PausePanelSliderValue {
+	font-size: 30px;
+	padding: 10px;
+	padding-top: 20px;
+	width: 80px;
+	height: 80px;
+	margin: 10px;
+	text-align: center;
+	vertical-align: center;
+	horizontal-align: right;
+	color: white;
+}
+
+.PausePanelDescriptionText {
+	vertical-align: top;
+	height: 100%;
+	horizontal-align: left;
+	font-size: 30px;
+	text-align: left;
+	color: white;
+	padding: 20px;
+	white-space: normal;
+	text-overflow: shrink;
+}
+

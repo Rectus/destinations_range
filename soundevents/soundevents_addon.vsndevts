@@ -11,7 +11,7 @@
 			"sounds/weapons/rpg_fire_01.vsnd",
 			"sounds/weapons/rpg_fire_02.vsnd",
 			"sounds/weapons/rpg_fire_03.vsnd",
-		]
+		] 
 	}
 	
 	Law.Explode = 

@@ -34,7 +34,9 @@ CPlayerPhysics = class(
 		debugDraw = false;
 		lastThinkTime = 0;
 		lastThinkDelta = 0;
-		lastFrameTime = 0;
+		thinkInterval = 2;
+		frameInterval = 1;
+		allowDirectEveryFrame = false;
 	}, 
 	
 	{
@@ -101,7 +103,7 @@ end
 
 function CPlayerPhysics:Init()
 
-	self.thinkEnt:GetPrivateScriptScope().EnableThink(self, self.lastThinkDelta)
+	self.thinkEnt:GetPrivateScriptScope().EnableThink(self)
 end
 
 
@@ -119,7 +121,8 @@ function CPlayerPhysics:AddPlayer(player)
 	
 		self.players[player] = 
 		{
-			idle = true, 
+			idle = true,
+			hasRotated = false, 
 			constraints = {}, 
 			activeConstraint = nil, 
 			velocity = Vector(0,0,0),
@@ -148,6 +151,7 @@ function CPlayerPhysics:AddPlayer(player)
 			moveEntInUse = false,
 			forcePrecision = false,
 			hasTeleported = false,
+			lastFrameTime = 0,
 		}
 		
 		moveEnt:SetAbsOrigin(player:GetHMDAnchor():GetAbsOrigin())
@@ -155,6 +159,31 @@ function CPlayerPhysics:AddPlayer(player)
 	end
 end
 
+
+function CPlayerPhysics:SetThinkInterval(interval)
+	
+	if interval
+	then
+		self.thinkInterval = math.floor(interval)
+	else
+		self.thinkInterval = self.THINK_FRAME_INTERVAL
+	end
+end
+
+function CPlayerPhysics:SetFrameInterval(interval)
+	
+	if interval
+	then
+		self.frameInterval = math.floor(interval)
+	else
+		self.frameInterval = self.MOVE_FRAME_INTERVAL
+	end
+end
+
+function CPlayerPhysics:SetAllowDirectEveryFrame(allow)
+	
+	self.allowDirectEveryFrame = allow
+end
 
 -- Add a movement constraint to the player. The constraint indicates that another entity is controlling the players movement.
 -- The constraint parameter an be any object reference, for example the entity that controls the player.
@@ -175,7 +204,9 @@ function CPlayerPhysics:AddConstraint(player, constraint, isRigid)
 end
 
 
-function CPlayerPhysics:AddVelocity(player, inVelocity)
+function CPlayerPhysics:AddVelocity(player, inVelocity, grounded)
+	grounded = grounded or false
+
 	if not self.players[player]
 	then
 		self:AddPlayer(player)
@@ -183,9 +214,14 @@ function CPlayerPhysics:AddVelocity(player, inVelocity)
 	
 	local playerProps = self.players[player]
 	
-	if playerProps.isPaused or player:IsVRDashboardShowing() or player:IsContentBrowserShowing()
+	if playerProps.isPaused
 	then
 		return
+	end
+	
+	if grounded
+	then
+		inVelocity = self.players[player].groundNormal:Cross(inVelocity):Cross(self.players[player].groundNormal)
 	end
 		
 	playerProps.velocityBuffer = playerProps.velocityBuffer + inVelocity
@@ -203,10 +239,17 @@ function CPlayerPhysics:AddVelocity(player, inVelocity)
 end
 
 
-function CPlayerPhysics:SetVelocity(player, inVelocity)
+function CPlayerPhysics:SetVelocity(player, inVelocity, grounded)
+	grounded = grounded or false
+	
 	if not self.players[player]
 	then
 		self:AddPlayer(player)
+	end
+	
+	if grounded
+	then
+		inVelocity = self.players[player].groundNormal:Cross(inVelocity):Cross(self.players[player].groundNormal)
 	end
 	
 	local playerProps = self.players[player]
@@ -265,8 +308,29 @@ function CPlayerPhysics:IsPlayerOnGround(player)
 	then
 		self:AddPlayer(player)
 	end
-	return self.players[player].onGround or self:TracePlayerHeight(player, self.players[player]) 
-		< self.FALL_GLUE_DISTANCE
+	
+	if self.players[player].onGround
+	then
+		return true, self.players[player].groundNormal 
+	else
+		local height, onGround, trace = self:TracePlayerHeight(player, self.players[player]) 
+		return height < self.FALL_GLUE_DISTANCE, trace.normal
+	end
+end
+
+
+function CPlayerPhysics:IsPlayerOnEntity(player)
+	if not self.players[player]
+	then
+		self:AddPlayer(player)
+	end
+	
+	local playerProps = self.players[player]
+	
+	return playerProps.onGround 
+		and playerProps.groundEnt 
+		and IsValidEntity(playerProps.groundEnt) 
+		and playerProps.groundEnt:GetEntityIndex() > 0
 end
 
 
@@ -337,7 +401,7 @@ function CPlayerPhysics:RotatePlayer(playerEnt, rotationDelta, rotationOrigin, c
 	
 	local playerProps = self.players[playerEnt]
 	
-	if playerProps.isPaused or playerEnt:IsVRDashboardShowing() or playerEnt:IsContentBrowserShowing()
+	if playerProps.isPaused
 	then
 		return false
 	end
@@ -346,7 +410,7 @@ function CPlayerPhysics:RotatePlayer(playerEnt, rotationDelta, rotationOrigin, c
 	local playSpace = self:GetPlayspaceOrigin(playerEnt, playerProps)
 	local moveVector = RotatePosition(rotationOrigin, rotationDelta, playSpace) - playSpace
 	self:MovePlayer(playerEnt, moveVector, false, false, constraint)
-	
+	playerProps.hasRotated = true
 	return true
 
 end
@@ -444,6 +508,34 @@ function CPlayerPhysics:IsPaused(player)
 end
 
 
+function CPlayerPhysics:IsMoving(player)
+
+	if not self.players[player]
+	then
+		self:AddPlayer(player)
+	end
+
+	return not self.players[player].idle and not self.players[player].isPaused
+end
+
+
+function CPlayerPhysics:IsRotating(player)
+
+	if not self.players[player]
+	then
+		self:AddPlayer(player)
+	end
+
+	return self.players[player].hasRotated and not self.players[player].isPaused
+end
+
+
+function CPlayerPhysics:SetDebugDraw(enable)
+
+	self.debugDraw = enable
+end
+
+
 function CPlayerPhysics:ToggleDebugDraw()
 
 	self.debugDraw = not self.debugDraw
@@ -471,16 +563,23 @@ function CPlayerPhysics:MovePlayer(playerEnt, offset, accelerate, grounded, cons
 	
 	if playerProps.activeConstraint and constraint ~= playerProps.activeConstraint then return end
 
-	if playerProps.isPaused or playerEnt:IsVRDashboardShowing() or playerEnt:IsContentBrowserShowing()
+	if playerProps.isPaused
 	then
 		return
 	end
 
-	local hitVector = self:TracePlayerCollision(playerEnt, playerProps, offset)
+	local moveMode = g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "player_physics_collisionmode")
+
+	local hitVector = nil
 	
-	if hitVector
+	if moveMode ~= 0
 	then
-		offset = offset - hitVector
+		hitVector= self:TracePlayerCollision(playerEnt, playerProps, offset)
+		
+		if hitVector
+		then
+			offset = offset - hitVector
+		end
 	end
 	
 	local height, foundGround, heightTrace = self:TracePlayerHeight(playerEnt, playerProps)
@@ -641,7 +740,7 @@ end
 -- Simulates physics
 function CPlayerPhysics:PlayerMoveThink()
 
-	if GetFrameCount() % self.THINK_FRAME_INTERVAL ~= 0 then return end
+	if GetFrameCount() % self.thinkInterval ~= 0 then return end
 
 	self.lastThinkDelta = Time() - self.lastThinkTime
 	self.lastThinkTime = Time()
@@ -665,7 +764,19 @@ function CPlayerPhysics:PlayerMoveThink()
 		
 			local move = not playerProps.idle
 			
-			if playerProps.isPaused or playerEnt:IsVRDashboardShowing() or playerEnt:IsContentBrowserShowing()
+			if playerProps.isPaused
+			then
+				move = false
+			end
+			
+			-- Force movement when standing on entity, even when paused
+			if self:IsPlayerOnEntity(playerEnt) 
+			then 
+				move = true 
+			end
+			
+			local physMode = g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "player_physics_physmode")
+			if physMode == 0
 			then
 				move = false
 			end
@@ -674,23 +785,24 @@ function CPlayerPhysics:PlayerMoveThink()
 			then
 				playerProps.velocity = Vector(0,0,0)
 			end
-
-			self:TracePlayerHeadCollision(playerEnt, playerProps)	
+			
+			self:TracePlayerHeadCollision(playerEnt, playerProps)
 		
 			if move
 			then
 				playerProps.velocity = playerProps.velocity + playerProps.velocityBuffer
-				playerProps.velocityBuffer = Vector(0,0,0)
 			
-				local groundDist, gravVelChange, onGround, groundEnt = self:CalcPlayerGravity(playerEnt, playerProps)
+				local groundDist, gravVelChange, onGround, groundEnt, groundNormal = self:CalcPlayerGravity(playerEnt, playerProps)
 				playerProps.velocity = playerProps.velocity + gravVelChange
 				if onGround
 				then
-					self.players[playerEnt].groundEnt = groundEnt
-					self.players[playerEnt].onGround = true
+					playerProps.groundEnt = groundEnt
+					playerProps.onGround = true
+					playerProps.groundNormal = groundNormal
 				else
-					self.players[playerEnt].groundEnt = nil
-					self.players[playerEnt].onGround = false
+					playerProps.groundEnt = nil
+					playerProps.onGround = false
+					playerProps.groundNormal = Vector(0, 0, 1)
 				end
 				
 				local hitVector = self:TracePlayerCollision(playerEnt, playerProps, 
@@ -702,8 +814,22 @@ function CPlayerPhysics:PlayerMoveThink()
 				end
 				
 				local stopped, dragVelChange = self:CalcPlayerDrag(playerEnt, playerProps)
+				if physMode < 2 then stopped = true end
+				
+				if not stopped then
+					playerProps.velocityBuffer = Vector(0,0,0)
+				elseif playerProps.velocityBuffer.z < 0
+				then
+					playerProps.velocityBuffer.z = 0
+				end
+				
 				if playerProps.velChangeThisThink then stopped = false end
 				playerProps.velocity = playerProps.velocity + dragVelChange
+							
+				if stopped and self:IsPlayerOnEntity(playerEnt) and physMode == 2 then
+					stopped = false
+				end
+				
 				
 				if self:CheckMapBounds(playerEnt, playerProps)
 				then
@@ -729,6 +855,9 @@ function CPlayerPhysics:PlayerMoveThink()
 				then
 					self:RotatePlayspace(playerEnt, playerProps, playerProps.rotationBuffer)
 					playerProps.rotationBuffer = 0
+					playerProps.hasRotated = true
+				else
+					playerProps.hasRotated = false
 				end
 		
 				
@@ -780,7 +909,6 @@ function CPlayerPhysics:PlayerMoveThink()
 				playerProps.moveEntity:SetVelocity(Vector(0,0,0))
 				playerProps.lerpDest = nil
 				playerProps.moveNextFrame = nil
-				playerProps.velocityBuffer = Vector(0,0,0)
 			end
 			playerProps.velChangeThisThink = false
 		end
@@ -790,15 +918,19 @@ end
 
 function CPlayerPhysics:FrameThink()
 
-	if GetFrameCount() % self.MOVE_FRAME_INTERVAL ~= 0 then return end
+	if GetFrameCount() % self.frameInterval ~= 0 then return end
 
 	local time = Time()
-	local frameDelta = time - self.lastFrameTime
-	self.lastFrameTime = time
+	
+	local doDirect = self.allowDirectEveryFrame or self.frameInterval > 1 or GetFrameCount() % 2 ~= 0
 
 	for playerEnt, playerProps in pairs(self.players)
 	do
-		if IsValidEntity(playerEnt) then
+		if IsValidEntity(playerEnt) and playerProps.moveEntInUse or doDirect then
+
+			local frameDelta = time - playerProps.lastFrameTime
+			playerProps.lastFrameTime = time		
+		
 			playerProps.lerpTime = Clamp(playerProps.lerpTime + frameDelta / self.lastThinkDelta, 0, 1)
 			
 			-- Reactivate movement if the player teleported or got moved by other means.
@@ -891,23 +1023,22 @@ function CPlayerPhysics:UpdateMoveMethod(playerEnt, playerProps)
 	local anchor = playerEnt:GetHMDAnchor()
 	local moveEnt = playerProps.moveEntity
 	
-	if playerProps.idle or playerProps.forcePrecision or next(playerProps.constraints) ~= nil 
-		or playerProps.velocity:Length() < self.MOVE_ENT_USE_MIN_VELOCITY 
+	local forceMode = g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "player_physics_movemode")
+	
+	if forceMode ~= 2 and (playerProps.idle or playerProps.forcePrecision or next(playerProps.constraints) ~= nil 
+		or playerProps.velocity:Length() < self.MOVE_ENT_USE_MIN_VELOCITY or forceMode == 1)
 	then
 		if playerProps.moveEntInUse
 		then
 			moveEnt:SetVelocity(Vector(0,0,0))
 			anchor:SetParent(nil, "")
 			moveEnt:SetAbsOrigin(anchor:GetAbsOrigin())
-			--moveEnt:SetParent(anchor, "")
 			playerProps.moveEntInUse = false
 			moveEnt:AddEffects(32) 
 		end	
 		
 	elseif not playerProps.moveEntInUse
 	then
-		--moveEnt:SetVelocity(Vector(0,0,0))
-		--moveEnt:SetParent(nil, "")
 		moveEnt:SetAbsOrigin(anchor:GetAbsOrigin())
 		anchor:SetParent(moveEnt, "")
 		playerProps.moveEntInUse = true
@@ -939,7 +1070,7 @@ end
 
 function CPlayerPhysics:CheckMapBounds(playerEnt, playerProps)
 	local origin = self:GetPlayspaceOrigin(playerEnt, playerProps)
-	local predictedOrigin = origin + playerProps.velocity * FrameTime() * self.MOVE_FRAME_INTERVAL
+	local predictedOrigin = origin + playerProps.velocity * FrameTime() * self.frameInterval
 	if playerProps.moveNextFrame
 	then
 		predictedOrigin = playerProps.moveNextFrame
@@ -965,8 +1096,8 @@ end
 function CPlayerPhysics:CalcPlayerDrag(playerEnt, playerProps)
 
 	local dragVector = nil
-	local speed = playerProps.velocity:Length()
-	local relativePlayerVel = playerProps.velocity
+	local speed
+	local relativePlayerVel
 	local dragVelChange = Vector(0,0,0)
 	
 	local playerHeightFac = (playerEnt:GetHMDAvatar():GetCenter().z + 4 
@@ -974,18 +1105,26 @@ function CPlayerPhysics:CalcPlayerDrag(playerEnt, playerProps)
 			/ self.PLAYER_FULL_HEIGHT * self.PLAYER_HEIGHT_DRAG_FACTOR
 	
 	if playerProps.onGround
-	then	
+	then
+		relativePlayerVel = playerProps.velocity
+	
 		if not playerProps.dragOverride
 		then
-			if playerProps.groundEnt and IsValidEntity(playerProps.groundEnt) 
-				and playerProps.groundEnt:GetEntityIndex() > 0 then
+			if self:IsPlayerOnEntity(playerEnt) then
 				
 				relativePlayerVel = relativePlayerVel - GetPhysVelocity(playerProps.groundEnt)
 				speed = relativePlayerVel:Length()
+			else
+				speed = playerProps.velocity:Length()
 			end
-				
-			dragVector = relativePlayerVel * (playerProps.dragConstant * min(speed / playerProps.dragConstant, 1)
-				+ playerProps.dragLinear * abs(speed)) * self.lastThinkDelta * playerHeightFac
+			
+			if speed < self.STOP_SPEED
+			then
+				dragVector = relativePlayerVel
+			else
+				dragVector = relativePlayerVel * (playerProps.dragConstant * min(speed / playerProps.dragConstant, 1)
+					+ playerProps.dragLinear * abs(speed)) * self.lastThinkDelta * playerHeightFac
+			end
 		else
 			dragVector = playerProps.dragOverride * self.lastThinkDelta
 		end
@@ -993,9 +1132,9 @@ function CPlayerPhysics:CalcPlayerDrag(playerEnt, playerProps)
 		dragVelChange = -dragVector
 			
 	else
-		local vel = Vector(playerProps.velocity.x, playerProps.velocity.y, 0)
-		speed = vel:Length()
-		dragVector = vel * playerProps.airDragLinear * speed * self.lastThinkDelta * playerHeightFac
+		relativePlayerVel = Vector(playerProps.velocity.x, playerProps.velocity.y, 0)
+		speed = relativePlayerVel:Length()
+		dragVector = relativePlayerVel * playerProps.airDragLinear * speed * self.lastThinkDelta * playerHeightFac
 		
 		if dragVector:Length() > speed
 		then 
@@ -1011,19 +1150,12 @@ function CPlayerPhysics:CalcPlayerDrag(playerEnt, playerProps)
 	end
 	
 	if playerProps.onGround then
+		
+		if not speed then speed = playerProps.velocity:Length() end
 	
-		if playerProps.groundEnt and IsValidEntity(playerProps.groundEnt) 
-			and playerProps.groundEnt:GetEntityIndex() > 0 then
-
-			if VectorDistanceSq(playerProps.velocity, GetPhysVelocity(playerProps.groundEnt)) < 25 then
-				dragVelChange = dragVelChange + GetPhysVelocity(playerProps.groundEnt) - playerProps.velocity
-			end
+		local stopped = speed < self.STOP_SPEED
 		
-			return false, dragVelChange
-		
-		elseif playerProps.velocity:Length() < self.STOP_SPEED then 
-			return true, dragVelChange
-		end
+		return stopped, dragVelChange
 	end
 	return false, dragVelChange
 end
@@ -1040,26 +1172,28 @@ function CPlayerPhysics:CalcPlayerGravity(playerEnt, playerProps)
 	local height, foundGround, heightTrace = self:TracePlayerHeight(playerEnt, playerProps)
 	local groundNormal = heightTrace.normal
 	
+	local gravFactor = g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "player_gravity")
 
 	if playerProps.gravity and foundGround
 	then
-		gravVelChange = -Vector(0, 0, (self.GRAVITY_ACC - self.GRAVITY_DRAG_COEFF 
+		gravVelChange = -Vector(0, 0, (self.GRAVITY_ACC * gravFactor - self.GRAVITY_DRAG_COEFF 
 			* playerProps.velocity.z * playerProps.velocity.z) * self.lastThinkDelta) 
 	end
 	
-	local groundNormalDot = playerProps.velocity:Dot(groundNormal)
+	local virtualVel = playerProps.velocity + gravVelChange
+	
+	local groundNormalDot = virtualVel:Dot(groundNormal)
 	
 	-- Player close to the ground and not moving away from it
-	if ((height < playerProps.velocity.z * self.lastThinkDelta
-		or abs(height) <= self.FALL_GLUE_DISTANCE)) and groundNormalDot <= 0
+	if ((height < virtualVel.z * self.lastThinkDelta
+		or abs(height) <= self.FALL_GLUE_DISTANCE))
 	then
 		groundEnt = heightTrace.enthit
-		onGround = true
-		groundFixup = -height
+		onGround = true	
 		
 		-- If the player velocity vector points through the ground, 
 		--	remove that part and use the rest to accelerate the player.
-		if groundNormalDot < 0
+		if groundNormalDot <= 0.01
 		then
 			if self.debugDraw 
 			then
@@ -1069,13 +1203,12 @@ function CPlayerPhysics:CalcPlayerGravity(playerEnt, playerProps)
 					255, 0, 255, false, self.lastThinkDelta)
 			end
 		
+			groundFixup = -height
 			gravVelChange = gravVelChange + (-groundNormal):Cross(playerProps.velocity):Cross(-groundNormal) - playerProps.velocity
 		end
-	else
-		onGround = false
 	end		
 
-	return groundFixup, gravVelChange, onGround, groundEnt
+	return groundFixup, gravVelChange, onGround, groundEnt, groundNormal
 end
 
 
@@ -1084,6 +1217,11 @@ function CPlayerPhysics:TracePlayerCollision(playerEnt, playerProps, offset)
 	local playerHeadHeight = playerEnt:GetHMDAvatar():GetAbsOrigin().z 
 		- self:GetPlayspaceOrigin(playerEnt, playerProps).z + self.HEIGHT_TRACE_RADIUS 
 	local playerPos = self:GetPlayerOrigin(playerEnt, playerProps)
+
+	if g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "player_physics_collisionmode") == 0
+	then
+		return nil
+	end
 
 	-- Trace in the direction the player is moving.
 	local trace =
@@ -1157,6 +1295,11 @@ end
 function CPlayerPhysics:TracePlayerHeadCollision(playerEnt, playerProps)
 
 	if not playerEnt:GetHMDAvatar() then return end
+	
+	if g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "player_physics_collisionmode") < 2
+	then 
+		return
+	end
 
 	local headCenter = playerEnt:GetHMDAvatar():GetCenter()
 	local trace =

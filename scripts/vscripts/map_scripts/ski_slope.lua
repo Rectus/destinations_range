@@ -2,7 +2,7 @@
 print("Ski slope map script")
 
 require("player_physics")
-require("slope_pause_manager")
+require("pause_manager")
 
 local slalomEnabled = false
 
@@ -49,6 +49,7 @@ local SPAWN_ITEMS =
 		name = "Locomotion tool",
 		img = "file://{resources}/images/tool_locomotion.png",
 		isTool = true,
+		quickInvModel = "models/tools/locomotion_tool.vmdl",
 		keyvals =
 		{
 			targetname = "",
@@ -58,6 +59,7 @@ local SPAWN_ITEMS =
 		},
 		modelPrecache = 
 		{
+			"models/tools/locomotion_tool.vmdl",
 			"models/tools/locomotion_tool_grapple.vmdl",
 			"models/tools/locomotion_tool_strap.vmdl"
 		}
@@ -72,6 +74,18 @@ local SPAWN_ITEMS =
 			model = "models/weapons/laser_pistol.vmdl";
 			vscripts = "tool_laser_pistol";
 			HasCollisionInHand = 0;
+		}
+	},
+	{
+		name = "MAC-10 'n Beans",
+		img = "",
+		isTool = true,
+		keyvals =
+		{
+			targetname = "",
+			model = "models/weapons/mac10/mac10.vmdl";
+			vscripts = "tool_mac10";
+			HasCollisionInHand = 1;
 		}
 	},
 	{
@@ -358,44 +372,74 @@ local SPAWN_ITEMS =
 	},
 }
 
+-- Any map specific player settings to load into the settigns manager 
+local MAP_PLAYER_DEFAULT_SETTINGS =
+{
+	-- What custom quick inventory items to use by default, indexed from the above array.
+	quick_inv_items = {1, 3, 2};
+}
+
+local MAP_COMMANDS =
+{
+	{cmd = "slope_teleport_cabin", type = 0, text = "Teleport to Cabin"},
+	{cmd = "slope_teleport_slalom", type = 0, text = "Teleport to Slalom"},
+	{cmd = "slope_enable_slalom", type = 0, text = "Enable Slalom"},
+}
+
 g_VRScript.playerPhysController = CPlayerPhysics()
 g_VRScript.playerPhysController:Init()
 
-g_VRScript.pauseManager = CPauseManager(SPAWN_ITEMS)
+g_VRScript.pauseManager = CPauseManager(SPAWN_ITEMS, MAP_PLAYER_DEFAULT_SETTINGS, MAP_COMMANDS)
 
 -- Enables the pause menu to store player data when they connect.
 g_VRScript.pauseManager:ListenPlayerConnect()
 
+-- Enables quick locomotion options.
+require("quick_locomotion")
+g_VRScript.pauseManager:EnableQuickLocomotion()
 
 function OnPrecache(context)
 	g_VRScript.pauseManager:DoPrecache(context)
-	PrecacheModel("models/editor/axis_helper.vmdl", context)
 end
 
 function OnActivate()
 	g_VRScript.pauseManager:Init()
-	CustomGameEventManager:RegisterListener("toggle_debug_draw", ToggleDebugDraw)
-	CustomGameEventManager:RegisterListener("pause_panel_slalom", EnableSlalom)
+	CustomGameEventManager:RegisterListener("pause_panel_command", OnMapCommand)
 	g_VRScript.debugEnabled = false
 end
+	
+function OnMapCommand(this, data)
 
-function ToggleDebugDraw()
-	g_VRScript.playerPhysController:ToggleDebugDraw()
-	g_VRScript.debugEnabled = not g_VRScript.debugEnabled
-end
+	if data.cmd == "slope_teleport_cabin"
+	then
+		local player = GetPlayerFromUserID(data.id)
+		local destination = Entities:FindByName(nil, "teleport_dest_top")
+		if destination then
+			g_VRScript.pauseManager:TeleportPlayer(player, destination, true)
+		end	
+	elseif data.cmd == "slope_teleport_slalom"
+	then
+		local player = GetPlayerFromUserID(data.id)
+		local destination = Entities:FindByName(nil, "teleport_dest_slalom")
+		if destination then
+			g_VRScript.pauseManager:TeleportPlayer(player, destination, true)
+		end
+		
+	elseif data.cmd == "slope_enable_slalom"
+	then
+			local player = GetPlayerFromUserID(data.id)
 
-function EnableSlalom(this, data)
-	local player = GetPlayerFromUserID(data.id)
-
-	if not slalomEnabled then
-		slalomEnabled = true
-		DoEntFire("slalom_layer", "ShowWorldLayerAndSpawnEntities", "", 0, nil, nil)
-		EmitSoundOnClient("Slope.UISpawnSlalom", player)
+		if not slalomEnabled then
+			slalomEnabled = true
+			DoEntFire("slalom_layer", "ShowWorldLayerAndSpawnEntities", "", 0, nil, nil)
+			EmitSoundOnClient("Slope.UISpawnSlalom", player)
+		end
 	end
 end
-	
+
+
 -- Utility function for passing call through to functions if debug mode is enabled.
--- Note that argumnets are evaluated regardless of if the function gets called.
+-- Note that arguments are evaluated regardless of if the function gets called.
 function _G.DebugCall(func, ...)
 	if g_VRScript.debugEnabled
 	then
