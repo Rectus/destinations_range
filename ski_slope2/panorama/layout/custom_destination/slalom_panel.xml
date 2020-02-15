@@ -1,0 +1,15 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SkiDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Slalom course" />
+				<Label class="Desc Big" text="Ski between the yellow gates to start. Ski between the alternating red and blue gate pairs down the hill to the finish line maked by the second yellow gate pair.\n\nYou have to ski through all the gates in the correct order to finish. If you miss a gate, you either can ski back and get it, \nor restart by skiing through the start." />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

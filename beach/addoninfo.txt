@@ -1,0 +1,7 @@
+"AddonInfo"
+{
+	"Dependencies"
+	{
+		"1"		"929520573"
+	}
+}

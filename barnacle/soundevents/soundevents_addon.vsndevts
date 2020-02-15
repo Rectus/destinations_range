@@ -1,0 +1,83 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	NPC_Barnacle.FinalBite = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 1.0
+		distance_max = "1000"
+		vsnd_files = 
+		[
+			"sounds/barnacle/barnacle_crunch2.vsnd",
+			"sounds/barnacle/barnacle_crunch3.vsnd",
+		]
+	}
+
+	NPC_Barnacle.TongueStretch = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.8
+		distance_max = "700"
+		vsnd_files = 
+		[
+			"sounds/barnacle/barnacle_tongue_pull1.vsnd",
+			"sounds/barnacle/barnacle_tongue_pull2.vsnd",
+			"sounds/barnacle/barnacle_tongue_pull3.vsnd",
+		]
+	}
+
+	NPC_Barnacle.PullPant = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		volume = 0.9
+		distance_max = "500"
+		vsnd_files = 
+		[
+			"sounds/barnacle/barnacle_pull1.vsnd",
+			"sounds/barnacle/barnacle_pull2.vsnd",
+			"sounds/barnacle/barnacle_pull3.vsnd",
+			"sounds/barnacle/barnacle_pull4.vsnd",
+		]
+	}
+
+	NPC_Barnacle.Scream = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		distance_max = "1000"
+		vsnd_files = 
+		[
+			"sounds/barnacle/barnacle_bark1.vsnd",
+			"sounds/barnacle/barnacle_bark2.vsnd",
+		]
+	}
+
+	NPC_Barnacle.Digest = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		distance_max = "1000"
+		vsnd_files = 
+		[
+			"sounds/barnacle/barnacle_digesting1.vsnd",
+			"sounds/barnacle/barnacle_digesting2.vsnd",
+			"sounds/barnacle/barnacle_gulp1.vsnd",
+			"sounds/barnacle/barnacle_gulp2.vsnd",
+		]
+	}
+	
+	NPC_Barnacle.BreakNeck = 
+	{
+		type = "destinations.simple_vr"
+		preload_vsnds = true
+		distance_max = "1000"
+		vsnd_files = 
+		[
+			"sounds/barnacle/neck_snap1.vsnd",
+			"sounds/barnacle/neck_snap2.vsnd",
+		]
+	}
+	
+}

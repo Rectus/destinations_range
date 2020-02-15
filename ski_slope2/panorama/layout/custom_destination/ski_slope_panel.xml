@@ -1,0 +1,15 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="SkiDialog">
+			<Panel class="TextArea">
+				<Label class="Title" text="Instructions" />
+				<Label class="Desc Big" text="Press the menu button to pause movement and bring up a pause menu. Use the pause menu to spawn ski poles.\n\nHold the poles at your sides. Turn by twisting your body. Stake by pushing off with both hands at the same time.\n\nForward:\tSteep slope\nRight:\tShallow long slope" />
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

@@ -1,0 +1,150 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/custom_destination/pause_panel.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/pause_commands.js" />
+	</scripts>
+	
+	<snippets>	
+		<snippet name="ItemButton">
+			<Panel class="PausePanelItemPane">
+				<Button class="PausePanelButton Item" id="ItemSpawnButton"> 
+					<Image class="PausePanelButtonImage" id="ItemSpawnButtonImage" scaling="stretch-to-fit-preserve-aspect"/>
+					<Label class="PausePanelButtonImageLabel" id="ItemSpawnButtonLabel" text="Unknown Item" /> 
+				</Button>
+				<ToggleButton class="PausePanelInvToggle" id="ItemInvToggle" />
+			</Panel>
+		</snippet>
+		
+		<snippet name="CommandButton">
+			<Button class="PausePanelButton"> 
+				<Label class="PausePanelButtonLabel Setting" id="CommandButtonLabel" text="" />
+			</Button>
+		</snippet>
+		
+		<snippet name="CommandToggleButton">
+			<ToggleButton class="PausePanelToggleButton"> 
+				<Label class="PausePanelButtonLabel Setting Left" id="CommandButtonLabel" text="" />
+			</ToggleButton>
+		</snippet>
+		
+		<snippet name="CommandGroup">
+			<Panel class="PausePanelButtonPane StackedH">
+				<Label class="PausePanelGroupLabel" id="CommandGroupLabel"  text="" />
+				<Panel class="PausePanelButtonPane StackedH Horizontal" id="CommandGroupButtonPane"/>
+			</Panel>
+		</snippet>
+		
+		<!--This is duplicated in js since it's not possible to set button groups otherwise -->
+		<snippet name="CommandRadioButton">
+			<RadioButton class="PausePanelButton Radio" group=""> 
+				<Label class="PausePanelButtonLabel Setting" id="CommandButtonLabel" text="" />
+			</RadioButton>
+		</snippet>
+		
+		<snippet name="CommandSlider">
+			<Panel class="PausePanelButtonPane StackedH Horizontal">
+				<Label class="PausePanelButtonLabel Setting" id="CommandSliderLabel" text="" />
+				<Slider class="PausePanelSlider" id="CommandSlider" direction="horizontal" /> 
+				<Label class="PausePanelSliderValue" id="CommandSliderValue" text="1.0" />		
+			</Panel>
+		</snippet>
+	</snippets>	
+
+
+	<ClientUIDialogPanel> 
+		<ClientUIDialogPanel class="PausePanel" id="PausePanel">
+			<Panel class="PausePanelTitlebar">
+				<Label class="PausePanelTitleLabel"  text="#Pause_TitlePaused"/>
+				
+				<Label class="PausePanelTitleLabel Hidden" id="PausePanelTitleFramerate"  text="FPS: "/>
+				
+				<Button id="SettingsButton" class="PausePanelButton Big Fit Right" onactivate="ToggleStyle(SettingsDialog, Visible); ToggleStyle(PausePanelDialog, Visible); TogglePanelSelected()"> 
+					<Label class="PausePanelButtonLabel" text="#Pause_Button_Settings" />
+				</Button>
+
+			</Panel>
+			
+			
+			<Panel class="PausePanelMainPane Visible" id="PausePanelDialog">
+
+				<Panel class="PausePanelVerticalPane Scrollable">
+
+					<Panel class="PausePanelPaneSpacer"/>
+					
+					<Panel class="PausePanelButtonPane StackedH Bordered" id="QuickPane">
+						
+					</Panel>
+					<Panel class="PausePanelButtonPane StackedH">
+						<ToggleButton class="PausePanelToggleButton"  id="QuickInvToggle" onselect="SetQuickInv(1)" ondeselect="SetQuickInv(0)"> 
+							<Label class="PausePanelButtonLabel Setting" text="#Pause_Button_CustomQuickInventory" style="horizontal-align: left;" />
+						</ToggleButton>
+					</Panel>
+					
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_MapFunctions" />
+					<Panel class="PausePanelButtonPane StackedH Bordered" id="MapPane">
+
+						<!--<Button id="TeleportButton" class="PausePanelButton" text="" onactivate="TeleportPlayer()"> 
+							<Label class="PausePanelButtonLabel Setting" text="Teleport to start" />
+						</Button>
+					
+						<Button id="SkisButton" class="PausePanelButton" text="" onactivate="ToggleSkis()"> 
+							<Label class="PausePanelButtonLabel Setting" text="Toggle ski visibility" />
+						</Button>
+					
+						<Button id="DebugButton" class="PausePanelButton" text="" onactivate="ToggleDebug()"> 
+							<Label class="PausePanelButtonLabel Setting" text="Toggle debug visualization" />
+						</Button>-->
+					</Panel> 
+				</Panel>
+					
+				<Panel class="PausePanelVerticalPane Scrollable" id="SpawnPane">
+
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_SpawnItems" />
+
+				</Panel>
+				
+			</Panel>
+			
+			<Panel class="PausePanelMainPane" id="SettingsDialog">
+			
+				<Panel class="PausePanelVerticalPane Scrollable">
+
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_ToolSettings" />
+					<Panel class="PausePanelButtonPane StackedH Bordered" id="ToolSettingsPane">
+
+					</Panel> 
+					
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_LocomotionSettings" />
+					<Panel class="PausePanelButtonPane StackedH Bordered" id="LocomotionSettingsPane">
+						
+					</Panel> 
+					
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_PhysicsSettings" />
+					<Panel class="PausePanelButtonPane StackedH Bordered" id="PhysicsSettingsPane">
+						
+					</Panel>
+
+					
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_DebugSettings" />
+					<Panel class="PausePanelButtonPane StackedH Bordered Debug" id="DebugSettingsPane">
+						
+					</Panel> 
+				
+				
+				</Panel>
+				
+				<Panel class="PausePanelVerticalPane" style="width: fill-parent-flow( 0.66 );">
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_SettingDescription" />
+					<Label class="PausePanelDescriptionText" id="PausePanelSettingDescription" />
+				</Panel>
+				
+			</Panel>
+			
+			
+		</ClientUIDialogPanel>
+	</ClientUIDialogPanel>
+</root>

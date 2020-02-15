@@ -1,0 +1,86 @@
+.ScoreBoard {
+	width: 100%;
+	opacity: 1;
+	background-color: #000000ff;
+	wash-color: none;
+	padding: 10px;
+	//border: 2px solid red;
+	flow-children: down;
+}
+
+.ScoreSection {
+	width: 100%;
+	height: fill-parent-flow( 1.0 );
+	opacity: 1;
+	wash-color: none;
+	padding: 10px;
+	//border: 2px solid red;
+	//border: 4px solid #cfcf20ff;
+	flow-children: down;
+}
+
+.TimeSection {
+	width: 100%;
+	height: fill-parent-flow( 0.5 );
+	opacity: 1;
+	wash-color: none;
+	padding: 10px;
+	//border: 2px solid red;
+	//border: 4px solid #cfcf20ff;
+	padding-top: 500px;
+	flow-children: down;
+}
+
+.ScoreEntry {
+	width: 100%;
+	height: fill-parent-flow( 1.0 );
+	opacity: 1;
+	wash-color: none;
+	padding: 10px;
+	//border: 2px solid red;
+	flow-children: right;
+}
+
+.ScorePos {
+	width: fill-parent-flow( 0.2 );
+	height: 100%;
+	color: #cfcf20ff;
+	font-family: platformfont;
+	font-size: 200px;
+	//border: 2px solid red;
+	text-align: center;
+	line-height: 325px;
+}
+
+.ScoreText {
+	width: fill-parent-flow( 1.0 );
+	height: 100%;
+	color: #cfcf20ff;
+	font-family: platformfont;
+	font-size: 200px;
+	//border: 2px solid red;
+	text-align: left;
+	line-height: 325px;
+}
+
+.ScoreTime {
+	width: fill-parent-flow( 0.8 );
+	height: 100%;
+	color: #cfcf20ff;
+	font-family: platformfont;
+	font-size: 200px;
+	//border: 2px solid red;
+	text-align: left;
+	line-height: 325px;
+}
+
+.ScoreTimeHeading {
+	width: fill-parent-flow( 0.8 );
+	height: 100%;
+	color: #cfcf20ff;
+	font-family: platformfont;
+	font-size: 200px;
+	//border: 2px solid red;
+	text-align: left;
+	line-height: 325px;
+}

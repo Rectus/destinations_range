@@ -1,0 +1,67 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "vr_standard.vfx"
+
+	//---- Blend ----
+	F_BLEND 2 // 3-Layer
+	F_BLEND_NORMALS 1
+
+	//---- Specular ----
+	F_SPECULAR 1
+	F_SPECULAR_CUBE_MAP 1 // In-game Cube Map
+
+	//---- Color ----
+	g_vColorTint "[0.941177 0.976471 0.996078 1.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	g_vTexCoordScrollSpeed "[0.000 0.000]"
+	TextureColor "[0.901961 0.901961 0.901961 1.000000]"
+
+	//---- Cube Map ----
+	g_flCubeMapBlur "0.000"
+	g_flCubeMapBrightness "1.000"
+
+	//---- Layer 1 ----
+	g_flLayer1BlendSoftness "0.500"
+	g_flLayer1BorderOffset "0.000"
+	g_flLayer1BorderSoftness "0.500"
+	g_flLayer1BorderStrength "0.500"
+	g_flLayer1Max "1.000"
+	g_vLayer1BorderColor "[1.000000 1.000000 1.000000 0.000000]"
+	g_vLayer1Scale "[0.500 0.500]"
+	TextureLayer1Color "[0.901961 0.901961 0.901961 0.000000]"
+	TextureLayer1Glossiness "materials/world/snow_gloss.png"
+	TextureLayer1Normal "materials/world/snow_rough_normal.png"
+	TextureLayer1Reflectance "[0.160000 0.160000 0.160000 0.000000]"
+	TextureLayer1RevealMask "materials/world/snow_blend.png"
+
+	//---- Layer 2 ----
+	g_flLayer2BlendSoftness "0.325"
+	g_flLayer2BorderOffset "0.000"
+	g_flLayer2BorderSoftness "0.500"
+	g_flLayer2BorderStrength "0.500"
+	g_flLayer2Max "1.000"
+	g_vLayer2BorderColor "[1.000000 1.000000 1.000000 0.000000]"
+	g_vLayer2Scale "[1.000 1.000]"
+	TextureLayer2Color "materials/world/cliff_color.tga"
+	TextureLayer2Glossiness "[0.342000 0.342000 0.342000 0.000000]"
+	TextureLayer2Normal "materials/world/cliff_normal.tga"
+	TextureLayer2Reflectance "[0.054000 0.054000 0.054000 0.000000]"
+	TextureLayer2RevealMask "materials/world/cliff_blend.tga"
+
+	//---- Lighting ----
+	g_flMetalness "0.000"
+	g_vReflectanceRange "[0.000 1.000]"
+	TextureGlossiness "materials/world/snow_gloss.png"
+	TextureReflectance "[0.160000 0.160000 0.160000 0.000000]"
+
+	//---- Normal Map ----
+	TextureNormal "materials/world/snow_fine_normal.png"
+
+	SystemAttributes
+	{
+		PhysicsSurfaceProperties "snow"
+	}
+}

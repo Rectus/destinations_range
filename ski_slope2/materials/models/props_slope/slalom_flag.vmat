@@ -1,0 +1,55 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "vr_standard.vfx"
+
+	//---- 2-Sided Rendering ----
+	F_RENDER_BACKFACES 1
+	F_TRANSMISSIVE_SUNLIGHT 1
+	F_TRANSMISSIVE_THICKNESS 1
+
+	//---- Enable wind ----
+	F_ENABLE_WIND 1
+
+	//---- Per-Instance Tint Mask ----
+	F_TINT_MASK 1
+
+	//---- Specular ----
+	F_SPECULAR 1
+	F_SPECULAR_CUBE_MAP 1 // In-game Cube Map
+
+	//---- 2-Sided Rendering ----
+	TextureTransmissiveThickness "[0.740000 0.740000 0.740000 0.000000]"
+
+	//---- Color ----
+	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	g_vTexCoordScrollSpeed "[0.000 0.000]"
+	TextureColor "materials/models/props_slope/slalom_flag_color.png"
+	TextureTintMask "materials/models/props_slope/slalom_flag_color.png"
+
+	//---- Cube Map ----
+	g_flCubeMapBlur "0.000"
+	g_flCubeMapBrightness "1.000"
+
+	//---- Lighting ----
+	g_flMetalness "0.000"
+	g_vReflectanceRange "[0.000 1.000]"
+	TextureGlossiness "materials/models/props_slope/slalom_flag_gloss.png"
+	TextureReflectance "[0.072000 0.072000 0.072000 0.000000]"
+
+	//---- Normal Map ----
+	TextureNormal "materials/models/props_slope/slalom_flag_normal.png"
+
+	//---- Wind ----
+	g_flWindFlexibility "0.400"
+	g_flWindHighFrequencyEffects "3.818"
+	g_flWindLinearity "0.794"
+	g_flWindLowFrequencyEffects "2.788"
+	g_flWindSpeedMultiplier "1.806"
+	TextureWindMaskHigh "materials/models/props_slope/slalom_flag_wind_mask.png"
+	TextureWindMaskLow "materials/models/props_slope/slalom_flag_wind_mask.png"
+	TextureWindRandomNoise "materials/default/default_noise.tga"
+}

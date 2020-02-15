@@ -1,0 +1,237 @@
+
+"beach" 
+{
+	"playrandom"
+	{
+
+		"time"			"2, 4"
+		"volume"		"1.0"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_60dB"
+
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_ocean_waves_01.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_02.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_03.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_04.vsnd"
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"3, 6"
+		"volume"		"0.6"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"0"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"2, 6"
+		"volume"		"0.6"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"2"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"1, 8"
+		"volume"		"0.4"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"1"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+}
+
+
+"jungle" 
+{
+	"playrandom"
+	{
+
+		"time"			"2, 4"
+		"volume"		"0.4"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_NONE"
+		"position"  	"0"
+
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_ocean_waves_01.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_02.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_03.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_04.vsnd"
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"0.5, 3"
+		"volume"		"0.8"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"random"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"1, 4"
+		"volume"		"0.5, 0.8"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"random"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"1, 5"
+		"volume"		"0.5, 0.7"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"random"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+}
+
+
+"hut" 
+{
+	"playrandom"
+	{
+
+		"time"			"2, 4"
+		"volume"		"0.2"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_NONE"
+		"position"  	"0"
+
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_ocean_waves_01.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_02.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_03.vsnd"
+			"wave"		"sounds/home/ambient_ocean_waves_04.vsnd"
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"1, 3"
+		"volume"		"0.5, 0.8"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"1"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"1, 3"
+		"volume"		"0.5, 0.8"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"2"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+	
+	"playrandom"
+	{
+		"time"			"1, 4"
+		"volume"		"0.5, 0.8"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_70dB"
+		"position"  	"3"
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_forest_bird_01.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_02.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_03.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_04.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_05.vsnd"
+			"wave"		"sounds/home/ambient_forest_bird_06.vsnd"	
+
+		}
+	}
+}
+
+	

@@ -1,0 +1,82 @@
+
+"desert" 
+{
+	"playrandom"
+	{
+
+		"time"			"5, 8"
+		"volume"		"1.0"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_60dB"
+		//"position"  	"random"
+		
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_desert_wind_01.vsnd"
+			"wave"		"sounds/home/ambient_desert_wind_02.vsnd"
+			"wave"		"sounds/home/ambient_desert_wind_03.vsnd"
+		}
+	}
+
+	"playrandom"
+	{
+
+		"time"			"5, 8"
+		"volume"		"0.3"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_60dB"
+		//"position"  	"random"
+		
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_cave_rumbles_01.vsnd"
+			"wave"		"sounds/home/ambient_cave_rumbles_02.vsnd"
+			"wave"		"sounds/home/ambient_cave_rumbles_03.vsnd"
+			"wave"		"sounds/home/ambient_cave_rumbles_04.vsnd"
+		}
+	}
+
+}
+
+
+"tank_inside" 
+{
+	"playrandom"
+	{
+
+		"time"			"5, 8"
+		"volume"		"1.0"
+		"pitch"			"100"
+		"soundlevel" 	"SNDLVL_60dB"
+		"position"  	"0"
+		
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_desert_wind_01.vsnd"
+			"wave"		"sounds/home/ambient_desert_wind_02.vsnd"
+			"wave"		"sounds/home/ambient_desert_wind_03.vsnd"
+		}
+	}
+
+	"playrandom"
+	{
+
+		"time"			"5, 8"
+		"volume"		"0.6, 0.8"
+		"pitch"			"90, 110"
+		"soundlevel" 	"SNDLVL_60dB"
+		//"position"  	"random"
+		
+		"rndwave"
+		{
+			"wave"		"sounds/home/ambient_cave_rumbles_01.vsnd"
+			"wave"		"sounds/home/ambient_cave_rumbles_02.vsnd"
+			"wave"		"sounds/home/ambient_cave_rumbles_03.vsnd"
+			"wave"		"sounds/home/ambient_cave_rumbles_04.vsnd"
+		}
+	}
+}
+
+
+
+	
