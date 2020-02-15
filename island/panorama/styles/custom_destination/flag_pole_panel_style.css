@@ -1,0 +1,251 @@
+
+// Indigo to Steam Blue
+@define ui_color: #5858f2ff;
+@define ui_color_middle: #5858f2aa;
+@define ui_color_fade: #5858f277;
+@define ui_color_faint: gradient( linear, 0% 0%, 0% 100%, from( #2f94c222 ), to( #5858f222 ) );
+@define ui_color_mid: gradient( linear, 0% 0%, 0% 100%, from( #2f94c299 ), to( #5858f299 ) );
+@define ui_color_full: gradient( linear, 0% 0%, 0% 100%, from( #2f94c2ff ), to( #5858f2ff ) );
+@define ui_color_dark: gradient( linear, 0% 0%, 0% 100%, from( #0c2531ff ), to( #16163dff ) );
+@define ui_color_bright: gradient( linear, 0% 0%, 0% 100%, from( #52b4e1ff ), to( #7676f8ff ) );
+@define ui_color_transparent: gradient( linear, 0% 0%, 0% 100%, from( #2f94c200 ), to( #5858f00 ) );
+
+//@define background_gradient: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #1f5673 ), to( #12334c ) );
+//@define background_center_gradient_hover: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #2b6483 ), to( #12334c ) );
+@define background_gradient: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #0e3c55 ), to( #092337 ) );
+@define background_center_gradient: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #0e3c55 ), to( #092337 ) );
+@define background_center_gradient_hover: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #1f5673 ), to( #12334c ) );
+
+@define background_center_gradient_dark: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #0e3c55 ), to( #12334c ) );
+@define background_center_gradient_darker: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #0e3c55 ), to( #0d2537 ) );
+
+@define button_gradient: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #1f5673 ), to( #12334c ) );
+@define button_gradient_hover: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #2b6483 ), to( #397595 ) );
+@define button_gradient_bright: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #4e8aaa ), to( #4e8aaa ) );
+@define button_gradient_favorite: gradient( linear, 0% 0%, 0% 100%, from( #3b3e36ff ), to( #3b3e36ff ) );
+
+
+//@define background_center_gradient: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #323133ff ), to( #0e0e11ff ) );
+//@define background_center_gradient_hover: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #3c3c3cff ), to( #323133ff ) );
+
+@define button_glow: #8C94A5ff;
+//@define panel_stroke: #ffffff20;
+@define panel_stroke: #000000ff;
+
+//@define black_gradient: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #323133ff ), to( #0e0e11ff ) ); 
+@define black_gradient: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #1a1a1aff ), to( #000000ff ) ); 
+@define white_gradient: gradient( radial, 50% 50%, 0% 0%, 100% 100%, from( #ffffffff ), to( #aaaaaaff ) ); 
+
+// Not a good gradient
+//@define ui_color: #5858f2ff;
+//@define ui_color_faint: gradient( linear, 0% 0%, 0% 100%, from( #55e28d22 ), to( #5858f222 ) );
+//@define ui_color_mid: gradient( linear, 0% 0%, 0% 100%, from( #55e28d955 ), to( #5858f255) );
+//@define ui_color_bright: gradient( linear, 0% 0%, 0% 100%, from( #55e28dff ), to( #7676f8ff ) );
+//@define ui_color_transparent: gradient( linear, 0% 0%, 0% 100%, from( #6676eb00 ), to( #5858f00 ) );
+
+// Blue
+//@define ui_color: #5362d9ff;
+//@define ui_color_faint: #5362d922;
+//@define ui_color_mid: #5362d955;
+//@define ui_color_bright: #6676ebff;
+//@define ui_color_transparent: #5362d900;
+
+// Green
+//@define ui_color: #55e28dff;
+//@define ui_color_faint: #55e28d22;
+//@define ui_color_mid: #55e28d55;
+//@define ui_color_bright: #71f6a6ff;
+//@define ui_color_transparent: #55e28d00;
+
+// Indigo
+//@define ui_color: #5858f2ff;
+//@define ui_color_faint: #5858f222;
+//@define ui_color_mid: #5858f255;
+//@define ui_color_bright: #7676f8ff;
+//@define ui_color_transparent: #5858f200;
+
+// Steam Blue
+//@define ui_color: #2f94c2ff;
+//@define ui_color_faint: #2f94c222;
+//@define ui_color_mid: #2f94c255;
+//@define ui_color_bright: #52b4e1ff;
+//@define ui_color_transparent: #52b4e100;
+
+@define white: #ffffff;
+@define red: #ad4543;
+@define darkred: #712d2c;
+@define green: #a3cf06;
+@define discountgreen: #4e7a03;
+@define blue: #2f6682;
+@define black: #000000;
+@define yellow: #ffff00;
+@define purple: #800080;
+@define backgroundgray : #383635ff;
+@define foregroundgray : #A6A4A1ff;
+@define transparent: #00000000;
+@define platformfont: "Motiva Sans,Noto Sans JP Regular,Noto Sans KR Regular,Noto Sans SC Regular,Noto Sans TC Regular";
+@define deffontsize: 22px;
+@define medfontsize: 28px;
+@define largefontsize: 32px;
+
+@define ui_primary_color: #14c6fcff;
+@define applabelsolid: #f2f2f2ff;
+@define all_games_hover: gradient( linear, 0% 0%, 100% 100%, from( #309ebf ), to( #0b224d ) );
+
+/* Transition timing */
+@define supershortduration: 0.15s;
+@define shortduration: 0.25s;
+@define shortmedduration: 0.3s;
+@define mediumduration: 0.4s;
+@define longduration: 1.7s;
+
+/* shadows */
+@define box_shadow_on_color: #52c7ebcc;
+@define box_shadow_mid_color: #40d2ff33;
+@define box_shadow_off_color: #52d1eb00;
+@define dark_box_shadow_color: #122b5988;
+@define dark_box_shadow_color_opaque: #172a2eff;
+@define light_box_shadow_color: #66bbcc55;
+@define module_shadow: #00000055 0px 0px 10px 0px;
+
+@define mouse_off_bg_left: gradient( radial, 0% 50%, 0% 0%, 80px 180px, from( #1f445400 ), to( #0d1b2400 ) );
+@define mouse_hover_bg_left: gradient( radial, 0% 50%, 0% 0%, 80px 180px, from( #1f4454ff ), to( #0d1b2400 ) );
+@define mouse_active_bg_left: gradient( radial, 0% 50%, 0% 0%, 80px 180px, from( #3a809eff ), to( #0d1b2400 ) );
+@define mouse_off_bg_right: gradient( radial, 100% 50%, 0% 0%, 80px 180px, from( #1f445400 ), to( #0d1b2400 ) );
+@define mouse_hover_bg_right: gradient( radial, 100% 50%, 0% 0%, 80px 180px, from( #1f4454ff ), to( #0d1b2400 ) );
+@define mouse_active_bg_right: gradient( radial, 100% 50%, 0% 0%, 80px 180px, from( #3a809eff ), to( #0d1b2400 ) );
+
+@define mouse_off_bg_up: gradient( radial, 50% 0%, 0% 0%, 120px 80px, from( #3a809e00 ), to( #0d1b2400 ) );
+@define mouse_hover_bg_up: gradient( radial, 50% 0%, 0% 0%, 120px 80px, from( #3a809eff ), to( #0d1b2400 ) );
+@define mouse_active_bg_up: gradient( radial, 50% -5%, 0% 0%, 140px 80px, from( #3abde5ff ), to( #0d1b2400 ) );
+
+@define mouse_off_bg_bottom: gradient( radial, 50% 100%, 0% 0%, 120px 80px, from( #3a809e00 ), to( #0d1b2400 ) );
+@define mouse_hover_bg_bottom: gradient( radial, 50% 100%, 0% 0%, 120px 80px, from( #3a809eff ), to( #0d1b2400 ) );
+@define mouse_active_bg_bottom: gradient( radial, 50% 95%, 0% 0%, 140px 80px, from( #3abde5ff ), to( #0d1b2400 ) );
+
+
+@define DragScrollFlickTimingFunction: cubic-bezier( 0.15, 0.74, 0.44, 0.98);
+@define DragScrollFlickTime: 2.5s;
+
+/* animation */
+@define bigpicture-ease-in-out: cubic-bezier( 0, 0.265, 0.265, 1.0);
+
+@keyframes 'main-button-glow-movement-no-fill'
+{
+	0%
+	{
+		box-shadow: box_shadow_on_color -4.5px -4.5px 18px 9px;
+	}
+
+	8%
+	{
+		box-shadow: box_shadow_on_color -4.5px -4.5px 18px 9px;
+	}
+
+	48%
+	{
+		box-shadow: box_shadow_on_color -1.5px -1.5px 6px 3px;
+	}
+
+	52%
+	{
+		box-shadow: box_shadow_on_color -1.5px -1.5px 6px 3px;
+	}
+
+	100%
+	{
+		box-shadow: box_shadow_on_color -4.5px -4.5px 18px 9px;
+	}
+}
+
+.FlagPolePanel {
+	background-color: none;
+	flow-children: down;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	visibility: collapse;
+
+	transition-property: opacity;
+	transition-duration: shortduration;
+	transition-timing-function: bigpicture-ease-in-out;
+}
+
+.FlagPolePanel.Activated {
+	opacity: 1;
+	visibility: visible;
+}
+
+
+.FlagPolePanelVerticalPane {
+	width: 100%;
+	height: fill-parent-flow( 1 );
+	background-color: background_center_gradient;
+	border-radius: 5px;
+	border: 2px solid panel_stroke;
+	margin: 3px;
+	padding: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	vertical-align: top;
+	horizontal-align: center;
+	flow-children: right-wrap;
+}
+
+
+.FlagPolePanelButtonPane {
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	padding-top: 100px;
+	vertical-align: top;
+	horizontal-align: center;
+	flow-children: right-wrap;
+}
+
+
+.FlagPolePanelPaneHeading {
+	width: 100%;
+	font-size: 100px;
+	text-align: center;
+	color: white;
+	padding: 20px;
+}
+
+
+.FlagPolePanelButton {
+	width: 32%;
+	height: fit-children;
+	border-radius: 5px;
+	border: 2px solid #ffffff10;
+	padding: 20px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin: 7px;
+	background-color: button_gradient;
+	flow-children: down;
+	
+	transition-property: border;
+	transition-duration: shortduration;
+	transition-timing-function: bigpicture-ease-in-out;
+}
+
+
+.FlagPolePanelButton:hover,
+.FlagPolePanelButton:focus {
+	//background-color: button_gradient_hover;	
+	//pre-transform-scale2d: 1;
+	border: 2px solid #ffffffff;
+}
+
+.FlagPolePanelButton:active {
+	background-color: button_gradient_bright;	
+
+}
+
+.FlagPolePanelButton:selected {
+	background-color: button_gradient_bright;	
+
+}
+
+

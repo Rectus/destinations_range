@@ -1,0 +1,57 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" />
+		<include src="file://{resources}/styles/custom_destination/flag_pole_panel_style.css" />
+	</styles>
+ 
+	<ClientUIDialogPanel class="FlagPolePanel">
+		<Panel class="FlagPolePanelVerticalPane" id="FlagPanel">
+			<Label class="FlagPolePanelPaneHeading" text="Flags" />
+			
+			<Panel class="FlagPolePanelButtonPane">
+				
+
+				<Button id="NoFlag" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '0');"> 
+					<Image src="file://{images}/custom_destination/flag_none_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+
+				<Button id="Flag01" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '1');"> 
+					<Image src="file://{images}/custom_destination/flag_single_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+				
+				<Button id="Flag05" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '5');"> 
+					<Image src="file://{images}/custom_destination/flag_pirate_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+			
+				<Button id="Flag02" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '2');"> 
+					<Image src="file://{images}/custom_destination/flag_sweden_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+			
+				<Button id="Flag03" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '3');"> 
+					<Image src="file://{images}/custom_destination/flag_finland_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+			
+				<Button id="Flag04" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '4');"> 
+					<Image src="file://{images}/custom_destination/flag_aaland_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+				
+				
+				
+				<Button id="Flag06" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '6');"> 
+					<Image src="file://{images}/custom_destination/flag_rainbow_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+				
+				<Button id="Flag07" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '7');"> 
+					<Image src="file://{images}/custom_destination/flag_trans_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+				
+				<Button id="Flag08" class="FlagPolePanelButton" onactivate="$.DispatchEvent('ClientUI_FireOutput', '8');"> 
+					<Image src="file://{images}/custom_destination/banner_sweden_icon.png" scaling="stretch-to-fit-preserve-aspect" />
+				</Button>
+				
+			</Panel>
+			
+		</Panel>
+	</ClientUIDialogPanel>
+</root>
