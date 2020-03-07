@@ -1,0 +1,87 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:vpcf26:version{26288658-411e-4f14-b698-2e1e5d00dec6} -->
+{
+	_class = "CParticleSystemDefinition"
+	m_nBehaviorVersion = 10
+	m_Initializers = 
+	[
+		{
+			_class = "C_INIT_CreateFromCPs"
+			m_nMinCP = 2
+			m_nMaxCP = 2
+		},
+	]
+	m_Operators = 
+	[
+		{
+			_class = "C_OP_PositionLock"
+			m_nControlPointNumber = 2
+		},
+		{
+			_class = "C_OP_OscillateScalar"
+			m_RateMin = 0.5
+			m_RateMax = 2.0
+			m_nField = "3"
+			m_bProportional = false
+			m_bProportionalOp = false
+		},
+		{
+			_class = "C_OP_EndCapTimedDecay"
+			m_flDecayTime = 0.3
+		},
+		{
+			_class = "C_OP_LerpEndCapScalar"
+			m_flOutput = 0.0
+			m_flLerpTime = 0.2
+		},
+		{
+			_class = "C_OP_LerpEndCapScalar"
+			m_nFieldOutput = "7"
+			m_flOutput = 0.2
+			m_flLerpTime = 0.3
+		},
+		{
+			_class = "C_OP_CycleScalar"
+			m_nDestField = "3"
+			m_flStartValue = 0.95
+			m_flCycleTime = 0.2
+			m_nSetMethod = "PARTICLE_SET_SCALE_INITIAL_VALUE"
+			m_nOpEndCapState = 0
+		},
+	]
+	m_Renderers = 
+	[
+		{
+			_class = "C_OP_RenderSprites"
+			m_flMinSize = 0.02
+			m_flMaxSize = 0.5
+			m_flStartFadeSize = 0.2
+			m_flEndFadeSize = 1.5
+			m_flSelfIllumAmount = 0.405
+			m_flDiffuseAmount = 0.0
+			m_bAdditive = true
+			m_flOverbrightFactor = 20.0
+			m_hTexture = resource:"materials/particle/particle_flares/particle_flare_007b.vtex"
+			VisibilityInputs = 
+			{
+				m_flCameraBias = 1.0
+				m_flRadiusScaleMin = 0.0
+				m_nCPin = 2
+				m_flDotInputMin = -0.3
+				m_flDotInputMax = 0.5
+			}
+		},
+	]
+	m_nInitialParticles = 1
+	m_nMaxParticles = 1
+	m_ConstantColor = [ 255, 200, 132, 255 ]
+	m_flConstantRadius = 3.0
+	m_controlPointConfigurations = 
+	[
+		{
+			m_name = "preview"
+		},
+	]
+	m_flNoDrawTimeToGoToSleep = 1.0
+	m_flMaxDrawDistance = 300.0
+	m_flStartFadeDistance = 100.0
+}

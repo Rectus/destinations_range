@@ -8,6 +8,7 @@ var commandTogglePanels = {};
 var commandRadioPanels = {};
 var itemToggles = {};
 var playerPhysEnabled = false;
+var isHost = false;
 
 var COMMAND_TYPES = 
 {
@@ -37,11 +38,20 @@ var toolSettings =
 
 var locomotionSettings =
 [
+	{cmd: "quick_loco_slide_mode", type: COMMAND_TYPES.RADIO, text: "#Pause_Setting_Loco_SlideMode", needs_playerphys: true, values: {0: "#Pause_Setting_Loco_SlideMode_Hand", 1: "#Pause_Setting_Loco_SlideMode_Head"}},
+
 	{cmd: "quick_loco_slide_factor", type: COMMAND_TYPES.SLIDER, needs_playerphys: true, text: "#Pause_Setting_Loco_SlideFactor", max : 3.0, min : 0.1, increment : 0.1, def : 1.0},
+
+	//{cmd: "quick_loco_grab_mode", type: COMMAND_TYPES.RADIO, text: "#Pause_Setting_Loco_GrabMode", needs_playerphys: true, values: {0: "#Pause_Setting_Loco_GrabMode_Surface", 1: "#Pause_Setting_Loco_GrabMode_Grounded", 2: "#Pause_Setting_Loco_GrabMode_Air"}},
+
+	{cmd: "quick_loco_turn_mode", type: COMMAND_TYPES.RADIO, text: "#Pause_Setting_Loco_TurnMode", needs_playerphys: true, values: {0: "#Pause_Setting_Loco_TurnMode_None", 1: "#Pause_Setting_Loco_TurnMode_Snap", }},
+	//2: "#Pause_Setting_Loco_TurnMode_Smooth"
+
+	{cmd: "quick_loco_turn_increment", type: COMMAND_TYPES.SLIDER, needs_playerphys: true, text: "#Pause_Setting_Loco_TurnIncrement", max : 90, min : 5, increment : 5, def : 45},
 	
 	{cmd: "comfort_grid", type: COMMAND_TYPES.RADIO, text: "#Pause_Setting_Loco_ComfortGrid", needs_playerphys: true, values: {0: "#Pause_Setting_Loco_ComfortGridOff", 1: "#Pause_Setting_Loco_ComfortGridRotate", 2: "#Pause_Setting_Loco_ComfortGridMove", 3: "#Pause_Setting_Loco_ComfortGridAlways"}},
 	
-	{cmd: "comfort_vignette", type: COMMAND_TYPES.TOGGLE, needs_playerphys: true, text: "#Pause_Setting_Loco_ComfortVignette"},
+	//{cmd: "comfort_vignette", type: COMMAND_TYPES.TOGGLE, needs_playerphys: true, text: "#Pause_Setting_Loco_ComfortVignette"},
 ];
 
 var physicsSettings =
@@ -51,6 +61,13 @@ var physicsSettings =
 	{cmd: "player_physics_collisionmode", type: COMMAND_TYPES.RADIO, text: "#Pause_Setting_Phys_CollisionMode", needs_playerphys: true, values: {0: "#Pause_Setting_Phys_CollisionModeOff", 1: "#Pause_Setting_Phys_CollisionModeBody", 2: "#Pause_Setting_Phys_CollisionModeFull"}},
 	
 	{cmd: "player_physics_physmode", type: COMMAND_TYPES.RADIO, text: "#Pause_Setting_Phys_PhysMode", needs_playerphys: true, values: {0: "#Pause_Setting_Phys_PhysModeOff", 1: "#Pause_Setting_Phys_PhysModeDirect", 2: "#Pause_Setting_Phys_PhysModeFull"}},
+
+	{cmd: "player_physics_forced_movement", type: COMMAND_TYPES.TOGGLE, text: "#Pause_Setting_Phys_ForcedMove", needs_playerphys: true},
+];
+
+var hostSettings =
+[
+	{cmd: "host_item_spawn_mode", type: COMMAND_TYPES.RADIO, text: "#Pause_Setting_Host_SpawnMode", values: {0: "#Pause_Setting_Host_SpawnMode_Noone", 1: "#Pause_Setting_Host_SpawnMode_Host", 2: "#Pause_Setting_Host_SpawnMode_Everyone"}},
 ];
 
 var debugSettings =
@@ -78,6 +95,7 @@ function RegisterPanel(data)
 		panelID = data.panel;
 		playerPhysEnabled = data.playerPhys === 0 ? false : true;
 		var quickLocoEnabled = data.quickLoco === 0 ? false : true;
+		isHost = data.isHost === 0 ? false : true;
 		$("#PausePanel").AddClass("Visible");
 		GameEvents.Unsubscribe(registerEventID);
 		
@@ -91,7 +109,12 @@ function RegisterPanel(data)
 		AddCommandButtons($("#ToolSettingsPane"), toolSettings);
 		AddCommandButtons($("#LocomotionSettingsPane"), locomotionSettings);
 		AddCommandButtons($("#PhysicsSettingsPane"), physicsSettings);
-		AddCommandButtons($("#DebugSettingsPane"), debugSettings);
+
+		if(isHost)
+		{
+			AddCommandButtons($("#HostSettingsPane"), hostSettings);
+			AddCommandButtons($("#DebugSettingsPane"), debugSettings);
+		}
 	}
 }
 

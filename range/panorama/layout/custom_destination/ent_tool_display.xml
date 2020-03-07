@@ -1,0 +1,53 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/custom_destination/ent_tool_display.css" />
+	</styles>
+	
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/ent_tool_display.js" />
+	</scripts>
+
+	<ClientUIDialogPanel>
+		<ClientUIDialogPanel class="Display">
+		
+			<Panel class="Page Visible" id="BootPage">	
+				<Label class="Text" id="BootText" text="" />
+			</Panel>
+			
+			<Panel class="Page Menu" id="MenuPage">	
+				<Button class="MenuItem" id="MenuEntInfo" tabindex="auto">	
+					<Label  text="#EntTool_MenuEntInfo" />
+				</Button>
+				<Button class="MenuItem" id="MenuPropManip" tabindex="auto">	
+					<Label text="#EntTool_MenuPropManip" />
+				</Button>
+				<Button class="MenuItem" id="MenuPropUtil" tabindex="auto">	
+					<Label text="#EntTool_MenuPropUtil" />
+				</Button>
+			</Panel>
+			
+			<Button class="Page" id="EntInfoPage">
+				<Button class="MenuItem Inverted">	
+					<Label class="MenuItemText" text="#EntTool_MenuEntInfo" />
+				</Button>
+				<Label class="Text" id="EntInfoText" text="Entity info here" />
+			</Button>
+			
+			<Button class="Page" id="PropManipPage">
+				<Button class="MenuItem Inverted">	
+					<Label class="MenuItemText" text="#EntTool_MenuPropManip" />
+				</Button>
+				<Label class="Text" id="PropManipText" text="Prop manip here" />
+			</Button>
+			
+			<Button class="Page" id="PropUtilPage">
+				<Button class="MenuItem Inverted">	
+					<Label class="MenuItemText" text="#EntTool_MenuPropUtil" />
+				</Button>
+				<Label class="Text" id="PropUtilText" text="Prop utils here" />
+			</Button>
+			
+		</ClientUIDialogPanel>
+	</ClientUIDialogPanel>
+</root>

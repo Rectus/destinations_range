@@ -10,7 +10,7 @@ local SPAWN_ITEMS =
 {
 	{
 		name = "Locomotion tool",
-		img = "file://{resources}/images/tool_locomotion.png",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_locomotion.png",
 		isTool = true,
 		quickInvModel = "models/tools/locomotion_tool.vmdl",
 		keyvals =
@@ -29,7 +29,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "MAC-10 'n Beans",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_mac10.png",
 		isTool = true,
 		keyvals =
 		{
@@ -41,7 +41,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Laser pistol",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_laser_pistol.png",
 		isTool = true,
 		keyvals =
 		{
@@ -53,7 +53,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Paper plane",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/prop_paper_plane.png",
 		isTool = false,
 		keyvals =
 		{
@@ -64,7 +64,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Round bomb",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/prop_round_bomb.png",
 		isTool = false,
 		keyvals =
 		{
@@ -80,7 +80,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Longsword",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_longsword.png",
 		isTool = true,
 		keyvals =
 		{
@@ -93,7 +93,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Spraypaint can",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_spraypaint.png",
 		isTool = true,
 		keyvals =
 		{
@@ -113,7 +113,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Recurve bow",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_bow.png",
 		isTool = true,
 		keyvals =
 		{
@@ -130,7 +130,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Ski pole",
-		img = "file://{resources}/images/tool_skipole.png",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_skipole.png",
 		isTool = true,
 		keyvals =
 		{
@@ -172,7 +172,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Jetpack",
-		img = "file://{resources}/images/tool_jetpack.png",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_jetpack.png",
 		isTool = true,
 		keyvals =
 		{
@@ -189,8 +189,21 @@ local SPAWN_ITEMS =
 		}
 	},
 	{
-		name = "Gravity Gun",
-		img = "",
+		name = "Gravity Gun (Remaster)",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_gravity_gun.png",
+		isTool = true,
+		keyvals =
+		{
+			targetname = "",
+			model = "models/weapons/hl2/gravity_gun_new/gravity_gun.vmdl";
+			vscripts = "tool_gravity_gun_new";
+			massScale = 0.2;
+			HasCollisionInHand = 1;
+		}
+	},
+	{
+		name = "Gravity Gun (Old)",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_gravity_gun_old.png",
 		isTool = true,
 		keyvals =
 		{
@@ -203,7 +216,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Suction cup",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_suction_cup.png",
 		isTool = true,
 		keyvals =
 		{
@@ -215,7 +228,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "M72 LAW Rocket launcher",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_m72_law.png",
 		isTool = true,
 		keyvals =
 		{
@@ -232,7 +245,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Barnacle Grapple",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_barnacle.png",
 		isTool = true,
 		keyvals =
 		{
@@ -245,7 +258,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Nailgun",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_nailgun.png",
 		isTool = true,
 		keyvals =
 		{
@@ -256,8 +269,8 @@ local SPAWN_ITEMS =
 		}
 	},
 	{
-		name = "Mare's leg",
-		img = "",
+		name = "Mare's Leg Rifle",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_mares_leg.png",
 		isTool = true,
 		keyvals =
 		{
@@ -269,7 +282,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Pogo stick",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_pogo_stick.png",
 		isTool = true,
 		keyvals =
 		{
@@ -282,7 +295,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Entity scanner",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_scanner.png",
 		isTool = true,
 		keyvals =
 		{
@@ -305,8 +318,8 @@ local SPAWN_ITEMS =
 		}
 	},
 	{
-		name = "Flashlight (rusty)",
-		img = "",
+		name = "Flashlight (Rusty)",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_flashlight_old.png",
 		isTool = true,
 		keyvals =
 		{
@@ -319,7 +332,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Sunlight adjustment tool",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/tool_sun_tool.png",
 		isTool = true,
 		keyvals =
 		{
@@ -334,8 +347,20 @@ local SPAWN_ITEMS =
 		}
 	},
 	{
-		name = "Fireworks",
+		name = "Spawnpoint Relocator",
 		img = "",
+		isTool = true,
+		keyvals =
+		{
+			targetname = "",
+			model = "models/tools/player_spawnpoint_tool.vmdl";
+			vscripts = "tool_spawnpoint";
+			HasCollisionInHand = 0;
+		}
+	},
+	{
+		name = "Fireworks",
+		img = "file://{resources}/images/custom_destination/spawn_menu/prop_fireworks.png",
 		isTool = false,
 		keyvals =
 		{
@@ -350,7 +375,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "LAW Rocket (deployed)",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/prop_m72_law_rocket.png",
 		isTool = false,
 		keyvals =
 		{
@@ -361,7 +386,7 @@ local SPAWN_ITEMS =
 	},
 	{
 		name = "Gold bar",
-		img = "",
+		img = "file://{resources}/images/custom_destination/spawn_menu/prop_gold_bar.png",
 		isTool = false,
 		keyvals =
 		{
@@ -376,7 +401,7 @@ local SPAWN_ITEMS =
 local MAP_PLAYER_DEFAULT_SETTINGS =
 {
 	-- What custom quick inventory items to use by default, indexed from the above array.
-	quick_inv_items = {1, 7, 8, 22, 2};
+	quick_inv_items = {1, 7, 8, 13, 22, 2};
 }
 
 

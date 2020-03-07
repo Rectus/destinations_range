@@ -1,0 +1,3828 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	m_meshList = 
+	{
+		m_meshList = 
+		[
+			{
+				m_meshName = "drapes"
+				m_meshFile = "models/drapes.dmx"
+				m_materialSearchPath = "materials/models"
+				m_bSkinParentedObjects = true
+				m_bLegacySkinParentedTransforms = false
+				m_bExpensiveTangents = false
+				m_bHighPrecisionTexCoords = false
+				m_bPerVertexCurvature = false
+				m_bBentNormals = false
+				m_bIgnoreCloth = false
+				m_bGetSkinningFromLod0 = false
+				m_bPreferHighDensityTrianglesInUvDensityCalculation = false
+				m_pMorphInfo = null
+			},
+		]
+	}
+	m_clothProxyMeshList = 
+	{
+		_class = "CVClothProxyMeshList"
+		m_flClothEnableThreshold = 0.05
+		m_bCreateStaticBone = false
+		m_nMaxBonesPerVertex = 4
+		m_bRemoveUnusedBonesEnabled = false
+		m_bDriveMeshesWithBacksolvedJointsOnly = false
+		m_flMatchProxiesToMeshes = 0.0
+		m_flFallbackEnvelope = 0.0
+		m_nReservedInt = 0
+		m_bSoftSkinAnimation = false
+		m_bReservedBool2 = false
+		m_bReservedBool3 = false
+		m_bReservedBool4 = false
+		m_clothProxyMeshList = [  ]
+	}
+	m_physicsMeshList = 
+	{
+		m_meshList = [  ]
+	}
+	m_pModelInfo = null
+	m_pBoneFlagList = 
+	{
+		m_pObject = 
+		{
+			m_boneFlag = 
+			[
+				{
+					m_sName = "$cloth_root"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = "a"
+					m_sParent = ""
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_3"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_18"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_19"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_1"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_2"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_0"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_33"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_4"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_5"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_32"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_6"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_31"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_7"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_30"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_29"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_8"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_9"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_28"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_10"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_27"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_11"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_26"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_25"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_12"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_13"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_24"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_14"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_23"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_15"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_22"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_21"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_16"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_17"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_20"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_198"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_203"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_197"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_202"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_196"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_201"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_195"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_200"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_194"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_199"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_193"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_192"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_191"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_190"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_189"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_188"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_187"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_186"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_185"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_184"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_183"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_182"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_181"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_180"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_179"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_178"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_177"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_176"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_175"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_174"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_173"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_172"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_171"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_170"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_169"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_168"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_167"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_166"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_165"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_164"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_163"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_162"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_161"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_160"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_159"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_158"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_157"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_156"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_155"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_154"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_153"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_152"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_151"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_150"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_149"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_148"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_147"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_146"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_145"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_144"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_143"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_142"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_141"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_140"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_139"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_138"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_137"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_136"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_135"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_134"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_133"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_132"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_131"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_130"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_129"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_39"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_40"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_41"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_42"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_43"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_123"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_128"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_122"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_127"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_121"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_126"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_120"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_125"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_119"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_124"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_118"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_117"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_116"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_115"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_114"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_113"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_112"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_111"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_110"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_109"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_108"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_107"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_106"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_105"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_104"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_103"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_102"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_101"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_100"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_99"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_98"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_97"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_96"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_95"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_94"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_93"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_92"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_91"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_90"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_89"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_88"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_87"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_86"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_85"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_84"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_83"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_82"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_81"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_80"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_79"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_78"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_77"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_76"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_75"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_74"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_73"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_72"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_71"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_70"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_69"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_68"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_67"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_66"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_65"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_64"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_63"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_62"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_61"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_60"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_59"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_58"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_57"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_56"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_55"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_54"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_38"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_37"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_36"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_35"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_34"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_53"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_52"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_51"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_50"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_49"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_48"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_47"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_46"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_45"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "$cloth0_44"
+					m_bProcedural = false
+					m_bDeleted = false
+					m_sGroup = ""
+					m_sParent = "$cloth_root"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "handle"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = ""
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame1_1"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame1_2"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame1_1"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame1_3"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame1_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame1_4"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame1_3"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame1_support"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame1_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "grip"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame1_support_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "grip"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame2_support_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "grip"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame4_support_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "grip"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame5_support_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "grip"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame6_support_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "grip"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame7_support_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "grip"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame8_support_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "grip"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame3_support_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "grip"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame1_tip_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame2_1"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame2_2"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame2_1"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame2_support"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame2_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame2_3"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame2_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame2_4"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame2_3"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame3_1"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame3_2"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame3_1"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame3_support"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame3_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame3_3"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame3_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame3_4"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame3_3"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame4_1"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame4_2"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame4_1"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame4_support"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame4_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame4_3"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame4_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame4_4"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame4_3"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame5_1"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame5_2"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame5_1"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame5_support"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame5_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame5_3"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame5_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame5_4"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame5_3"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame6_1"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame6_2"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame6_1"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame6_support"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame6_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame6_3"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame6_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame6_4"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame6_3"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame7_1"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame7_2"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame7_1"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame7_support"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame7_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame7_3"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame7_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame7_4"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame7_3"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame8_1"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame8_2"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame8_1"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame8_support"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame8_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame8_3"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame8_2"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame8_4"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "frame8_3"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame2_tip_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame3_tip_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame4_tip_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame5_tip_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame6_tip_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame7_tip_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+				{
+					m_sName = "frame8_tip_target"
+					m_bProcedural = false
+					m_bDeleted = true
+					m_sGroup = ""
+					m_sParent = "handle"
+					m_bRigidLength = false
+					m_bPrealignedRotation = false
+					m_ReferenceAngle = [ 0.0, 0.0, 0.0 ]
+				},
+			]
+			m_boneWorldspace = 
+			[
+				{
+					m_name = "$cloth_root"
+					m_Translation = [ 0.0, 0.0, 0.0 ]
+					m_Rotation = [ 0.0, -0.0, 0.0 ]
+				},
+				{
+					m_name = "$cloth0_3"
+					m_Translation = [ -0.150002, -48.0, 4.000002 ]
+					m_Rotation = [ 90.0, 22.645269, -87.137596 ]
+				},
+				{
+					m_name = "$cloth0_18"
+					m_Translation = [ -0.150002, -42.000015, 4.000003 ]
+					m_Rotation = [ 90.76606, 40.353069, -77.507065 ]
+				},
+				{
+					m_name = "$cloth0_19"
+					m_Translation = [ 0.150005, -42.000011, 3.999992 ]
+					m_Rotation = [ -89.23394, 40.353069, 102.492928 ]
+				},
+				{
+					m_name = "$cloth0_1"
+					m_Translation = [ 0.150002, -48.0, 3.999998 ]
+					m_Rotation = [ -90.0, 22.645269, 87.137596 ]
+				},
+				{
+					m_name = "$cloth0_2"
+					m_Translation = [ -0.149996, 48.000008, 3.999993 ]
+					m_Rotation = [ 90.0, 24.556162, -114.227737 ]
+				},
+				{
+					m_name = "$cloth0_0"
+					m_Translation = [ 0.150007, 48.000015, 3.999994 ]
+					m_Rotation = [ 89.397995, 24.161768, -113.271912 ]
+				},
+				{
+					m_name = "$cloth0_33"
+					m_Translation = [ -2.249994, 42.000015, 3.999993 ]
+					m_Rotation = [ 89.23394, 40.353069, -102.492928 ]
+				},
+				{
+					m_name = "$cloth0_4"
+					m_Translation = [ -2.550003, 42.000015, 4.000004 ]
+					m_Rotation = [ -90.76606, 40.353069, 77.507065 ]
+				},
+				{
+					m_name = "$cloth0_5"
+					m_Translation = [ -2.55, 35.999996, 4.000001 ]
+					m_Rotation = [ 90.766037, 40.353069, -77.507065 ]
+				},
+				{
+					m_name = "$cloth0_32"
+					m_Translation = [ -2.250005, 36.000019, 4.00001 ]
+					m_Rotation = [ -89.233948, 40.353062, 102.49292 ]
+				},
+				{
+					m_name = "$cloth0_6"
+					m_Translation = [ -0.149997, 30.000013, 3.999997 ]
+					m_Rotation = [ 90.76606, 40.353069, -77.507065 ]
+				},
+				{
+					m_name = "$cloth0_31"
+					m_Translation = [ 0.149996, 30.000013, 4.000006 ]
+					m_Rotation = [ -89.23394, 40.353069, 102.492928 ]
+				},
+				{
+					m_name = "$cloth0_7"
+					m_Translation = [ -0.150001, 24.00001, 4.000004 ]
+					m_Rotation = [ -90.76606, 40.353069, 77.507065 ]
+				},
+				{
+					m_name = "$cloth0_30"
+					m_Translation = [ 0.150004, 24.00001, 3.999997 ]
+					m_Rotation = [ 89.23394, 40.353069, -102.492928 ]
+				},
+				{
+					m_name = "$cloth0_29"
+					m_Translation = [ -2.249997, 18.000004, 3.999998 ]
+					m_Rotation = [ 89.23394, 40.353069, -102.492928 ]
+				},
+				{
+					m_name = "$cloth0_8"
+					m_Translation = [ -2.550002, 18.000006, 4.000001 ]
+					m_Rotation = [ -90.76606, 40.353069, 77.507065 ]
+				},
+				{
+					m_name = "$cloth0_9"
+					m_Translation = [ -2.549999, 12.000004, 3.999999 ]
+					m_Rotation = [ 90.76606, 40.353069, -77.507065 ]
+				},
+				{
+					m_name = "$cloth0_28"
+					m_Translation = [ -2.250001, 12.000006, 4.000003 ]
+					m_Rotation = [ -89.23394, 40.353069, 102.492928 ]
+				},
+				{
+					m_name = "$cloth0_10"
+					m_Translation = [ -0.149999, 6.000001, 4.0 ]
+					m_Rotation = [ 90.76606, 40.353069, -77.507065 ]
+				},
+				{
+					m_name = "$cloth0_27"
+					m_Translation = [ 0.15, 6.000003, 4.000002 ]
+					m_Rotation = [ -89.23394, 40.353069, 102.492928 ]
+				},
+				{
+					m_name = "$cloth0_11"
+					m_Translation = [ -0.149999, 0.0, 4.0 ]
+					m_Rotation = [ -90.76606, 40.353069, 77.507065 ]
+				},
+				{
+					m_name = "$cloth0_26"
+					m_Translation = [ 0.150001, -0.000001, 4.0 ]
+					m_Rotation = [ 89.23394, 40.353069, -102.492928 ]
+				},
+				{
+					m_name = "$cloth0_25"
+					m_Translation = [ -2.25, -6.000003, 4.000001 ]
+					m_Rotation = [ 89.23394, 40.353069, -102.492928 ]
+				},
+				{
+					m_name = "$cloth0_12"
+					m_Translation = [ -2.549999, -6.000001, 3.999999 ]
+					m_Rotation = [ -90.76606, 40.353069, 77.507065 ]
+				},
+				{
+					m_name = "$cloth0_13"
+					m_Translation = [ -2.55, -12.000005, 4.000001 ]
+					m_Rotation = [ 90.76606, 40.353069, -77.507065 ]
+				},
+				{
+					m_name = "$cloth0_24"
+					m_Translation = [ -2.249998, -12.000003, 3.999998 ]
+					m_Rotation = [ -89.23394, 40.353069, 102.492928 ]
+				},
+				{
+					m_name = "$cloth0_14"
+					m_Translation = [ -0.150001, -18.000006, 4.000003 ]
+					m_Rotation = [ 90.76606, 40.353069, -77.507065 ]
+				},
+				{
+					m_name = "$cloth0_23"
+					m_Translation = [ 0.150004, -18.000006, 3.999998 ]
+					m_Rotation = [ -89.23394, 40.353069, 102.492928 ]
+				},
+				{
+					m_name = "$cloth0_15"
+					m_Translation = [ -0.149997, -24.00001, 3.999998 ]
+					m_Rotation = [ -90.76606, 40.353069, 77.507065 ]
+				},
+				{
+					m_name = "$cloth0_22"
+					m_Translation = [ 0.149997, -24.00001, 4.000005 ]
+					m_Rotation = [ 89.23394, 40.353069, -102.492928 ]
+				},
+				{
+					m_name = "$cloth0_21"
+					m_Translation = [ -2.250004, -30.000015, 4.000005 ]
+					m_Rotation = [ 89.23394, 40.353069, -102.492928 ]
+				},
+				{
+					m_name = "$cloth0_16"
+					m_Translation = [ -2.549997, -30.000013, 3.999998 ]
+					m_Rotation = [ -90.76606, 40.353069, 77.507065 ]
+				},
+				{
+					m_name = "$cloth0_17"
+					m_Translation = [ -2.55, -35.999996, 3.999995 ]
+					m_Rotation = [ 90.766037, 40.353069, -77.507065 ]
+				},
+				{
+					m_name = "$cloth0_20"
+					m_Translation = [ -2.249993, -36.000019, 3.99999 ]
+					m_Rotation = [ -89.233948, 40.353062, 102.49292 ]
+				},
+				{
+					m_name = "$cloth0_198"
+					m_Translation = [ -2.549991, 36.000015, 18.400002 ]
+					m_Rotation = [ 90.0, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_203"
+					m_Translation = [ -2.54999, 42.000015, 18.4 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_197"
+					m_Translation = [ -2.550002, 36.000004, 32.800011 ]
+					m_Rotation = [ -90.0, -23.021517, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_202"
+					m_Translation = [ -2.549999, 42.000008, 32.800007 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_196"
+					m_Translation = [ -2.550001, 36.000004, 47.200005 ]
+					m_Rotation = [ -90.0, -23.021517, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_201"
+					m_Translation = [ -2.55, 42.000008, 47.200005 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_195"
+					m_Translation = [ -2.550001, 36.000004, 61.60001 ]
+					m_Rotation = [ -90.0, -23.021517, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_200"
+					m_Translation = [ -2.550001, 42.000008, 61.60001 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_194"
+					m_Translation = [ -2.549981, 36.000011, 76.000015 ]
+					m_Rotation = [ 90.000008, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_199"
+					m_Translation = [ -2.549991, 42.000027, 76.000023 ]
+					m_Rotation = [ -90.000015, 26.56064, 78.690056 ]
+				},
+				{
+					m_name = "$cloth0_193"
+					m_Translation = [ -0.149999, 30.000004, 18.400002 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_192"
+					m_Translation = [ -0.149999, 30.000004, 32.800003 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_191"
+					m_Translation = [ -0.149999, 30.000004, 47.200005 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_190"
+					m_Translation = [ -0.149999, 30.000006, 61.600006 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_189"
+					m_Translation = [ -0.149983, 30.0, 76.000015 ]
+					m_Rotation = [ 90.000015, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_188"
+					m_Translation = [ -0.149992, 24.00001, 18.400002 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_187"
+					m_Translation = [ -0.150002, 24.0, 32.800003 ]
+					m_Rotation = [ -90.0, -23.021538, 78.690071 ]
+				},
+				{
+					m_name = "$cloth0_186"
+					m_Translation = [ -0.150001, 24.0, 47.200001 ]
+					m_Rotation = [ -90.0, -23.021538, 78.690071 ]
+				},
+				{
+					m_name = "$cloth0_185"
+					m_Translation = [ -0.150001, 24.0, 61.600006 ]
+					m_Rotation = [ -90.0, -23.021538, 78.690071 ]
+				},
+				{
+					m_name = "$cloth0_184"
+					m_Translation = [ -0.149994, 23.999998, 76.0 ]
+					m_Rotation = [ 90.0, 26.560648, -101.309937 ]
+				},
+				{
+					m_name = "$cloth0_183"
+					m_Translation = [ -2.549994, 18.000002, 18.400003 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_182"
+					m_Translation = [ -2.549999, 18.000002, 32.800011 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_181"
+					m_Translation = [ -2.549998, 18.0, 47.200008 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_180"
+					m_Translation = [ -2.549997, 18.000004, 61.600014 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_179"
+					m_Translation = [ -2.549989, 17.999994, 76.000015 ]
+					m_Rotation = [ 89.999992, 26.56064, -101.309944 ]
+				},
+				{
+					m_name = "$cloth0_178"
+					m_Translation = [ -2.55, 12.0, 18.400002 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_177"
+					m_Translation = [ -2.55, 11.999999, 32.800007 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_176"
+					m_Translation = [ -2.549999, 12.0, 47.200001 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_175"
+					m_Translation = [ -2.55, 12.000004, 61.600002 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_174"
+					m_Translation = [ -2.549985, 11.999994, 76.000023 ]
+					m_Rotation = [ 90.000015, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_173"
+					m_Translation = [ -0.15, 6.0, 18.400003 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_172"
+					m_Translation = [ -0.149999, 6.0, 32.800003 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_171"
+					m_Translation = [ -0.149999, 6.0, 47.200005 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_170"
+					m_Translation = [ -0.149999, 6.000003, 61.600002 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_169"
+					m_Translation = [ -0.149985, 5.999992, 76.000023 ]
+					m_Rotation = [ 90.000015, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_168"
+					m_Translation = [ -0.149996, -0.000004, 18.400009 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_167"
+					m_Translation = [ -0.149998, -0.000001, 32.800007 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_166"
+					m_Translation = [ -0.149997, -0.0, 47.200012 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_165"
+					m_Translation = [ -0.149996, 0.000001, 61.60001 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_164"
+					m_Translation = [ -0.14999, -0.000014, 76.000023 ]
+					m_Rotation = [ 89.999992, 26.56064, -101.309944 ]
+				},
+				{
+					m_name = "$cloth0_163"
+					m_Translation = [ -2.549998, -6.000008, 18.400009 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_162"
+					m_Translation = [ -2.549998, -6.0, 32.800007 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_161"
+					m_Translation = [ -2.549997, -6.000001, 47.200008 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_160"
+					m_Translation = [ -2.549996, -6.0, 61.600006 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_159"
+					m_Translation = [ -2.549991, -6.000015, 76.000023 ]
+					m_Rotation = [ 89.999992, 26.56064, -101.309944 ]
+				},
+				{
+					m_name = "$cloth0_158"
+					m_Translation = [ -2.55, -12.000002, 18.400003 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_157"
+					m_Translation = [ -2.55, -12.0, 32.800003 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_156"
+					m_Translation = [ -2.549999, -12.0, 47.200005 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_155"
+					m_Translation = [ -2.55, -11.999997, 61.600002 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_154"
+					m_Translation = [ -2.549988, -12.000012, 76.000031 ]
+					m_Rotation = [ 90.000015, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_153"
+					m_Translation = [ -0.15, -18.000002, 18.400005 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_152"
+					m_Translation = [ -0.149999, -18.0, 32.800003 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_151"
+					m_Translation = [ -0.149999, -18.0, 47.200001 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_150"
+					m_Translation = [ -0.149999, -17.999996, 61.600002 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_149"
+					m_Translation = [ -0.149987, -18.000017, 76.000023 ]
+					m_Rotation = [ 90.000015, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_148"
+					m_Translation = [ -0.15, -24.000017, 18.400015 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_147"
+					m_Translation = [ -0.149999, -24.0, 32.800007 ]
+					m_Rotation = [ -90.0, -23.021538, 78.690071 ]
+				},
+				{
+					m_name = "$cloth0_146"
+					m_Translation = [ -0.149999, -24.0, 47.200005 ]
+					m_Rotation = [ -90.0, -23.021538, 78.690071 ]
+				},
+				{
+					m_name = "$cloth0_145"
+					m_Translation = [ -0.149999, -24.000002, 61.60001 ]
+					m_Rotation = [ -90.0, -23.021538, 78.690071 ]
+				},
+				{
+					m_name = "$cloth0_144"
+					m_Translation = [ -0.149995, -24.000002, 76.0 ]
+					m_Rotation = [ 90.0, 26.560648, -101.309937 ]
+				},
+				{
+					m_name = "$cloth0_143"
+					m_Translation = [ -2.550003, -30.000021, 18.400013 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_142"
+					m_Translation = [ -2.549997, -30.000002, 32.800007 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_141"
+					m_Translation = [ -2.549996, -30.000004, 47.200008 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_140"
+					m_Translation = [ -2.549995, -30.000002, 61.600002 ]
+					m_Rotation = [ -90.000008, -23.021521, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_139"
+					m_Translation = [ -2.549994, -30.000025, 76.000023 ]
+					m_Rotation = [ 89.999992, 26.56064, -101.309944 ]
+				},
+				{
+					m_name = "$cloth0_138"
+					m_Translation = [ -2.549995, -36.000008, 18.400002 ]
+					m_Rotation = [ -90.000015, 23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_137"
+					m_Translation = [ -2.549997, -36.0, 32.800011 ]
+					m_Rotation = [ -90.0, -23.021517, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_136"
+					m_Translation = [ -2.549997, -36.0, 47.200005 ]
+					m_Rotation = [ -90.0, -23.021517, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_135"
+					m_Translation = [ -2.549996, -35.999996, 61.60001 ]
+					m_Rotation = [ -90.0, -23.021517, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_134"
+					m_Translation = [ -2.549986, -36.000023, 76.000031 ]
+					m_Rotation = [ 90.000008, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_133"
+					m_Translation = [ -0.149997, -42.000008, 18.400002 ]
+					m_Rotation = [ -90.000008, 23.021524, 101.309929 ]
+				},
+				{
+					m_name = "$cloth0_132"
+					m_Translation = [ -0.149998, -42.000004, 32.800003 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_131"
+					m_Translation = [ -0.149998, -42.000008, 47.200001 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_130"
+					m_Translation = [ -0.149998, -42.0, 61.600002 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_129"
+					m_Translation = [ -0.149989, -42.000023, 76.000031 ]
+					m_Rotation = [ 90.000015, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_39"
+					m_Translation = [ -0.15, -48.000004, 18.400005 ]
+					m_Rotation = [ 90.0, 11.782576, -87.137604 ]
+				},
+				{
+					m_name = "$cloth0_40"
+					m_Translation = [ -0.150001, -48.0, 32.800003 ]
+					m_Rotation = [ -90.0, -11.782583, 92.862411 ]
+				},
+				{
+					m_name = "$cloth0_41"
+					m_Translation = [ -0.150001, -48.0, 47.200005 ]
+					m_Rotation = [ -90.0, -11.782583, 92.862411 ]
+				},
+				{
+					m_name = "$cloth0_42"
+					m_Translation = [ -0.150001, -48.0, 61.599998 ]
+					m_Rotation = [ -90.0, -11.782583, 92.862411 ]
+				},
+				{
+					m_name = "$cloth0_43"
+					m_Translation = [ -0.15, -48.0, 76.000008 ]
+					m_Rotation = [ 90.000008, 13.788145, -87.137596 ]
+				},
+				{
+					m_name = "$cloth0_123"
+					m_Translation = [ -2.249995, -36.000004, 18.4 ]
+					m_Rotation = [ -90.000015, 23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_128"
+					m_Translation = [ 0.150004, -42.0, 18.4 ]
+					m_Rotation = [ -90.000008, 23.021524, 101.309929 ]
+				},
+				{
+					m_name = "$cloth0_122"
+					m_Translation = [ -2.250005, -36.000011, 32.800018 ]
+					m_Rotation = [ 90.000023, -23.021515, -78.690086 ]
+				},
+				{
+					m_name = "$cloth0_127"
+					m_Translation = [ 0.150001, -42.0, 32.800007 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_121"
+					m_Translation = [ -2.250003, -36.000015, 47.200024 ]
+					m_Rotation = [ 90.000023, -23.021515, -78.690086 ]
+				},
+				{
+					m_name = "$cloth0_126"
+					m_Translation = [ 0.150002, -42.0, 47.200005 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_120"
+					m_Translation = [ -2.250001, -36.000023, 61.600029 ]
+					m_Rotation = [ 90.000023, -23.021515, -78.690086 ]
+				},
+				{
+					m_name = "$cloth0_125"
+					m_Translation = [ 0.150001, -42.0, 61.599998 ]
+					m_Rotation = [ -90.0, -23.021523, 101.309937 ]
+				},
+				{
+					m_name = "$cloth0_119"
+					m_Translation = [ -2.249978, -36.000004, 76.000015 ]
+					m_Rotation = [ -90.0, 26.560638, 101.309959 ]
+				},
+				{
+					m_name = "$cloth0_124"
+					m_Translation = [ 0.15001, -42.000027, 76.000031 ]
+					m_Rotation = [ 90.000015, 26.56064, -78.690056 ]
+				},
+				{
+					m_name = "$cloth0_118"
+					m_Translation = [ -2.250002, -30.000021, 18.400013 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_117"
+					m_Translation = [ -2.250002, -30.000004, 32.800007 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_116"
+					m_Translation = [ -2.250002, -30.000002, 47.200005 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_115"
+					m_Translation = [ -2.250002, -30.000004, 61.600006 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_114"
+					m_Translation = [ -2.249985, -30.000006, 76.000023 ]
+					m_Rotation = [ -90.000015, 26.56064, 78.690056 ]
+				},
+				{
+					m_name = "$cloth0_113"
+					m_Translation = [ 0.15, -24.000017, 18.400013 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_112"
+					m_Translation = [ 0.150001, -24.0, 32.800003 ]
+					m_Rotation = [ 90.000008, -23.02154, -101.309937 ]
+				},
+				{
+					m_name = "$cloth0_111"
+					m_Translation = [ 0.150001, -24.0, 47.200005 ]
+					m_Rotation = [ 90.000008, -23.02154, -101.309937 ]
+				},
+				{
+					m_name = "$cloth0_110"
+					m_Translation = [ 0.15, -24.000002, 61.600006 ]
+					m_Rotation = [ 90.000008, -23.02154, -101.309937 ]
+				},
+				{
+					m_name = "$cloth0_109"
+					m_Translation = [ 0.150006, -24.0, 76.0 ]
+					m_Rotation = [ -90.0, 26.560648, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_108"
+					m_Translation = [ 0.15, -18.000002, 18.400005 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_107"
+					m_Translation = [ 0.150002, -18.0, 32.800007 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_106"
+					m_Translation = [ 0.150003, -18.000004, 47.200012 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_105"
+					m_Translation = [ 0.150004, -18.000006, 61.60001 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_104"
+					m_Translation = [ 0.150013, -17.99999, 76.000015 ]
+					m_Rotation = [ -89.999992, 26.56064, 101.309944 ]
+				},
+				{
+					m_name = "$cloth0_103"
+					m_Translation = [ -2.25, -12.000001, 18.400002 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_102"
+					m_Translation = [ -2.249999, -12.000001, 32.800011 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_101"
+					m_Translation = [ -2.249997, -12.000002, 47.200012 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_100"
+					m_Translation = [ -2.249997, -12.000001, 61.60001 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_99"
+					m_Translation = [ -2.249989, -11.999989, 76.000023 ]
+					m_Rotation = [ -89.999992, 26.56064, 101.309944 ]
+				},
+				{
+					m_name = "$cloth0_98"
+					m_Translation = [ -2.249998, -6.000007, 18.400009 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_97"
+					m_Translation = [ -2.250001, -5.999998, 32.800007 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_96"
+					m_Translation = [ -2.250001, -5.999997, 47.200008 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_95"
+					m_Translation = [ -2.250001, -5.999999, 61.60001 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_94"
+					m_Translation = [ -2.249986, -5.999992, 76.000023 ]
+					m_Rotation = [ -90.000015, 26.56064, 78.690056 ]
+				},
+				{
+					m_name = "$cloth0_93"
+					m_Translation = [ 0.150005, -0.000003, 18.400007 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_92"
+					m_Translation = [ 0.149999, 0.000002, 32.800007 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_91"
+					m_Translation = [ 0.149999, 0.000002, 47.200012 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_90"
+					m_Translation = [ 0.149999, 0.000002, 61.60001 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_89"
+					m_Translation = [ 0.150014, 0.000011, 76.000023 ]
+					m_Rotation = [ -90.000015, 26.56064, 78.690056 ]
+				},
+				{
+					m_name = "$cloth0_88"
+					m_Translation = [ 0.15, 6.0, 18.400003 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_87"
+					m_Translation = [ 0.150002, 6.0, 32.800007 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_86"
+					m_Translation = [ 0.150003, 6.000001, 47.200008 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_85"
+					m_Translation = [ 0.150004, 5.999999, 61.60001 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_84"
+					m_Translation = [ 0.15001, 6.000014, 76.000023 ]
+					m_Rotation = [ -89.999992, 26.56064, 101.309944 ]
+				},
+				{
+					m_name = "$cloth0_83"
+					m_Translation = [ -2.25, 12.000001, 18.400002 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_82"
+					m_Translation = [ -2.249998, 12.000001, 32.800007 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_81"
+					m_Translation = [ -2.249997, 12.0, 47.200008 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_80"
+					m_Translation = [ -2.249996, 11.999999, 61.60001 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_79"
+					m_Translation = [ -2.249991, 12.000017, 76.000023 ]
+					m_Rotation = [ -89.999992, 26.56064, 101.309944 ]
+				},
+				{
+					m_name = "$cloth0_78"
+					m_Translation = [ -2.249993, 18.000004, 18.400003 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_77"
+					m_Translation = [ -2.25, 18.000004, 32.800007 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_76"
+					m_Translation = [ -2.250001, 18.000004, 47.200008 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_75"
+					m_Translation = [ -2.250001, 18.000004, 61.60001 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_74"
+					m_Translation = [ -2.249988, 18.000017, 76.000023 ]
+					m_Rotation = [ -90.000015, 26.56064, 78.690056 ]
+				},
+				{
+					m_name = "$cloth0_73"
+					m_Translation = [ 0.150009, 24.000008, 18.400003 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_72"
+					m_Translation = [ 0.149999, 24.0, 32.800007 ]
+					m_Rotation = [ 90.000008, -23.02154, -101.309937 ]
+				},
+				{
+					m_name = "$cloth0_71"
+					m_Translation = [ 0.149999, 24.0, 47.200005 ]
+					m_Rotation = [ 90.000008, -23.02154, -101.309937 ]
+				},
+				{
+					m_name = "$cloth0_70"
+					m_Translation = [ 0.149998, 23.999998, 61.600002 ]
+					m_Rotation = [ 90.000008, -23.02154, -101.309937 ]
+				},
+				{
+					m_name = "$cloth0_69"
+					m_Translation = [ 0.150002, 24.0, 76.000008 ]
+					m_Rotation = [ -90.0, 26.560648, 78.690079 ]
+				},
+				{
+					m_name = "$cloth0_68"
+					m_Translation = [ 0.150001, 30.000002, 18.400002 ]
+					m_Rotation = [ 89.999992, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_67"
+					m_Translation = [ 0.150003, 30.000004, 32.800007 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_66"
+					m_Translation = [ 0.150004, 30.000004, 47.200005 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_65"
+					m_Translation = [ 0.150005, 30.000002, 61.60001 ]
+					m_Rotation = [ 90.000008, -23.021521, -78.690079 ]
+				},
+				{
+					m_name = "$cloth0_64"
+					m_Translation = [ 0.150007, 30.000023, 76.000023 ]
+					m_Rotation = [ -89.999992, 26.56064, 101.309944 ]
+				},
+				{
+					m_name = "$cloth0_63"
+					m_Translation = [ -2.249991, 36.000011, 18.400002 ]
+					m_Rotation = [ 90.0, 23.021523, -78.690071 ]
+				},
+				{
+					m_name = "$cloth0_62"
+					m_Translation = [ -2.249991, 36.000004, 32.800011 ]
+					m_Rotation = [ 90.000023, -23.021515, -78.690086 ]
+				},
+				{
+					m_name = "$cloth0_61"
+					m_Translation = [ -2.249989, 36.0, 47.200012 ]
+					m_Rotation = [ 90.000023, -23.021515, -78.690086 ]
+				},
+				{
+					m_name = "$cloth0_60"
+					m_Translation = [ -2.249987, 36.0, 61.600018 ]
+					m_Rotation = [ 90.000023, -23.021515, -78.690086 ]
+				},
+				{
+					m_name = "$cloth0_59"
+					m_Translation = [ -2.249992, 36.000031, 76.000023 ]
+					m_Rotation = [ -90.0, 26.560638, 101.309959 ]
+				},
+				{
+					m_name = "$cloth0_58"
+					m_Translation = [ -2.249989, 42.000011, 18.4 ]
+					m_Rotation = [ 90.000008, 23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_57"
+					m_Translation = [ -2.249999, 42.000008, 32.800003 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_56"
+					m_Translation = [ -2.25, 42.000008, 47.200008 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_55"
+					m_Translation = [ -2.25, 42.000004, 61.600006 ]
+					m_Rotation = [ 90.0, -23.021523, -101.309929 ]
+				},
+				{
+					m_name = "$cloth0_54"
+					m_Translation = [ -2.249991, 42.000023, 76.000023 ]
+					m_Rotation = [ -90.000015, 26.56064, 78.690056 ]
+				},
+				{
+					m_name = "$cloth0_38"
+					m_Translation = [ 0.15, 48.0, 18.400002 ]
+					m_Rotation = [ 90.0, 12.646663, -111.801399 ]
+				},
+				{
+					m_name = "$cloth0_37"
+					m_Translation = [ 0.15, 47.999996, 32.800003 ]
+					m_Rotation = [ 90.0, -12.646663, -111.801399 ]
+				},
+				{
+					m_name = "$cloth0_36"
+					m_Translation = [ 0.15, 47.999996, 47.200001 ]
+					m_Rotation = [ 90.0, -12.646663, -111.801399 ]
+				},
+				{
+					m_name = "$cloth0_35"
+					m_Translation = [ 0.150002, 47.999996, 61.599998 ]
+					m_Rotation = [ 90.0, -12.646663, -111.801399 ]
+				},
+				{
+					m_name = "$cloth0_34"
+					m_Translation = [ 0.150003, 48.000015, 76.000015 ]
+					m_Rotation = [ -90.000008, 14.787544, 68.198593 ]
+				},
+				{
+					m_name = "$cloth0_53"
+					m_Translation = [ -0.150002, 48.0, 18.400007 ]
+					m_Rotation = [ 90.0, 12.868679, -114.227745 ]
+				},
+				{
+					m_name = "$cloth0_52"
+					m_Translation = [ -0.15, 48.0, 32.799999 ]
+					m_Rotation = [ 90.000015, -12.868676, -114.22776 ]
+				},
+				{
+					m_name = "$cloth0_51"
+					m_Translation = [ -0.15, 48.0, 47.200001 ]
+					m_Rotation = [ 90.000015, -12.868676, -114.22776 ]
+				},
+				{
+					m_name = "$cloth0_50"
+					m_Translation = [ -0.15, 48.0, 61.599995 ]
+					m_Rotation = [ 90.000015, -12.868676, -114.22776 ]
+				},
+				{
+					m_name = "$cloth0_49"
+					m_Translation = [ -0.149998, 48.000015, 76.000023 ]
+					m_Rotation = [ -90.000023, 15.04394, 65.77227 ]
+				},
+				{
+					m_name = "$cloth0_48"
+					m_Translation = [ 0.150002, -48.000004, 18.399998 ]
+					m_Rotation = [ -90.0, 11.782576, 87.137604 ]
+				},
+				{
+					m_name = "$cloth0_47"
+					m_Translation = [ 0.149998, -48.000008, 32.800003 ]
+					m_Rotation = [ 89.999992, -11.782572, -92.862396 ]
+				},
+				{
+					m_name = "$cloth0_46"
+					m_Translation = [ 0.149999, -48.000008, 47.200005 ]
+					m_Rotation = [ 89.999992, -11.782572, -92.862396 ]
+				},
+				{
+					m_name = "$cloth0_45"
+					m_Translation = [ 0.15, -48.000008, 61.600002 ]
+					m_Rotation = [ 89.999992, -11.782572, -92.862396 ]
+				},
+				{
+					m_name = "$cloth0_44"
+					m_Translation = [ 0.150002, -47.999992, 76.000008 ]
+					m_Rotation = [ -90.000008, 13.788145, 87.137596 ]
+				},
+			]
+			m_morphFlag = [  ]
+			m_userFlag = [  ]
+		}
+	}
+	m_pHitBoxSetLists = [  ]
+	m_pAttachmentLists = [  ]
+	m_pAnimGroup = 
+	{
+		m_pObject = 
+		{
+			m_Name = ""
+			m_pBoneFlagList = 
+			{
+				m_pObject = null
+			}
+			m_pSeqGroup = 
+			{
+				m_pObject = null
+			}
+			m_pAnimGroups = [  ]
+			m_Vanim = 
+			[
+				{
+					m_Animationname = "phys_jiggle"
+					m_Filepath = "models/phys_jiggle.dmx"
+					m_nStartframe = 1
+					m_nEndframe = 3
+					m_flFps = 60.0
+					m_Loop = 
+					{
+						m_bLoop = true
+						m_bSmoothLoop = false
+						m_nSmoothLoopStart = 0
+						m_nSmoothLoopEnd = 0
+						m_StartLoop = 
+						{
+							_class = "CVAnimCmdStartLoop"
+							m_bEnabled = false
+							m_nLoopRestart = 0
+						}
+					}
+					m_bHidden = false
+					m_bDisable = false
+					m_Activities = [  ]
+					m_AnimationEvents = [  ]
+					m_MotionFrames = [  ]
+					m_pIkRules = [  ]
+					m_pAlignAnimation = null
+					m_adjustAnimation = 
+					{
+						m_translation = [ 0.0, 0.0, 0.0 ]
+						m_rotation = [ 0.0, 0.0, 0.0 ]
+					}
+					m_Keywords = [  ]
+					m_sequenceParams = 
+					{
+						m_flFadeInTime = 0.2
+						m_flFadeOutTime = 0.2
+					}
+					m_folderName = ""
+					m_MotionFramesRootBone = ""
+				},
+			]
+			m_sScripts = [  ]
+			m_folderNames = [  ]
+			m_sCompileScripts = [  ]
+			m_pActivityWhiteList = 
+			{
+				m_pObject = null
+			}
+		}
+	}
+	m_pMaterialGroupList = 
+	{
+		m_pObject = null
+	}
+	m_pMeshGroupList = 
+	{
+		m_pObject = null
+	}
+	m_pLodGroupList = 
+	{
+		m_pObject = null
+	}
+	m_pPropBreakableList = 
+	{
+		m_pObject = null
+	}
+	m_pPropDataList = 
+	{
+		m_pObject = null
+	}
+	m_pConstraintLists = [  ]
+	m_collision = "models\\drapes.collision"
+	m_softbody = ""
+	m_sMDLFilename = ""
+	m_sOffsetHitboxSets = [  ]
+	m_vHitboxSetOffset = [ 0.0, 0.0, 0.0 ]
+	m_scriptFiles = [  ]
+	m_pMaterialRemapList = null
+	m_flFbxScale = 1.0
+	m_flQCScale = 1.0
+	m_vOrigin = [ 0.0, 0.0, 0.0 ]
+	m_bEmbedAnimsInAnimGroup = false
+	m_pPsfList = null
+	m_keyValueText = ""
+	m_bStaticProp = false
+	m_bEnableClothProcessing = true
+	m_flClothEnableThreshold = 0.05
+	m_nMaxClothVertsPerMesh = 2048
+	m_bBuildClothBoneHierarchy = true
+	m_nNavType = "AUTH_NAV_MESH"
+	m_bMakeUniqueVMeshes = false
+	m_bMakeImplicitBindPoseSequence = false
+	m_bAdjustSkeletonFromBoneFlags = true
+	m_bHiddenAssetFlag = false
+	m_pAnimGroups = [  ]
+}

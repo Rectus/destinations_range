@@ -60,7 +60,7 @@ local strapKeyvals =
 	classname = "prop_dynamic";
 	model = "models/weapons/mac10/mac10_strap.vmdl";
 	targetname = "strap";
-	--DefaultAnim = "idle";
+	DefaultAnim = "strap_bones";
 	Collisions = "Not Solid"
 }
 

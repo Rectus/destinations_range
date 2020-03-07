@@ -38,6 +38,11 @@ function OnPressed(params)
 
 	if params.activator 
 	then
+
+		if not g_VRScript.pauseManager:IsPlayerAllowedToSpawnItems(params.activator) then
+			return
+		end
+
 		usingPlayer = params.activator
 		scale = 0.2
 				

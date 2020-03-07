@@ -13,6 +13,7 @@ CPauseManager = class(
 		playerSettings = nil;
 		mapCommands = nil;
 		debugFramerate = false;
+		itemSpawnMode = 2;
 	}, 	
 	{
 		DEFAULT_SETTINGS =
@@ -27,6 +28,11 @@ CPauseManager = class(
 			player_physics_collisionmode = {value = 2, type = "int"};
 			player_physics_physmode = {value = 2, type = "int"};
 			player_physics_movemode = {value = 0, type = "int"};
+			player_physics_forced_movement = true;
+			quick_loco_slide_mode = 0;
+			quick_loco_grab_mode = 1;
+			quick_loco_turn_mode = 1;
+			quick_loco_turn_increment = 45;
 		};
 	},
 	nil
@@ -133,6 +139,21 @@ function CPauseManager:IsTeleportControlsAllowed(player, handID)
 end
 
 
+function CPauseManager:IsPlayerAllowedToSpawnItems(player)
+	if self.players[player]
+	then
+		if self.itemSpawnMode == 2 then
+			return true
+		elseif self.itemSpawnMode == 1 and self.players[player].isHost then
+			return true
+		else
+			return false
+		end
+	end
+	return false
+end
+
+
 function CPauseManager:OnPlayerConnect(data)
 
 	--[[ Data format
@@ -204,12 +225,14 @@ function CPauseManager:AddPlayer(player)
 	{
 		paused = false;
 		pausePanel = nil;
+		showPausePanel = false;
 		playerdata = data;
 		quickLocomotion = nil;
 		handTeleport = {};
 		quickInv = nil;
 		quickInvEnabled = false;
 		comfort = nil;
+		isHost = (player == Entities:GetLocalPlayer());
 	}
 	self.players[player].handTeleport[0] = true
 	self.players[player].handTeleport[1] = true
@@ -227,20 +250,30 @@ function CPauseManager:Think()
 		then
 			self:AddPlayer(player)
 		end
+
+		-- Update teleport settings in case something changed it
+		local moveType = math.floor(g_VRScript.playerSettings:GetPlayerSetting(player, "locomotion_mode") or 0)
+		player:AllowTeleportFromHand(0, self.players[player].handTeleport[0] and moveType == 0)
+		player:AllowTeleportFromHand(1, self.players[player].handTeleport[1] and moveType == 0)
+
 		
-		if self.players[player].paused 
+		if self.players[player].paused
 		then
 		
-			if not (player:IsVRDashboardShowing() or player:IsContentBrowserShowing()) 
+			if not (player:IsVRDashboardShowing() or player:IsContentBrowserShowing())
 			then
 				self.players[player].paused = false
 				self:Unpause(player)
+			elseif not self.players[player].showPausePanel and player:IsContentBrowserShowing() then
+				self.players[player].showPausePanel = true
+				self:Pause(player)
 			end
 		else
 				
-			if player:IsVRDashboardShowing() or player:IsContentBrowserShowing() 
+			if player:IsVRDashboardShowing() or player:IsContentBrowserShowing()
 			then
 				self.players[player].paused = true
+				self.players[player].showPausePanel = player:IsContentBrowserShowing()
 				self:Pause(player)
 			end
 		
@@ -266,7 +299,14 @@ function CPauseManager:Think()
 		
 		if self.players[player].quickInv
 		then
-			self.players[player].quickInv:Think(self.players[player].quickInvEnabled)
+			if self.itemSpawnMode < 1
+			or (not self.players[player].isHost and self.itemSpawnMode < 2) then
+				self.players[player].quickInv:Think(false)
+			else
+				self.players[player].quickInv:Think(self.players[player].quickInvEnabled)
+			end
+
+			
 		end
 		
 		if self.players[player].comfort
@@ -282,16 +322,20 @@ function CPauseManager:Think()
 end
 
 
-function CPauseManager:Pause(player)
+function CPauseManager:Pause(player, spawnPausePanel)
 
-	if not self.players[player] 
+	if not self.players[player]
 	then
 		self:AddPlayer(player)
 	end
 	
-	if g_VRScript.playerPhysController 
+	if g_VRScript.playerPhysController
 	then
 		g_VRScript.playerPhysController:SetPaused(player, true)
+	end
+
+	if not self.players[player].showPausePanel then
+		return
 	end
 	
 	local baseAngles = QAngle(0, player:GetHMDAvatar():GetAngles().y, 0)
@@ -333,11 +377,18 @@ function CPauseManager:SpawnPausePanel(player, origin, angles)
 	}
 	self.players[player].pausePanel = SpawnEntityFromTableSynchronous("point_clientui_world_panel", keyvals)
 	self.players[player].pausePanel:SetParent(self.players[player].pausePanelTarget, "")
-	
+
 	local hasPlayerPhys = g_VRScript.playerPhysController ~= nil and 1 or 0
 	local hasQuickLoco = (hasPlayerPhys and self.quickLocomotion) and 1 or 0
-	CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_register", 
-		{id = player:GetUserID(), panel = self.players[player].pausePanel:GetEntityIndex(), playerPhys = hasPlayerPhys, quickLoco = hasQuickLoco})
+	local host = self.players[player].isHost and 1 or 0
+	CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_register",
+		{
+			id = player:GetUserID(),
+			panel = self.players[player].pausePanel:GetEntityIndex(),
+			playerPhys = hasPlayerPhys,
+			quickLoco = hasQuickLoco, isHost = host
+		}
+	)
 		
 	CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_add_map_commands", 
 		{id = player:GetUserID(), commands = self.mapCommands})
@@ -374,9 +425,10 @@ function CPauseManager:Unpause(player)
 		g_VRScript.playerPhysController:SetPaused(player, false)
 	end
 	
-	CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_set_visible", 
-		{panel = self.players[player].pausePanel:GetEntityIndex(), visible = 0})
-
+	if self.players[player].pausePanel ~= nil then
+		CustomGameEventManager:Send_ServerToPlayer(player, "pause_panel_set_visible", 
+			{panel = self.players[player].pausePanel:GetEntityIndex(), visible = 0})
+	end
 end
 
 
@@ -431,7 +483,16 @@ function CPauseManager:OnCommand(data)
 
 	-- Commands without player settings.
 
-	if data.cmd == "force_reload_pause_panel"
+	if data.cmd == "host_item_spawn_mode"
+	then
+		local player = GetPlayerFromUserID(data.id)
+		if manager.players[player].isHost then
+			manager.itemSpawnMode = math.floor(data.val)
+			GameRules:SetPlayersCanSpawnAnyItems(manager.itemSpawnMode > 1)
+			GameRules:SetPlayersCanSpawnTools(manager.itemSpawnMode > 1)
+		end
+		
+	elseif data.cmd == "force_reload_pause_panel"
 	then
 		local player = GetPlayerFromUserID(data.id)
 		manager.players[player].pausePanel:Kill()
@@ -563,6 +624,13 @@ function CPauseManager:SpawnItem(data)
 	local player = GetPlayerFromUserID(data.id)
 	local panel = EntIndexToHScript(data.panel)
 	local manager = g_VRScript.pauseManager --Hack for not having self here
+
+	if manager.itemSpawnMode < 1 
+	or (not manager.players[player].isHost and manager.itemSpawnMode < 2) then
+		print("Player " .. player:GetUserID() .. " attempted to spawn an item with spawning disabled.")
+		EmitSoundOnClient("cache_finder_no_target", player)
+		return
+	end
 	
 	print("Spawning item ID: " .. data.itemID)
 	

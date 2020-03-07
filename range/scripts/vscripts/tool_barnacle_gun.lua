@@ -68,7 +68,7 @@ local holdingObject = false
 local pullDelay = false
 
 local beamParticle = nil
-local BEAM_TRACE_INTERVAL = 0.011
+local BEAM_TRACE_INTERVAL = FrameTime()
 
 local isTargeting = false
 local targetFound = false

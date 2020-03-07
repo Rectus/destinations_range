@@ -107,6 +107,11 @@ function OnTakeDamage(damageTable)
 		return false
 	end
 
+	-- Don't let launching cans with the gravity gun pop them. TODO: check damage type instead if possible
+	if damageTable.inflictor and damageTable.inflictor:GetModelName() == "models/weapons/hl2/gravity_gun_new/gravity_gun.vmdl" then
+		return false
+	end
+
 	thisEntity:SetHealth(thisEntity:GetHealth() - damageTable.damage)
 	if thisEntity:GetHealth() <= 0 and not m_isDead then
 		m_isDead = true

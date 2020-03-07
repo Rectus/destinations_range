@@ -113,7 +113,7 @@ end
 
 function CPlayerPhysics:AddPlayer(player)
 
-	if not player or not player:GetHMDAnchor() then return end
+	if not player or not player:GetHMDAnchor() or not player:GetHMDAvatar() then return end
 
 	if not self.players[player]
 	then
@@ -327,9 +327,9 @@ function CPlayerPhysics:IsPlayerOnEntity(player)
 	
 	local playerProps = self.players[player]
 	
-	return playerProps.onGround 
-		and playerProps.groundEnt 
-		and IsValidEntity(playerProps.groundEnt) 
+	return playerProps.onGround
+		and playerProps.groundEnt
+		and IsValidEntity(playerProps.groundEnt)
 		and playerProps.groundEnt:GetEntityIndex() > 0
 end
 
@@ -763,16 +763,22 @@ function CPlayerPhysics:PlayerMoveThink()
 			playerProps.lerpTime = 0
 		
 			local move = not playerProps.idle
+			local onDynEntity = false
 			
 			if playerProps.isPaused
 			then
 				move = false
 			end
 			
-			-- Force movement when standing on entity, even when paused
-			if self:IsPlayerOnEntity(playerEnt) 
-			then 
-				move = true 
+			-- Force movement when standing on a moving entity, even when paused
+			if self:IsPlayerOnEntity(playerEnt)
+			then
+				if (g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "player_physics_forced_movement") == true
+					or not playerProps.isPaused)
+					and not VectorIsZero(GetPhysVelocity(playerProps.groundEnt)) then
+					move = true
+				end
+				onDynEntity = true
 			end
 			
 			local physMode = g_VRScript.playerSettings:GetPlayerSetting(playerEnt, "player_physics_physmode")
@@ -800,6 +806,7 @@ function CPlayerPhysics:PlayerMoveThink()
 					playerProps.onGround = true
 					playerProps.groundNormal = groundNormal
 				else
+					onDynEntity = false
 					playerProps.groundEnt = nil
 					playerProps.onGround = false
 					playerProps.groundNormal = Vector(0, 0, 1)
@@ -826,7 +833,7 @@ function CPlayerPhysics:PlayerMoveThink()
 				if playerProps.velChangeThisThink then stopped = false end
 				playerProps.velocity = playerProps.velocity + dragVelChange
 							
-				if stopped and self:IsPlayerOnEntity(playerEnt) and physMode == 2 then
+				if stopped and onDynEntity and physMode == 2 then
 					stopped = false
 				end
 				
@@ -904,7 +911,7 @@ function CPlayerPhysics:PlayerMoveThink()
 				end	
 				playerProps.prevPos = self:GetPlayspaceOrigin(playerEnt, playerProps)
 				
-			else
+			else -- not move
 				self:UpdateMoveMethod(playerEnt, playerProps)
 				playerProps.moveEntity:SetVelocity(Vector(0,0,0))
 				playerProps.lerpDest = nil

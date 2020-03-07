@@ -4,7 +4,7 @@ local spinSeqs = {}
 for i = 0, 12
 do
 	local seqName = "@spinframe0_" .. i * 30
-	
+
 	model:CreateSequence(
 		{
 			name = seqName,
@@ -39,7 +39,7 @@ local leverSeqs1 = {}
 for i = 0, 5
 do
 	local seqName = "@spinframe1_" .. i * 10
-	
+
 	model:CreateSequence(
 		{
 			name = seqName,
@@ -75,7 +75,7 @@ local leverSeqs2 = {}
 for i = 0, 5
 do
 	local seqName = "@spinframe2_" .. i * 10
-	
+
 	model:CreateSequence(
 		{
 			name = seqName,

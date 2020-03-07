@@ -1,0 +1,63 @@
+<root>
+	<styles>
+		<include src="file://{resources}/styles/base_styles.css" />
+		<include src="file://{resources}/styles/info_panels.css" /> 
+		<include src="file://{resources}/styles/custom_destination/example.css" />
+	</styles>
+
+	<ClientUIDialogPanel class="InWorldInfoPanel AlwaysVisible">
+		<Panel class="Page" id="GravityGunDialog">
+			<Panel class="TextArea">
+				
+				 
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_gravity_gun.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_gravity_gun_old.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_longsword.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_bow.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_barnacle.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_sun_tool.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_spraypaint.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_scanner.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_pogo_stick.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_nailgun.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/prop_paper_plane.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/prop_fireworks.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/prop_round_bomb.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/prop_gold_bar.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_flashlight_old.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_laser_pistol.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_mac10.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_suction_cup.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_mares_leg.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/prop_m72_law_rocket.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_m72_law.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_locomotion.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_skipole.png" scaling="stretch-to-fit-preserve-aspect"/>
+				
+				<Image class="TutorialImage" src="file://{resources}/images/custom_destination/spawn_menu/tool_jetpack.png" scaling="stretch-to-fit-preserve-aspect"/>
+			</Panel>
+		</Panel>
+	</ClientUIDialogPanel>
+</root>

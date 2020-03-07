@@ -1,0 +1,66 @@
+
+@define screen_transparent: #00000000;
+@define screen_off_visible: #000000ff;
+@define screen_dim: #189a18ff;
+@define screen_bright: #20cf20ff;
+
+.Display {
+	opacity: 1;
+	wash-color: none;
+	padding: 10px;
+	/*border: 2px solid red;*/
+}
+
+.Page {
+	width: 100%;
+	vertical-align: top;
+	horizontal-align: left;
+	flow-children: down;
+	visibility: collapse;
+}
+
+.Page.Visible {
+	visibility: visible;
+}
+
+.Page.Menu {
+	overflow: scroll;
+}
+
+
+.MenuItem {
+	width: 100%;
+	height: 60px;
+	vertical-align: top;
+	horizontal-align: left;
+	flow-children: right;
+	background-color: screen_transparent;
+	padding: 10px;
+
+	// Child text
+	color: screen_bright;
+	font-family: platformfont;
+	font-size: 20px;
+	text-align: left;
+}
+
+
+.MenuItem:hover {
+	color: screen_off_visible;
+	background-color: screen_bright;
+}
+
+.MenuItem:focus,
+.MenuItem:selected,
+.MenuItem.Inverted {
+	color: screen_off_visible;
+	background-color: screen_dim;
+}
+
+
+.Text {
+	color: screen_dim;
+	font-family: platformfont;
+	font-size: 20px;
+	text-align: left;
+}

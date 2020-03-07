@@ -9,7 +9,7 @@
 		<Panel class="Page" id="GravityGunDialog">
 			<Panel class="TextArea">
 				<Label class="Title" text="Gravity Gun" />
-				<Label class="Desc Big" text="Simple gravity gun.\n\nUsage:\nPick up with the trigger button.\nHold the touch pad to pull props.\nPress the trigger to launch a held prop or punt props aimed at." />
+				<Label class="Desc Big" text="Gravity gun.\n\nUsage:\nPick up with the trigger button.\nHold the touch pad or pull the thumbstick back to pull props.\nPress the trigger to launch a held prop or punt props aimed at.\nPush the thumbstick up to toggle the laser sight." />
 			</Panel>
 		</Panel>
 	</ClientUIDialogPanel>

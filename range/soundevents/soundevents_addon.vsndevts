@@ -3,7 +3,6 @@
 	Law.Fire = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
 		volume = 0.45
 		distance_max = "100000"
 		vsnd_files = 
@@ -17,7 +16,6 @@
 	Law.Explode = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
 		volume = 0.6
 		distance_max = "1000000"
 		vsnd_files = "sounds/weapons/rocket_explode_01.vsnd"
@@ -27,30 +25,24 @@
 	Balloon.Inflate = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
 		volume = 0.5
 		vsnd_files = "sounds/balloon-inflate.vsnd"
-
 	}
 	
 	Balloon.Explode = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
 		volume = 0.5
 		pitch = 1.4
 		distance_max = "10000"
 		vsnd_files = "sounds/tools/drone_explode.vsnd"
-
 	}
 	
 	SkiPole.Hit = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
 		volume = 0.4
 		vsnd_files = "sounds/props/dice_impact_04.vsnd"
-
 	}
 	
 	
@@ -58,10 +50,8 @@
 	Flashlight.Button = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
 		volume = 0.4
 		vsnd_files = "sounds/props/toy_soldier_impact_04.vsnd"
-
 	}
 	Suctioncup.Attach = 
 	{
@@ -88,7 +78,8 @@
 		type = "destinations.simple_vr"
 		preload_vsnds = true
 		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/hold_loop.vsnd"		
+		vsnd_files = "sounds/weapons/physcannon/hold_loop.vsnd"	
+		attachment = "beam"
 	}
 	
 	Physcannon.Pickup = 
@@ -96,55 +87,63 @@
 		type = "destinations.simple_vr"
 		preload_vsnds = true
 		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/physcannon_pickup.vsnd"		
+		vsnd_files = "sounds/weapons/physcannon/physcannon_pickup.vsnd"	
+		attachment = "muzzle"
 	}
 	
 	Physcannon.Charge = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
+
 		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/physcannon_charge.vsnd"		
+		vsnd_files = "sounds/weapons/physcannon/physcannon_charge.vsnd"	
+		attachment = "muzzle"
 	}
 		
 	Physcannon.Drop = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
+
 		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/physcannon_drop.vsnd"		
+		vsnd_files = "sounds/weapons/physcannon/physcannon_drop.vsnd"	
+		attachment = "muzzle"
 	}
 		
 	Physcannon.Dryfire = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
-		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/physcannon_dryfire.vsnd"		
+
+		volume = 0.2
+		vsnd_files = "sounds/weapons/physcannon/physcannon_dryfire.vsnd"	
+		attachment = "muzzle"		
 	}
 		
 	Physcannon.Tooheavy = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
-		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/physcannon_tooheavy.vsnd"		
+
+		volume = 0.2
+		vsnd_files = "sounds/weapons/physcannon/physcannon_tooheavy.vsnd"
+		attachment = "beam"		
 	}
 		
 	Physcannon.ClawsClose = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
-		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/physcannon_claws_close.vsnd"		
+		
+		volume = 0.05
+		distance_max = "100"
+		vsnd_files = "sounds/weapons/physcannon/physcannon_claws_close.vsnd"	
+		attachment = "muzzle"		
 	}
 		
 	Physcannon.ClawsOpen = 
 	{
 		type = "destinations.simple_vr"
-		preload_vsnds = true
-		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/physcannon_claws_open.vsnd"		
+		volume = 0.05
+		distance_max = "100"
+		vsnd_files = "sounds/weapons/physcannon/physcannon_claws_open.vsnd"	
+		attachment = "muzzle"
 	}
 	
 	Physcannon.Launch = 
@@ -152,7 +151,8 @@
 		type = "destinations.simple_vr"
 		preload_vsnds = true
 		volume = 0.3
-		vsnd_files = "sounds/weapons/physcannon/superphys_launch1.vsnd"		
+		vsnd_files = "sounds/weapons/physcannon/superphys_launch1.vsnd"	
+		attachment = "muzzle"
 	}
 	
 	Barnacle.TongueAttack =

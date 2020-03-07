@@ -1,5 +1,10 @@
 
 function SpawnLaw(params)
+
+	if not params.activator or not g_VRScript.pauseManager:IsPlayerAllowedToSpawnItems(params.activator) then
+		return
+	end
+
 	local spawnPoint = Entities:FindByName(nil, "law_spawned")
 	
 	local lawKeyvals = 

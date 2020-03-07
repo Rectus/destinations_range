@@ -15,6 +15,7 @@
 		"Pause_Header_SettingDescription" "Description"
 		
 		"Pause_Button_Settings" "Settings"
+		"Pause_Button_Settings_Desc" ""
 		"Pause_Button_TeleportToStart" "Teleport To Start"
 		"Pause_Button_QuickTeleport" "Teleport"
 		"Pause_Button_QuickSlide" "Slide"
@@ -45,10 +46,30 @@
 		
 		"Pause_Setting_Phys_DebugMove" "Player Physics Framerate"
 		"Pause_Setting_Phys_DebugMove_Desc" "Sets the player physics movement to  be actuated every this many frames.\n\n The default is every frame (1).\n\nChanging this may break things."
-		
+
+		"Pause_Setting_Loco_SlideMode" "Quick Locomotion Slide Mode"
+		"Pause_Setting_Loco_SlideMode_Hand" "Controller Relative"
+		"Pause_Setting_Loco_SlideMode_Head" "Head Relative"
+		"Pause_Setting_Loco_SlideMode_Desc" "Toggles the quick locomotion slide mode between controller and head relative movement."
+
 		"Pause_Setting_Loco_SlideFactor" "Quick Locomotion Slide Speed"
 		"Pause_Setting_Loco_SlideFactor_Desc" "Sets the movement speed for the Quick Locomotion Slide mode."
 		
+		"Pause_Setting_Loco_GrabMode" "Quick Locomotion Grab Mode"
+		"Pause_Setting_Loco_GrabMode_Surface" "Surface"
+		"Pause_Setting_Loco_GrabMode_Grounded" "Air (Grounded)"
+		"Pause_Setting_Loco_GrabMode_Air" "Air"
+		"Pause_Setting_Loco_GrabMode_Desc" "Grab mode"
+
+		"Pause_Setting_Loco_TurnMode" "Quick Locomotion Turn Mode"
+		"Pause_Setting_Loco_TurnMode_None" "None"
+		"Pause_Setting_Loco_TurnMode_Snap" "Snap"
+		"Pause_Setting_Loco_TurnMode_Smooth" "Smooth"
+		"Pause_Setting_Loco_TurnMode_Desc" "Allows turning when quick locomotion is enabled."
+		
+		"Pause_Setting_Loco_TurnIncrement" "Snap Turn Increment"
+		"Pause_Setting_Loco_TurnIncrement_Desc" "Sets the snap turn increment in degrees for Quick Locomotion."
+
 		"Pause_Setting_Loco_ComfortGrid" "Comfort Ground Grid"
 		"Pause_Setting_Loco_ComfortGridOff" "Off"
 		"Pause_Setting_Loco_ComfortGridRotate" "Turn"
@@ -79,7 +100,18 @@
 		"Pause_Setting_Phys_MoveModeForceDirect" "Force Direct"
 		"Pause_Setting_Phys_MoveModeForceEntity" "Force Entity"
 		"Pause_Setting_Phys_MoveMode_Desc" "Override the player movement mode.\n\nNormally the physics system switches between movement modes automatically depending on what best suits the situation.\nDirect mode moves the playspace anchor directly at half the framerate. This is required for the motion controller positions to be updated correctly, but can introduce movement lag on joined players.\nEntity mode parents the player to a separate entity, which is controlled by setting its velocity. This may improve lag, but introduces lag to motion controller positions."
+
+		"Pause_Setting_Phys_ForcedMove" "Allow Paused Movement"
+		"Pause_Setting_Phys_ForcedMove_Desc" "Allows the player to be move along with entities when paused.\n\nThis makes it possible to ride elevators when paused, but will hide the menu for the duration of the movement."
+
+		"Pause_Panel_HostOnly" "Only available to the hosting player"
+		"Pause_Header_HostSettings" "Host Settings"
 		
+		"Pause_Setting_Host_SpawnMode" "Item Spawning Control"
+		"Pause_Setting_Host_SpawnMode_Noone" "Noone"
+		"Pause_Setting_Host_SpawnMode_Host" "Host Only (Custom Items)"
+		"Pause_Setting_Host_SpawnMode_Everyone" "Everyone"
+		"Pause_Setting_Host_SpawnMode_Desc" "Controls who can spawn tools and items from the menus.\n\nHost Only mode is limited to spawning custom items due to limitations in the application."
 		
 		
 		"EntTool_MenuEntInfo" "Entity Information"

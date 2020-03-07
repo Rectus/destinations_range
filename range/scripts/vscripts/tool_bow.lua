@@ -79,6 +79,7 @@ function Precache(context)
 	PrecacheModel(BOW_VIEW_KEYVALS.model, context)
 end
 
+
 function SetEquipped( this, pHand, nHandID, pHandAttachment, pPlayer )
 	handID = nHandID
 	handEnt = pHand

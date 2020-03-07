@@ -125,6 +125,10 @@
 	background-color: #701010ff;
 }
 
+.PausePanelButtonPane.Restricted {
+	background-color: #907810ff;
+}
+
 
 .PausePanelPaneSpacer {
 	width: 100%;

@@ -112,15 +112,15 @@
 			<Panel class="PausePanelMainPane" id="SettingsDialog">
 			
 				<Panel class="PausePanelVerticalPane Scrollable">
+		
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_LocomotionSettings" />
+					<Panel class="PausePanelButtonPane StackedH Bordered" id="LocomotionSettingsPane">
+						
+					</Panel> 
 
 					<Label class="PausePanelPaneHeading" text="#Pause_Header_ToolSettings" />
 					<Panel class="PausePanelButtonPane StackedH Bordered" id="ToolSettingsPane">
 
-					</Panel> 
-					
-					<Label class="PausePanelPaneHeading" text="#Pause_Header_LocomotionSettings" />
-					<Panel class="PausePanelButtonPane StackedH Bordered" id="LocomotionSettingsPane">
-						
 					</Panel> 
 					
 					<Label class="PausePanelPaneHeading" text="#Pause_Header_PhysicsSettings" />
@@ -128,10 +128,15 @@
 						
 					</Panel>
 
+					<Label class="PausePanelPaneHeading" text="#Pause_Header_HostSettings" />
+					<Panel class="PausePanelButtonPane StackedH Bordered Restricted" id="HostSettingsPane">
+						<Label class="PausePanelPaneHeading" text="#Pause_Panel_HostOnly" />
+					</Panel>
+
 					
 					<Label class="PausePanelPaneHeading" text="#Pause_Header_DebugSettings" />
 					<Panel class="PausePanelButtonPane StackedH Bordered Debug" id="DebugSettingsPane">
-						
+						<Label class="PausePanelPaneHeading" text="#Pause_Panel_HostOnly" />
 					</Panel> 
 				
 				
