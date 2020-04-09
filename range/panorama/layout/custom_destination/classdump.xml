@@ -1,0 +1,14 @@
+<root>
+
+	<scripts>
+		<include src="file://{resources}/scripts/custom_destination/classdump.js" />
+	</scripts>
+
+	<ClientUIDialogPanel> 
+
+		<Label id="testclass1" />
+		<Button id="testclass2" />
+		
+	</ClientUIDialogPanel> 
+
+</root>

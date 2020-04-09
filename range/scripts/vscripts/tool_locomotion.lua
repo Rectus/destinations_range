@@ -154,7 +154,7 @@ local strapKeyvals =
 	classname = "prop_dynamic";
 	model = "models/tools/locomotion_tool_strap.vmdl";
 	targetname = "locomotion_strap";
-	--DefaultAnim = "idle";
+	DefaultAnim = "poke";
 	Collisions = "Not Solid"
 }
 
