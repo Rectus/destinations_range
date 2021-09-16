@@ -459,8 +459,8 @@ local PICKUP_TRIGGER_DELAY = 0.2
  	-- emit a SOUND on thisEntity - just borrow from the drone
  	EmitSoundOn("drone_equip", thisEntity);
  
- 	-- this may not be working right now
- 	EntFireByHandle( self, m_hHandAttachment, "Skin", "1", 0 );		
+ 	EntFireByHandle( self, m_hHandAttachment, "Skin", "1", 0 );
+	EntFireByHandle(self, thisEntity, "Skin", "1", 0);
  
  	local modelAttachmentIndex = m_hHandAttachment:ScriptLookupAttachment( "flashlight_beam" );
  	local vecStartPost = m_hHandAttachment:GetAttachmentOrigin( modelAttachmentIndex );
@@ -514,7 +514,8 @@ local PICKUP_TRIGGER_DELAY = 0.2
  
  	EmitSoundOn("drone_equip", thisEntity);
  
- 	EntFireByHandle( self, m_hHandAttachment, "Skin", "0", 0 );		
+ 	EntFireByHandle( self, m_hHandAttachment, "Skin", "0", 0 );
+	EntFireByHandle(self, thisEntity, "Skin", "0", 0);
  
  	if ( m_hLight ~= nil ) then
  		m_hLight:Destroy();
