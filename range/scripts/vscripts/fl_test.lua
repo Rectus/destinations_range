@@ -504,7 +504,7 @@ local PICKUP_TRIGGER_DELAY = 0.2
 	 	}
 	 	m_hLight = SpawnEntityFromTableSynchronous( "light_spot", lightTable )
 	 	m_hLight:SetAngles( angAttachment[1], angAttachment[2], angAttachment[3] );
-	 	m_hLight:SetParent(thisEntity, "flashlight_beam")
+	 	m_hLight:SetParent(m_hHandAttachment, "flashlight_beam")
  	end
  end
  
